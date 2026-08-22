@@ -1,0 +1,68 @@
+<!--
+    iOS の Switch（HIG の Toggle）。軸は `on` 1 本（#79 の 1 Component 1 軸）。
+
+    **軸が `on` で、`disabled` が `<State>` なのはなぜか。** Switch が持ちたい状態は
+    「値（on / off）」と「操作できるかどうか（enabled / disabled）」の 2 種類あるが、
+    **両方を Variant にすると 4 Variant = 軸 2 本**になる。値のほうを軸にして
+    操作可能性を State に置けば、1 軸のまま両方を表せる。
+
+    **`disabled` は Web では `forcedState` でしか見えない。** `disabled` は
+    `packages/renderer-web/src/state-css.ts` の `STATE_SELECTORS` に無く（`:disabled` は
+    `<div>` に効かないので、書けても一度も真にならない）、**規則を 1 行も出さない**。
+    しかも診断も `RenderIssue` も出ないので、知らないと「書いたのに効かない」に見える。
+    見るのは Studio の Inspector の強制表示で、それを `e2e/apple-hig.spec.ts` が操作して確かめている。
+    仕様は docs/03 §4。
+
+    **つまみの移動を `justify` で書けない。** `<Variant>` が受け付けるのは共通属性 + `name` / `on`
+    だけで（`packages/compiler/src/schema.ts` の `TAG_ATTRIBUTE_TYPES`）、`justify` は
+    `HStack` 固有なので Variant に書くと `semantic.unknown-attribute` になる。
+    `{$variant.padding-leading}` も駄目 —— `{}` の中では `-` が算術に読まれる（docs/02 §5.2.1）。
+    **だから「先頭に詰め物を置き、その `width` を Variant で振る」形にしてある。**
+
+    **`grow` は使わない。** 詰め物を `grow` で伸ばすと (a) Runtime Renderer が比で配分しない（#187）
+    (b) codegen が `grow` を生成拒否する（#26 の決裁）ので、**Swift へ生成できない Component になる**。
+    固定幅ならどちらも踏まない。
+
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+-->
+<Component name="Switch">
+
+    <Props>
+        <Prop name="on" type="string" default="off" />
+    </Props>
+
+    <!--
+        `normal` は base への差分ゼロ。**書いておく** —— Inspector の強制表示に
+        「素の見た目へ戻す」選択肢が並ぶのは宣言があるときだけ（TextField と同じ形）。
+    -->
+    <State name="normal" />
+    <State name="disabled" opacity="$switch.disabledOpacity" />
+
+    <!--
+        **2 種とも同じ 2 属性を書く。** Variant は base からの差分として読まれるので、
+        `off` で `width` を省くと「動かない」ではなく「`on` の位置が残る」になる（docs/02 §5.4）。
+    -->
+    <Variant on="on" name="off" background="$switch.trackOff" width="$switch.rest" />
+    <Variant on="on" name="on"  background="$switch.trackOn"  width="$switch.travel" />
+
+    <HStack
+        width="$switch.trackWidth"
+        height="$switch.trackHeight"
+        radius="$switch.trackRadius"
+        padding="$switch.inset"
+        align="center"
+        background="{$variant.background}">
+
+        <!-- 詰め物。**幅だけが軸で振れる**（上のコメント）。off は 0 / on は travel。 -->
+        <VStack width="{$variant.width}" height="$switch.thumbSize" />
+
+        <VStack
+            width="$switch.thumbSize"
+            height="$switch.thumbSize"
+            radius="$switch.thumbRadius"
+            background="$switch.thumbColor"
+            shadow="$switch.thumbShadow" />
+
+    </HStack>
+
+</Component>

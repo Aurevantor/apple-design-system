@@ -1,5 +1,72 @@
 {
-  "$description": "GlassBar 専用。Semantic を alias するだけの層（docs/04 §1）。",
+  "$description": "Component 専用。Semantic を alias するだけの層（docs/04 §1）。",
+  "switch": {
+    "trackWidth": {
+      "$type": "dimension",
+      "$value": "{switchMetric.trackWidth}",
+      "$description": "溝の幅。"
+    },
+    "trackHeight": {
+      "$type": "dimension",
+      "$value": "{switchMetric.trackHeight}",
+      "$description": "溝の高さ。**固定** —— capsule の近似が成り立つ前提（README の近似の表）。"
+    },
+    "trackRadius": {
+      "$type": "dimension",
+      "$value": "{switchMetric.trackCorner}",
+      "$description": "溝の角丸。trackHeight の半分。"
+    },
+    "thumbSize": {
+      "$type": "dimension",
+      "$value": "{switchMetric.thumb}",
+      "$description": "つまみの一辺。"
+    },
+    "thumbRadius": {
+      "$type": "dimension",
+      "$value": "{switchMetric.thumbCorner}",
+      "$description": "つまみの角丸。thumbSize の半分。"
+    },
+    "inset": {
+      "$type": "dimension",
+      "$value": "{switchMetric.inset}",
+      "$description": "溝の内側の余白。"
+    },
+    "travel": {
+      "$type": "dimension",
+      "$value": "{switchMetric.travel}",
+      "$description": "on のときの詰め物の幅。"
+    },
+    "rest": {
+      "$type": "dimension",
+      "$value": "{switchMetric.zeroTravel}",
+      "$description": "off のときの詰め物の幅（0）。"
+    },
+    "trackOn": {
+      "$type": "color",
+      "$value": "{control.switchTrack.on}",
+      "$description": "on の溝。"
+    },
+    "trackOff": {
+      "$type": "color",
+      "$value": "{control.switchTrack.off}",
+      "$description": "off の溝。"
+    },
+    "thumbColor": {
+      "$type": "color",
+      "$value": "{control.switchThumb}",
+      "$description": "つまみの面。"
+    },
+    "thumbShadow": {
+      "$type": "shadow",
+      "$value": "{control.switchThumbShadow}",
+      "$description": "つまみの影（2 層）。"
+    },
+    "disabledOpacity": {
+      "$type": "number",
+      "$value": "{control.switchDisabled}",
+      "$description": "disabled の不透明度。"
+    }
+  },
   "glassBar": {
     "padding": {
       "$type": "dimension",

@@ -39,6 +39,43 @@
       "identity": { "$value": "{glassMetric.zero}" }
     }
   },
+  "control": {
+    "$description": "コントロールの意味の層（#196）。glass.* と名前が 1 つも交わらない —— ガラスは面の見え方、こちらは値の見え方で、客が違う。",
+    "switchTrack": {
+      "$type": "color",
+      "$description": "溝の色。**on / off の軸そのもの**（この 2 色の差が『値が絵に出る』の本体）。出典は switchInk と同じ（Figma も実機も未実測）。",
+      "on": { "$value": "{switchInk.onTint}" },
+      "off": { "$value": "{switchInk.offTrack}" }
+    },
+    "switchThumb": {
+      "$type": "color",
+      "$description": "つまみの面。on / off で変えない。",
+      "$value": "{switchInk.thumb}"
+    },
+    "switchThumbShadow": {
+      "$type": "shadow",
+      "$description": "つまみの影。**2 層で「浮いている」を近似する**（近い層で接地、遠い層で浮き）。**spread は使わない** —— SwiftUI の .shadow に spread が無く、Modifiers.swift が報告して落とすので、書くと Web と Swift で絵が変わる（README の近似の表）。",
+      "$value": [
+        {
+          "color": "{switchInk.thumbShadowNear}",
+          "offsetX": { "value": 0, "unit": "px" },
+          "offsetY": { "value": 1, "unit": "px" },
+          "blur": { "value": 1, "unit": "px" }
+        },
+        {
+          "color": "{switchInk.thumbShadowFar}",
+          "offsetX": { "value": 0, "unit": "px" },
+          "offsetY": { "value": 3, "unit": "px" },
+          "blur": { "value": 8, "unit": "px" }
+        }
+      ]
+    },
+    "switchDisabled": {
+      "$type": "number",
+      "$description": "disabled の不透明度。**<State> なので Swift には写らない**（UIDSLRuntime に states を読む箇所が無い・docs/07 §2）。",
+      "$value": "{switchRatio.disabled}"
+    }
+  },
   "demo": {
     "$description": "Showcase と Catalog の標本だけが使う（#170）。**Component の契約ではない**（帯の見た目を決めるのは glass.* と glassBar.* だけ）。",
     "backdrop": {
@@ -55,7 +92,11 @@
       "$type": "dimension",
       "height": { "$value": "{demoMetric.sampleHeight}" },
       "gap": { "$value": "{demoMetric.sampleGap}" },
-      "padding": { "$value": "{demoMetric.canvasPadding}" }
+      "padding": { "$value": "{demoMetric.canvasPadding}" },
+      "radius": {
+        "$value": "{glassMetric.corner}",
+        "$description": "標本を載せる面の角丸。Component の契約ではないので switch.* を借りない（借りると『Switch の角丸を変えたら標本の面も変わる』という無い依存ができる）。"
+      }
     },
     "text": {
       "$type": "typography",

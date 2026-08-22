@@ -1,9 +1,9 @@
 {
-  "name": "@ui-dsl/liquid-glass",
+  "name": "@ui-dsl/apple-hig",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Liquid Glass (iOS 26+) の chrome 部品 — UIX 定義と Token",
+  "description": "Apple HIG の部品 — UIX 定義と Token（Liquid Glass の帯を含む）",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {

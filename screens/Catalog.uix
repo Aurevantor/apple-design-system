@@ -1,12 +1,19 @@
 <!--
-    liquid-glass: Catalog / omitted: State（GlassBar は <State> を1つも宣言していない。
-    タッチ反応は README の近似表のとおり描かない）と、押した状態・スクロールに追随する
-    屈折・周囲の色の反射（いずれも v0.1 の言語機能に無い。近似したものの一覧は ../README.md）。
+    apple-hig: Catalog / omitted: Switch の disabled（<State> は screen から宣言できず、
+    forcedState は Renderer に渡す描画オプションなので、静止したカタログには並べられない。
+    見るのは Studio の Inspector で、e2e/apple-hig.spec.ts が実際に操作して確かめている）と、
+    GlassBar の State（<State> を1つも宣言していない。タッチ反応は README の近似表のとおり
+    描かない）と、押した状態・スクロールに追随する屈折・周囲の色の反射
+    （いずれも v0.1 の言語機能に無い。近似したものの一覧は ../README.md）。
 
     **全 Variant を一望する見本帳。** screens/Showcase.uix は展開経路の検査が目的で、
-    ここは「glass 軸 3 種を並べて見る」ためだけの画面（#170）。背後の縞は Showcase と
+    ここは「軸を並べて見る」ためだけの画面（#170）。GlassBar の背後の縞は Showcase と
     同じもの —— ガラスは背後に何か在って初めて絵になり、フラットな地では 3 種の
     透過差（72% / 28% / 0%）が見分けにくい。
+
+    **Switch は縞に載せない。** ガラスと違って背後を透かさないので、縞に載せると
+    「溝の色が背後で変わる」ように見えて **on / off の差（この Component の軸そのもの）が
+    読みにくくなる**。無地の面に置く。
 -->
 <Screen id="glass-catalog" name="Catalog" background="$demo.backdrop.canvas" padding="$demo.sample.padding">
 
@@ -16,10 +23,10 @@
 
             <VStack id="catalog-cover" spacing="$demo.sample.gap" align="stretch">
                 <Text id="catalog-title" style="$demo.text.label" color="$demo.label">
-                    Liquid Glass — Catalog
+                    Apple HIG — Catalog
                 </Text>
                 <Text id="catalog-note" style="$demo.text.label" color="$demo.label">
-                    GlassBar の glass 軸 3 種を並べた見本帳。State は宣言されていないため対象外。
+                    GlassBar の glass 軸 3 種と Switch の on 軸 2 種を並べた見本帳。
                 </Text>
             </VStack>
 
@@ -83,6 +90,26 @@
                 </ZStack>
                 <Text id="catalog-caption-identity" style="$demo.text.label" color="$demo.label">
                     面 0% ・ ぼかし 0 ・ 縁 0% 0pt（ガラスを当てない）
+                </Text>
+            </VStack>
+
+            <VStack id="catalog-switch" spacing="$demo.sample.gap" align="stretch">
+                <Text id="catalog-switch-title" style="$demo.text.label" color="$demo.label">
+                    Switch — on 軸 2 種
+                </Text>
+                <HStack id="catalog-switch-row"
+                        width="fill"
+                        padding="$demo.sample.padding"
+                        spacing="$demo.sample.gap"
+                        radius="$demo.sample.radius"
+                        align="center"
+                        background="$demo.backdrop.light">
+                    <Switch id="catalog-switch-off" on="off" />
+                    <Switch id="catalog-switch-on" on="on" />
+                </HStack>
+                <Text id="catalog-caption-switch" style="$demo.text.label" color="$demo.label">
+                    off = 灰の溝・つまみは左 ／ on = 緑の溝・つまみは右（詰め物 0 → 20）。
+                    disabled は forcedState でしか見えないのでここには並べていない。
                 </Text>
             </VStack>
 

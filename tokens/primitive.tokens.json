@@ -40,6 +40,65 @@
       "$description": "ぼかさない。"
     }
   },
+  "switchInk": {
+    "$type": "color",
+    "$description": "Switch の色。**出典: Figma UI kit も実機も未実測**（この環境に kit が無く、UIKit は macOS に無いので UISwitch を測れない）。値は on / off / disabled の差が絵に出る band 内の 1 点で、Apple の実装値ではない（#169 の 3-a と同じ扱い）。",
+    "onTint": {
+      "$value": "#34C759",
+      "$description": "on の溝。iOS の system green として広く知られている綴りだが、実機では測っていない。"
+    },
+    "offTrack": {
+      "$value": "#78788029",
+      "$description": "off の溝。灰色を 16% で置く（#RRGGBBAA は toColor が受ける唯一の透過表記）。"
+    },
+    "thumb": {
+      "$value": "#FFFFFF",
+      "$description": "つまみ。on / off で変えない（変わるのは溝の色と位置だけ）。"
+    },
+    "thumbShadowNear": {
+      "$value": "#0000003D",
+      "$description": "つまみの影の近い層（24%）。接地を見せる。"
+    },
+    "thumbShadowFar": {
+      "$value": "#00000026",
+      "$description": "つまみの影の遠い層（15%）。浮きを見せる。"
+    }
+  },
+  "switchMetric": {
+    "$type": "dimension",
+    "$description": "Switch の寸法。**4 つが 1 つの式で閉じている**（inset*2 + thumb = trackHeight / inset*2 + thumb + travel = trackWidth / trackCorner*2 = trackHeight / thumbCorner*2 = thumb）。言語に算術が無いので式では書けず、examples/hello-world/src/apple-hig.test.ts が解決値で assert して縛る —— 1 つだけ動かすと落ちる。",
+    "trackWidth": { "$value": 51, "$description": "溝の幅。" },
+    "trackHeight": {
+      "$value": 31,
+      "$description": "溝の高さ。**capsule は高さに追随しないので、これを変えたら trackCorner も変える**（検査が落ちる）。"
+    },
+    "trackCorner": {
+      "$value": 15.5,
+      "$description": "溝の角丸。trackHeight の半分ちょうど（capsule の近似）。"
+    },
+    "thumb": { "$value": 27, "$description": "つまみの一辺。" },
+    "thumbCorner": {
+      "$value": 13.5,
+      "$description": "つまみの角丸。thumb の半分ちょうど（真円の近似）。"
+    },
+    "inset": { "$value": 2, "$description": "溝の内側の余白。上下左右で同じ。" },
+    "travel": {
+      "$value": 20,
+      "$description": "つまみが移動する距離 = trackWidth - inset*2 - thumb。**詰め物の幅としてだけ使う**（言語に算術が無いので手で置いた値）。"
+    },
+    "zeroTravel": {
+      "$value": 0,
+      "$description": "off のときの詰め物の幅。**0 も明示的に書く** —— Variant は base からの差分として読まれるので、片方だけ属性を落とすと『動かない』ではなく『on の位置が残る』になる（docs/02 §5.4）。"
+    }
+  },
+  "switchRatio": {
+    "$type": "number",
+    "$description": "Switch の不透明度。",
+    "disabled": {
+      "$value": 0.4,
+      "$description": "disabled の不透明度。**Web では forcedState でしか見えない**（README の「disabled の見せ方」）。"
+    }
+  },
   "glassMetric": {
     "$type": "dimension",
     "$description": "帯の寸法。",
