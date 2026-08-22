@@ -1,0 +1,75 @@
+{
+  "$description": "素の値。ここだけが数値と色を直に持つ（docs/04 §1）。値の出典は semantic 側の $description に書く。",
+  "glassInk": {
+    "$type": "color",
+    "$description": "ガラスの面に乗せる白。透過度だけが違う 4 段。#RRGGBBAA で書く（toColor が受ける唯一の透過表記）。",
+    "opaque72": {
+      "$value": "#FFFFFFB8",
+      "$description": "白 72%（0xB8 = 184/255）。"
+    },
+    "opaque28": {
+      "$value": "#FFFFFF47",
+      "$description": "白 28%（0x47 = 71/255）。"
+    },
+    "opaque00": {
+      "$value": "#FFFFFF00",
+      "$description": "白 0%。面を塗らないことを『塗らない』ではなく『透明を塗る』で表す —— Variant が 3 種とも同じ属性の組を持つため（片方だけ属性を落とすと base からの差分が読めなくなる）。"
+    },
+    "rim80": {
+      "$value": "#FFFFFFCC",
+      "$description": "縁の白 80%（0xCC = 204/255）。"
+    },
+    "rim40": {
+      "$value": "#FFFFFF66",
+      "$description": "縁の白 40%（0x66 = 102/255）。"
+    }
+  },
+  "blurRadius": {
+    "$type": "dimension",
+    "$description": "backdropBlur に渡す半径（UI Point）。",
+    "wide": {
+      "$value": 20,
+      "$description": "広いぼかし。"
+    },
+    "narrow": {
+      "$value": 8,
+      "$description": "狭いぼかし。背後の形が残る。"
+    },
+    "none": {
+      "$value": 0,
+      "$description": "ぼかさない。"
+    }
+  },
+  "glassMetric": {
+    "$type": "dimension",
+    "$description": "帯の寸法。",
+    "gap": { "$value": 12, "$description": "帯の内側の余白と、中身どうしの間隔。" },
+    "corner": { "$value": 22, "$description": "帯の角丸。" },
+    "hairline": { "$value": 1, "$description": "縁の線の太さ。" },
+    "zero": { "$value": 0, "$description": "縁を引かないときの太さ。" }
+  },
+  "demoMetric": {
+    "$type": "dimension",
+    "$description": "Showcase の標本だけが使う寸法。Component の契約ではない。",
+    "sampleHeight": { "$value": 96, "$description": "標本 1 枚の高さ。" },
+    "canvasPadding": { "$value": 20, "$description": "標本の外周。" },
+    "sampleGap": { "$value": 16, "$description": "標本どうしの間隔。" }
+  },
+  "demoInk": {
+    "$type": "color",
+    "$description": "Showcase の下地。ぼかしの有無が目で分かるよう、明度差の大きい 2 色を縞にする。",
+    "stripeDark": { "$value": "#2961D6", "$description": "縞の暗いほう（R=41）。" },
+    "stripeLight": { "$value": "#FFFFFF", "$description": "縞の明るいほう（R=255）。" },
+    "canvas": { "$value": "#101418", "$description": "標本の外側の地。" },
+    "label": { "$value": "#101418", "$description": "帯の中の文字。" }
+  },
+  "demoType": {
+    "$type": "dimension",
+    "$description": "Showcase の文字の大きさ。",
+    "label": { "$value": { "value": 14, "unit": "px" } }
+  },
+  "demoFamily": {
+    "$type": "fontFamily",
+    "sans": { "$value": ["SF Pro Text", "Helvetica Neue", "sans-serif"] }
+  }
+}

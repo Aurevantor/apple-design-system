@@ -1,0 +1,58 @@
+<!--
+    liquid-glass: Showcase / omitted: 押した状態・スクロールに追随する屈折・周囲の色の反射
+    （いずれも v0.1 の言語機能に無い。近似したものの一覧は ../README.md）
+
+    **3 種を縞の上に並べる。** ガラスは背後に何か在って初めて絵になるので、標本は
+    「縞 + その上の帯」を 1 組にする（#168 の e2e が使った形と同じ下地）。
+    帯と縞は**同じ ZStack の中に居る** —— 祖先が backdrop root を作ると、その root の中で
+    描かれたものだけがぼかす対象になるため（docs/02 §5.4.2）。
+-->
+<Screen id="glass-showcase" name="Showcase" background="$demo.backdrop.canvas" padding="$demo.sample.padding">
+
+    <VStack spacing="$demo.sample.gap" align="stretch">
+
+        <ZStack id="sample-regular" width="fill" height="$demo.sample.height" align="center">
+            <HStack id="backdrop-regular" width="fill" height="fill" align="stretch">
+                <VStack grow="1" background="$demo.backdrop.dark" />
+                <VStack grow="1" background="$demo.backdrop.light" />
+                <VStack grow="1" background="$demo.backdrop.dark" />
+                <VStack grow="1" background="$demo.backdrop.light" />
+            </HStack>
+            <GlassBar id="bar-regular" glass="regular">
+                <Content>
+                    <Text id="label-regular" style="$demo.text.label" color="$demo.label">regular</Text>
+                </Content>
+            </GlassBar>
+        </ZStack>
+
+        <ZStack id="sample-clear" width="fill" height="$demo.sample.height" align="center">
+            <HStack id="backdrop-clear" width="fill" height="fill" align="stretch">
+                <VStack grow="1" background="$demo.backdrop.dark" />
+                <VStack grow="1" background="$demo.backdrop.light" />
+                <VStack grow="1" background="$demo.backdrop.dark" />
+                <VStack grow="1" background="$demo.backdrop.light" />
+            </HStack>
+            <GlassBar id="bar-clear" glass="clear">
+                <Content>
+                    <Text id="label-clear" style="$demo.text.label" color="$demo.label">clear</Text>
+                </Content>
+            </GlassBar>
+        </ZStack>
+
+        <ZStack id="sample-identity" width="fill" height="$demo.sample.height" align="center">
+            <HStack id="backdrop-identity" width="fill" height="fill" align="stretch">
+                <VStack grow="1" background="$demo.backdrop.dark" />
+                <VStack grow="1" background="$demo.backdrop.light" />
+                <VStack grow="1" background="$demo.backdrop.dark" />
+                <VStack grow="1" background="$demo.backdrop.light" />
+            </HStack>
+            <GlassBar id="bar-identity" glass="identity">
+                <Content>
+                    <Text id="label-identity" style="$demo.text.label" color="$demo.label">identity</Text>
+                </Content>
+            </GlassBar>
+        </ZStack>
+
+    </VStack>
+
+</Screen>

@@ -1,0 +1,20 @@
+{
+  "$description": "GlassBar 専用。Semantic を alias するだけの層（docs/04 §1）。",
+  "glassBar": {
+    "padding": {
+      "$type": "dimension",
+      "$value": "{glassMetric.gap}",
+      "$description": "帯の内側の余白。"
+    },
+    "spacing": {
+      "$type": "dimension",
+      "$value": "{glassMetric.gap}",
+      "$description": "帯に並ぶ中身どうしの間隔。"
+    },
+    "radius": {
+      "$type": "dimension",
+      "$value": "{glassMetric.corner}",
+      "$description": "帯の角丸。**capsule にしない** —— radius は 4 隅一律で高さに追随しないので、999 のような値を置くと高さが変わったとき破綻する（#169 の近似の表）。"
+    }
+  }
+}

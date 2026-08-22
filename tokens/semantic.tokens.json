@@ -1,0 +1,72 @@
+{
+  "$description": "意味の層。glass 軸の 3 種（SwiftUI の Glass 構造と同じ名前）がここで値になる。値の出典はこの層の $description に書く（docs/04 §1・#169）。",
+  "glass": {
+    "material": {
+      "$type": "color",
+      "$description": "面に乗せる白。**出典: この repo の Web Preview の画素実測（2026-08-22）。Figma UI kit は未実測**（この環境に kit が無く、#167 の調査どおり CSS 再現の具体値は公開されていない）。値は『3 種の差が絵に出る』ことを e2e で測って決めた band 内の 1 点で、Apple の実装値ではない。kit の数値が手に入ったら差し替える。",
+      "regular": {
+        "$value": "{glassInk.opaque72}",
+        "$description": "既定。面が濃く、背後は形を失う。"
+      },
+      "clear": {
+        "$value": "{glassInk.opaque28}",
+        "$description": "薄い面。背後の色がそのまま透ける。"
+      },
+      "identity": {
+        "$value": "{glassInk.opaque00}",
+        "$description": "ガラスを当てない。面も縁もぼかしも無い（SwiftUI の Glass.identity に合わせた名前）。"
+      }
+    },
+    "blur": {
+      "$type": "dimension",
+      "$description": "背後をぼかす半径。**出典は glass.material と同じ**（Web Preview の画素実測。Figma 未実測）。regular と clear の差は『どちらもぼけているが、clear は背後の形が残る』ことを狙って置いた。",
+      "regular": { "$value": "{blurRadius.wide}" },
+      "clear": { "$value": "{blurRadius.narrow}" },
+      "identity": { "$value": "{blurRadius.none}" }
+    },
+    "rim": {
+      "$type": "color",
+      "$description": "縁の光。**近似**（README の「近似したもの」）—— Liquid Glass の縁は上が明るく下が暗いグラデーションだが、UIX の borderColor は 4 辺一律の単色しか持たない。出典は glass.material と同じ。",
+      "regular": { "$value": "{glassInk.rim80}" },
+      "clear": { "$value": "{glassInk.rim40}" },
+      "identity": { "$value": "{glassInk.opaque00}" }
+    },
+    "rimWidth": {
+      "$type": "dimension",
+      "$description": "縁の線の太さ。identity は縁を引かないので 0。",
+      "regular": { "$value": "{glassMetric.hairline}" },
+      "clear": { "$value": "{glassMetric.hairline}" },
+      "identity": { "$value": "{glassMetric.zero}" }
+    }
+  },
+  "demo": {
+    "$description": "Showcase の標本だけが使う。**Component の契約ではない**（帯の見た目を決めるのは glass.* と glassBar.* だけ）。",
+    "backdrop": {
+      "$type": "color",
+      "dark": { "$value": "{demoInk.stripeDark}" },
+      "light": { "$value": "{demoInk.stripeLight}" },
+      "canvas": { "$value": "{demoInk.canvas}" }
+    },
+    "label": {
+      "$type": "color",
+      "$value": "{demoInk.label}"
+    },
+    "sample": {
+      "$type": "dimension",
+      "height": { "$value": "{demoMetric.sampleHeight}" },
+      "gap": { "$value": "{demoMetric.sampleGap}" },
+      "padding": { "$value": "{demoMetric.canvasPadding}" }
+    },
+    "text": {
+      "$type": "typography",
+      "label": {
+        "$value": {
+          "fontFamily": "{demoFamily.sans}",
+          "fontSize": "{demoType.label}",
+          "fontWeight": "medium",
+          "lineHeight": 1.4
+        }
+      }
+    }
+  }
+}

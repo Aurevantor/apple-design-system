@@ -1,0 +1,24 @@
+{
+  "name": "@ui-dsl/liquid-glass",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Liquid Glass (iOS 26+) の chrome 部品 — UIX 定義と Token",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "components",
+    "screens",
+    "tokens"
+  ],
+  "scripts": {
+    "build": "tsc -b"
+  }
+}

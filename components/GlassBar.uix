@@ -1,0 +1,62 @@
+<!--
+    Liquid Glass の帯（ツールバー / タブバーの chrome）。軸は `glass` 1 本（#79 の 1 Component 1 軸）。
+
+    **なぜ帯なのか。** Apple の Liquid Glass は chrome に置くもので content area ではない
+    （「下に何もスクロールしていないガラスには屈折させるものが無い」）。帯は chrome そのもので、
+    かつ面が大きいので 3 種の差が絵に出る —— 44pt のボタンでは regular と clear の差が
+    数画素にしか出ず、並べても違いが見えない（#169 の決裁）。
+
+    **capsule にしない。** `radius` は 4 隅一律で高さに追随しないので、`999` のような値は
+    高さが変わった瞬間に破綻する。帯は角丸を控えめに取ることでこの近似を踏まずに済む。
+
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/liquid-glass.test.ts が固定）。
+-->
+<Component name="GlassBar">
+
+    <Props>
+        <Prop name="glass" type="string" default="regular" />
+    </Props>
+
+    <Slots>
+        <Slot name="content" />
+    </Slots>
+
+    <!--
+        3 種とも同じ 4 属性を持つ。**片方だけ属性を落とさない** —— Variant は base からの
+        差分として読まれるので、`identity` で `backdropBlur` を書かずに省くと
+        「ぼかさない」ではなく「regular のぼかしが残る」になる。
+    -->
+    <Variant on="glass" name="regular"
+             background="$glass.material.regular"
+             backdropBlur="$glass.blur.regular"
+             borderColor="$glass.rim.regular"
+             borderWidth="$glass.rimWidth.regular" />
+
+    <Variant on="glass" name="clear"
+             background="$glass.material.clear"
+             backdropBlur="$glass.blur.clear"
+             borderColor="$glass.rim.clear"
+             borderWidth="$glass.rimWidth.clear" />
+
+    <Variant on="glass" name="identity"
+             background="$glass.material.identity"
+             backdropBlur="$glass.blur.identity"
+             borderColor="$glass.rim.identity"
+             borderWidth="$glass.rimWidth.identity" />
+
+    <HStack
+        padding="$glassBar.padding"
+        spacing="$glassBar.spacing"
+        radius="$glassBar.radius"
+        align="center"
+        clip="true"
+        background="{$variant.background}"
+        backdropBlur="{$variant.backdropBlur}"
+        borderColor="{$variant.borderColor}"
+        borderWidth="{$variant.borderWidth}">
+
+        <SlotOutlet name="content" />
+
+    </HStack>
+
+</Component>
