@@ -1,0 +1,65 @@
+<!--
+    選択できる小さな capsule（Chip）。軸は `selected` 1 本（#79 の 1 Component 1 軸）。
+
+    **HIG に「Chip」という部品名は無い。** iOS でこの形に当たるのは
+    `UIButton.Configuration` の `.tinted()` / `.filled()` を capsule で使う書き方で、
+    **見た目の型としては実在するが、名前は Material 由来**。#195 が挙げた 6 つに
+    入っているのでその名前のまま作るが、**Apple の部品を写したものではない**ことを
+    README にも書いてある。
+
+    **3 属性を Variant で振る。** 面・文字・縁の 3 つが選択で変わる ——
+    `SegmentedControl` と違って**ラベルが 1 つしか無い**ので、文字色を Variant で振れる
+    （あちらは 2 つのラベルに別々の色を振る手段が無かった）。
+
+    **書く名前と読む名前が違う。** `<Variant color="…">` と書いて `{$variant.foreground}` で読む
+    —— UIX の属性名は `color` / IR のキー名は `foreground` で、**読むときは IR のキー名**
+    （`packages/compiler/src/compile.ts` の `IR_KEY_TO_UIX_ATTRIBUTE`。同じ形が
+    `style` → `typography` / `radius` → `cornerRadius` にもある）。
+    間違えても診断が案内するので静かには壊れない（#72）。
+
+    **`<State name="disabled">` を持つ。** Chip は**操作できる**（選ぶもの）ので、
+    `Switch` / `Slider` と同じ扱い。**切り替わらない**のは v0.1 の線（#195）。
+
+    **capsule を採る** —— `radius × 2 === height` を解決値で縛ってある（Badge と同じ）。
+
+    **`grow` は使わない**（他の Component と同じ —— 寸法を Token で固定して式で閉じる。
+    #187 のあとは「生成できない」が理由ではない）。
+
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+-->
+<Component name="Chip">
+
+    <Props>
+        <Prop name="selected" type="string" default="off" />
+        <Prop name="label" type="string" default="Chip" />
+    </Props>
+
+    <State name="normal" />
+    <State name="disabled" opacity="$chip.disabledOpacity" />
+
+    <!-- **2 種とも同じ 3 属性を書く**（片方を省くと base からの差分が読めなくなる）。 -->
+    <Variant on="selected" name="off"
+             background="$chip.backgroundOff"
+             color="$chip.labelOff"
+             borderColor="$chip.borderOff" />
+
+    <Variant on="selected" name="on"
+             background="$chip.backgroundOn"
+             color="$chip.labelOn"
+             borderColor="$chip.borderOn" />
+
+    <HStack
+        height="$chip.height"
+        padding-horizontal="$chip.paddingHorizontal"
+        radius="$chip.radius"
+        borderWidth="$chip.borderWidth"
+        background="{$variant.background}"
+        borderColor="{$variant.borderColor}"
+        align="center"
+        justify="center">
+
+        <Text style="$chip.labelStyle" color="{$variant.foreground}">{$props.label}</Text>
+
+    </HStack>
+
+</Component>

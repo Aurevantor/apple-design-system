@@ -1,0 +1,60 @@
+<!--
+    iOS の ProgressView（linear）。軸は `value` 1 本（#79 の 1 Component 1 軸）。
+
+    **`Switch` と同じ形。** 塗りの `width` を Variant で振るだけで、他は何も変えない
+    （`Switch` は「詰め物」の幅、こちらは「塗り」の幅）。
+
+    **`<State>` を 1 つも宣言しない。** ProgressView は**操作できない**ので
+    「操作できるかどうか」という軸が無い —— `disabled` を書くと、押せないものに
+    「押せません」と描くことになる。`GlassBar` と同じ扱い（README の「State を持つのはどれか」）。
+
+    **幅が固定であることに依存する。** 塗りの幅を **pt で** Variant に置く以上、
+    `trackWidth` を変えると比率が壊れる（`fillHalf` の 120 は 240 の半分、という関係が
+    Token の外にある）。**capsule と同じ族の近似**なので、同じやり方で縛ってある ——
+    `fillHalf × 2 === trackWidth` / `fillFull === trackWidth` / `fillEmpty === 0` を
+    解決値で assert する（言語に算術が無いので UIX には書けない）。
+
+    **`grow` は使わない。** #187 が入る前は「使うと Swift へ生成できなくなる」が理由だったが、
+    **いまは `Stack` の中なら比配分できる**（自作 `Layout` の `UIXFlexStack`）。
+    それでも使わないのは、**幅が固定であることが Variant の比率の前提**だから ——
+    `grow` で伸ばすと `fillHalf` が「半分」でなくなる（README の近似の表）。
+    `Screen` / `Scroll` の直下の `grow` は #187 のあとも拒否される。
+
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+-->
+<Component name="ProgressBar">
+
+    <Props>
+        <Prop name="value" type="string" default="half" />
+    </Props>
+
+    <!--
+        **3 種とも同じ 1 属性を書く。** Variant は base からの差分として読まれるので、
+        `empty` で `width` を省くと「0%」ではなく「`half` の塗りが残る」になる（docs/02 §5.4）。
+    -->
+    <Variant on="value" name="empty" width="$progressBar.fillEmpty" />
+    <Variant on="value" name="half"  width="$progressBar.fillHalf" />
+    <Variant on="value" name="full"  width="$progressBar.fillFull" />
+
+    <HStack
+        width="$progressBar.trackWidth"
+        height="$progressBar.trackHeight"
+        radius="$progressBar.trackRadius"
+        background="$progressBar.trackColor"
+        clip="true">
+
+        <!--
+            塗り。**`height="fill"` で溝いっぱいに伸ばす** —— 親（溝）の `align` は
+            既定の `center` なので、これを落とすと**高さ 0 になって消える**
+            （親が `stretch` だと落としても親が代わりに伸ばしてしまい、壊れても気づけない。
+            AGENTS.md の #27 の実測）。
+        -->
+        <VStack
+            width="{$variant.width}"
+            height="fill"
+            radius="$progressBar.trackRadius"
+            background="$progressBar.fillColor" />
+
+    </HStack>
+
+</Component>

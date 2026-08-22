@@ -1,0 +1,58 @@
+<!--
+    iOS の Stepper（− / ＋ の 2 連ボタン）。**軸を持たない** ——
+    Stepper は「値」を見せる部品ではなく「値を変える口」なので、絵に出る差は
+    **押しているかどうか**しかない。それは軸ではなく `<State>`（docs/03 §4）。
+
+    軸ゼロは `TextField`（`packages/components`）と `GlassBar` に先例がある。
+    **「1 Component 1 軸」は「必ず 1 本持つ」ではない**（#79 は上限の話）。
+
+    **`pressed` は `disabled` と違って Web で実際に効く。**
+    `packages/renderer-web/src/state-css.ts` の `STATE_SELECTORS` に `pressed` は**在り**、
+    `:active` に写る（`disabled` は無いので `forcedState` が唯一の入口）。
+    **この Component が Catalog に並ぶと、Catalog に stylesheet が出るようになる** ——
+    #196 の時点では apple-hig のどの Component も疑似クラスへ写る State を持っておらず、
+    「`<style>` が 1 つも無い」が検査の前提だった。**その前提はここで変わる**
+    （`examples/hello-world/src/apple-hig.test.ts` の該当箇所に書いてある）。
+
+    **`pressed` は Swift へ写らない**（#201）。`docs/07` §2 の表で `ButtonStyle` が
+    Phase 4 に置かれており、`packages/codegen-swift` は `<State>` を見ると
+    「静的コードに写しません」と報告して落とす。**その報告そのものを検査で固定してある**
+    （`screens/Controls.uix` を生成したときの diagnostics）。
+
+    **どちらを押したかは描けない。** `<State>` は Component の宣言部にしか書けないので、
+    押下は**部品全体**に掛かる。「− を押している絵」と「＋ を押している絵」は分けられない
+    （README の近似の表）。
+
+    **`grow` は使わない** —— 区切り線の左右を `grow` で等分したくなるが、**寸法を
+    Token で固定して式で閉じる**ほうを採った（#187 のあとは「生成できない」が理由ではない）。
+    `segment × 2 + divider === width` を解決値で縛ってある。
+
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+-->
+<Component name="Stepper">
+
+    <State name="normal" />
+    <State name="pressed" opacity="$stepper.pressedOpacity" />
+    <State name="disabled" opacity="$stepper.disabledOpacity" />
+
+    <HStack
+        width="$stepper.width"
+        height="$stepper.height"
+        radius="$stepper.radius"
+        background="$stepper.background"
+        align="center"
+        clip="true">
+
+        <VStack width="$stepper.segmentWidth" height="fill" align="center" justify="center">
+            <Text style="$stepper.glyphStyle" color="$stepper.glyphColor">−</Text>
+        </VStack>
+
+        <VStack width="$stepper.dividerWidth" height="fill" background="$stepper.dividerColor" />
+
+        <VStack width="$stepper.segmentWidth" height="fill" align="center" justify="center">
+            <Text style="$stepper.glyphStyle" color="$stepper.glyphColor">＋</Text>
+        </VStack>
+
+    </HStack>
+
+</Component>

@@ -1,0 +1,48 @@
+<!--
+    iOS の Badge（未読の数を出す小さな capsule）。軸は `tone` 1 本（#79 の 1 Component 1 軸）。
+
+    **`<State>` を 1 つも宣言しない。** Badge は**操作できない** —— 数を知らせるだけの
+    表示で、押す対象は Badge が乗っている側（タブやアイコン）。`disabled` を書くと
+    「押せないものに押せないと描く」ことになる。`GlassBar` / `ProgressBar` と同じ扱い
+    （README の「State を持つのはどれか」）。
+
+    **capsule を採る**（`GlassBar` は採らなかった）。`radius` は 4 隅一律で高さに追随しないので、
+    **高さが固定であることに依存する**近似 —— `Switch` の溝と同じで、`radius × 2 === height` を
+    解決値で assert して縛ってある（言語に算術が無いので UIX には書けない）。
+
+    **桁が増えると横に伸びる。** `minWidth` を高さと同じにしてあるので、1 桁なら真円、
+    2 桁以上なら `padding-horizontal` のぶん伸びた capsule になる。**`width` を固定しない**
+    のはここだけ —— 他のコントロールは幅を固定して比率の前提にしているが、Badge は
+    中身の幅に追随してよい（振る値を持たないので、伸びても壊れるものが無い）。
+
+    **`grow` は使わない**（他の Component と同じ —— 寸法を Token で固定して式で閉じる。
+    #187 のあとは「生成できない」が理由ではない）。
+
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+-->
+<Component name="Badge">
+
+    <Props>
+        <Prop name="tone" type="string" default="danger" />
+        <Prop name="label" type="string" default="1" />
+    </Props>
+
+    <!-- **3 種とも同じ 1 属性を書く**（片方を省くと base の色が残る）。 -->
+    <Variant on="tone" name="neutral" background="$badge.neutral" />
+    <Variant on="tone" name="accent"  background="$badge.accent" />
+    <Variant on="tone" name="danger"  background="$badge.danger" />
+
+    <HStack
+        height="$badge.height"
+        minWidth="$badge.minWidth"
+        padding-horizontal="$badge.paddingHorizontal"
+        radius="$badge.radius"
+        background="{$variant.background}"
+        align="center"
+        justify="center">
+
+        <Text style="$badge.labelStyle" color="$badge.labelColor">{$props.label}</Text>
+
+    </HStack>
+
+</Component>

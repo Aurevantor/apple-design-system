@@ -1,5 +1,5 @@
 {
-  "$description": "Component 専用。Semantic を alias するだけの層（docs/04 §1）。",
+  "$description": "Component 専用。Semantic を alias するだけの層（docs/04 §1）。**ここは Component 名で切る**（#196 / #202）—— 値の共有は 1 つ下の semantic / primitive でやり、この層では $switch.trackOff と $slider.trackColor を別々に持つ。こうすると『どれを変えると何が動くか』がこの層だけ読めば分かる。",
   "switch": {
     "trackWidth": {
       "$type": "dimension",
@@ -58,8 +58,360 @@
     },
     "thumbShadow": {
       "$type": "shadow",
-      "$value": "{control.switchThumbShadow}",
+      "$value": "{control.raisedShadow}",
       "$description": "つまみの影（2 層）。"
+    },
+    "disabledOpacity": {
+      "$type": "number",
+      "$value": "{control.switchDisabled}",
+      "$description": "disabled の不透明度。"
+    }
+  },
+  "slider": {
+    "trackWidth": {
+      "$type": "dimension",
+      "$value": "{sliderMetric.trackWidth}",
+      "$description": "溝の幅。**固定** —— 塗りの幅を pt で置くので、変えると比率が壊れる（README の近似の表）。"
+    },
+    "trackHeight": {
+      "$type": "dimension",
+      "$value": "{sliderMetric.trackHeight}",
+      "$description": "溝の高さ。"
+    },
+    "trackRadius": {
+      "$type": "dimension",
+      "$value": "{sliderMetric.trackCorner}",
+      "$description": "溝の角丸。trackHeight の半分。"
+    },
+    "thumbSize": {
+      "$type": "dimension",
+      "$value": "{sliderMetric.thumb}",
+      "$description": "つまみの一辺。"
+    },
+    "thumbRadius": {
+      "$type": "dimension",
+      "$value": "{sliderMetric.thumbCorner}",
+      "$description": "つまみの角丸。thumbSize の半分。"
+    },
+    "fillMin": {
+      "$type": "dimension",
+      "$value": "{sliderMetric.fillMin}",
+      "$description": "min の塗り幅（0）。"
+    },
+    "fillMid": {
+      "$type": "dimension",
+      "$value": "{sliderMetric.fillMid}",
+      "$description": "mid の塗り幅。"
+    },
+    "fillMax": {
+      "$type": "dimension",
+      "$value": "{sliderMetric.fillMax}",
+      "$description": "max の塗り幅。"
+    },
+    "trackColor": {
+      "$type": "color",
+      "$value": "{control.sliderTrack}",
+      "$description": "未塗りの溝。"
+    },
+    "fillColor": {
+      "$type": "color",
+      "$value": "{control.sliderFill}",
+      "$description": "塗り。"
+    },
+    "thumbColor": {
+      "$type": "color",
+      "$value": "{control.sliderThumb}",
+      "$description": "つまみの面。"
+    },
+    "thumbShadow": {
+      "$type": "shadow",
+      "$value": "{control.raisedShadow}",
+      "$description": "つまみの影（2 層）。Switch と同じ。"
+    },
+    "disabledOpacity": {
+      "$type": "number",
+      "$value": "{control.switchDisabled}",
+      "$description": "disabled の不透明度。"
+    }
+  },
+  "progressBar": {
+    "trackWidth": {
+      "$type": "dimension",
+      "$value": "{progressMetric.trackWidth}",
+      "$description": "溝の幅。**固定** —— 塗りの幅を pt で置くので、変えると比率が壊れる。"
+    },
+    "trackHeight": {
+      "$type": "dimension",
+      "$value": "{progressMetric.trackHeight}",
+      "$description": "溝の高さ。"
+    },
+    "trackRadius": {
+      "$type": "dimension",
+      "$value": "{progressMetric.trackCorner}",
+      "$description": "溝の角丸。trackHeight の半分。"
+    },
+    "fillEmpty": {
+      "$type": "dimension",
+      "$value": "{progressMetric.fillEmpty}",
+      "$description": "0% の塗り幅（0）。"
+    },
+    "fillHalf": {
+      "$type": "dimension",
+      "$value": "{progressMetric.fillHalf}",
+      "$description": "50% の塗り幅。"
+    },
+    "fillFull": {
+      "$type": "dimension",
+      "$value": "{progressMetric.fillFull}",
+      "$description": "100% の塗り幅。"
+    },
+    "trackColor": {
+      "$type": "color",
+      "$value": "{control.progressTrack}",
+      "$description": "溝。"
+    },
+    "fillColor": {
+      "$type": "color",
+      "$value": "{control.progressFill}",
+      "$description": "塗り。"
+    }
+  },
+  "stepper": {
+    "width": {
+      "$type": "dimension",
+      "$value": "{stepperMetric.width}",
+      "$description": "全体の幅。"
+    },
+    "height": {
+      "$type": "dimension",
+      "$value": "{stepperMetric.height}",
+      "$description": "全体の高さ。"
+    },
+    "radius": {
+      "$type": "dimension",
+      "$value": "{stepperMetric.corner}",
+      "$description": "角丸。**capsule にしない**（高さに追随しないため）。"
+    },
+    "segmentWidth": {
+      "$type": "dimension",
+      "$value": "{stepperMetric.segment}",
+      "$description": "片側の幅。"
+    },
+    "dividerWidth": {
+      "$type": "dimension",
+      "$value": "{stepperMetric.divider}",
+      "$description": "区切り線の太さ。"
+    },
+    "background": {
+      "$type": "color",
+      "$value": "{control.stepperBackground}",
+      "$description": "地。"
+    },
+    "glyphColor": {
+      "$type": "color",
+      "$value": "{control.stepperGlyph}",
+      "$description": "記号の色。"
+    },
+    "dividerColor": {
+      "$type": "color",
+      "$value": "{control.stepperDivider}",
+      "$description": "区切り線。"
+    },
+    "glyphStyle": {
+      "$type": "typography",
+      "$value": "{control.glyphText}",
+      "$description": "記号の文字。"
+    },
+    "pressedOpacity": {
+      "$type": "number",
+      "$value": "{control.pressedOpacity}",
+      "$description": "pressed の不透明度。**:active に写る**（disabled と違う）。"
+    },
+    "disabledOpacity": {
+      "$type": "number",
+      "$value": "{control.switchDisabled}",
+      "$description": "disabled の不透明度。"
+    }
+  },
+  "segmented": {
+    "width": {
+      "$type": "dimension",
+      "$value": "{segmentedMetric.width}",
+      "$description": "全体の幅。**固定** —— インジケータの位置を pt で置くので、変えると選択位置がずれる。"
+    },
+    "height": {
+      "$type": "dimension",
+      "$value": "{segmentedMetric.height}",
+      "$description": "全体の高さ。"
+    },
+    "radius": {
+      "$type": "dimension",
+      "$value": "{segmentedMetric.corner}",
+      "$description": "外側の角丸。"
+    },
+    "inset": {
+      "$type": "dimension",
+      "$value": "{segmentedMetric.inset}",
+      "$description": "地とインジケータの間の余白。"
+    },
+    "segmentWidth": {
+      "$type": "dimension",
+      "$value": "{segmentedMetric.segment}",
+      "$description": "1 区画の幅。"
+    },
+    "indicatorRadius": {
+      "$type": "dimension",
+      "$value": "{segmentedMetric.indicatorCorner}",
+      "$description": "インジケータの角丸。"
+    },
+    "indicatorHeight": {
+      "$type": "dimension",
+      "$value": "{segmentedMetric.indicatorHeight}",
+      "$description": "インジケータの高さ。"
+    },
+    "restLeading": {
+      "$type": "dimension",
+      "$value": "{segmentedMetric.restLeading}",
+      "$description": "leading 選択時の詰め物の幅（0）。"
+    },
+    "restTrailing": {
+      "$type": "dimension",
+      "$value": "{segmentedMetric.restTrailing}",
+      "$description": "trailing 選択時の詰め物の幅。"
+    },
+    "background": {
+      "$type": "color",
+      "$value": "{control.segmentedBackground}",
+      "$description": "地。"
+    },
+    "indicatorColor": {
+      "$type": "color",
+      "$value": "{control.segmentedIndicator}",
+      "$description": "選択中の区画。"
+    },
+    "indicatorShadow": {
+      "$type": "shadow",
+      "$value": "{control.raisedShadow}",
+      "$description": "インジケータの影（2 層）。Switch のつまみと同じ。"
+    },
+    "labelColor": {
+      "$type": "color",
+      "$value": "{control.segmentedLabel}",
+      "$description": "ラベル。選択中でも変えない（近似）。"
+    },
+    "labelStyle": {
+      "$type": "typography",
+      "$value": "{control.labelText}",
+      "$description": "ラベルの文字。"
+    },
+    "disabledOpacity": {
+      "$type": "number",
+      "$value": "{control.switchDisabled}",
+      "$description": "disabled の不透明度。"
+    }
+  },
+  "badge": {
+    "height": {
+      "$type": "dimension",
+      "$value": "{badgeMetric.height}",
+      "$description": "高さ。**固定** —— capsule の近似が成り立つ前提。"
+    },
+    "radius": {
+      "$type": "dimension",
+      "$value": "{badgeMetric.corner}",
+      "$description": "角丸。height の半分。"
+    },
+    "paddingHorizontal": {
+      "$type": "dimension",
+      "$value": "{badgeMetric.paddingHorizontal}",
+      "$description": "左右の余白。"
+    },
+    "minWidth": {
+      "$type": "dimension",
+      "$value": "{badgeMetric.minWidth}",
+      "$description": "最小の幅。1 桁のとき真円になる。"
+    },
+    "neutral": {
+      "$type": "color",
+      "$value": "{control.badgeNeutral}",
+      "$description": "tone: neutral の面。"
+    },
+    "accent": {
+      "$type": "color",
+      "$value": "{control.badgeAccent}",
+      "$description": "tone: accent の面。"
+    },
+    "danger": {
+      "$type": "color",
+      "$value": "{control.badgeDanger}",
+      "$description": "tone: danger の面。"
+    },
+    "labelColor": {
+      "$type": "color",
+      "$value": "{control.badgeLabel}",
+      "$description": "数字。3 tone とも同じ。"
+    },
+    "labelStyle": {
+      "$type": "typography",
+      "$value": "{control.badgeText}",
+      "$description": "数字の文字。"
+    }
+  },
+  "chip": {
+    "height": {
+      "$type": "dimension",
+      "$value": "{chipMetric.height}",
+      "$description": "高さ。**固定** —— capsule の近似が成り立つ前提。"
+    },
+    "radius": {
+      "$type": "dimension",
+      "$value": "{chipMetric.corner}",
+      "$description": "角丸。height の半分。"
+    },
+    "paddingHorizontal": {
+      "$type": "dimension",
+      "$value": "{chipMetric.paddingHorizontal}",
+      "$description": "左右の余白。"
+    },
+    "borderWidth": {
+      "$type": "dimension",
+      "$value": "{chipMetric.border}",
+      "$description": "縁の太さ。"
+    },
+    "backgroundOff": {
+      "$type": "color",
+      "$value": "{control.chipBackgroundOff}",
+      "$description": "非選択の面。"
+    },
+    "backgroundOn": {
+      "$type": "color",
+      "$value": "{control.chipBackgroundOn}",
+      "$description": "選択の面。"
+    },
+    "labelOff": {
+      "$type": "color",
+      "$value": "{control.chipLabelOff}",
+      "$description": "非選択のラベル。"
+    },
+    "labelOn": {
+      "$type": "color",
+      "$value": "{control.chipLabelOn}",
+      "$description": "選択のラベル。"
+    },
+    "borderOff": {
+      "$type": "color",
+      "$value": "{control.chipBorderOff}",
+      "$description": "非選択の縁。"
+    },
+    "borderOn": {
+      "$type": "color",
+      "$value": "{control.chipBorderOn}",
+      "$description": "選択の縁。"
+    },
+    "labelStyle": {
+      "$type": "typography",
+      "$value": "{control.labelText}",
+      "$description": "ラベルの文字。"
     },
     "disabledOpacity": {
       "$type": "number",

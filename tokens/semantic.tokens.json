@@ -40,30 +40,30 @@
     }
   },
   "control": {
-    "$description": "コントロールの意味の層（#196）。glass.* と名前が 1 つも交わらない —— ガラスは面の見え方、こちらは値の見え方で、客が違う。",
+    "$description": "コントロールの意味の層（#196 / #202）。glass.* と名前が 1 つも交わらない —— ガラスは面の見え方、こちらは値の見え方で、客が違う。**ここは役ごとに名前を持つ層**で、Component ごとに切るのは 1 つ上の component 層（$switch.trackOff / $slider.trackColor は別々）。出典は primitive の controlInk / switchInk と同じで、**Figma UI kit も実機も未実測**。",
     "switchTrack": {
       "$type": "color",
-      "$description": "溝の色。**on / off の軸そのもの**（この 2 色の差が『値が絵に出る』の本体）。出典は switchInk と同じ（Figma も実機も未実測）。",
+      "$description": "溝の色。**on / off の軸そのもの**（この 2 色の差が『値が絵に出る』の本体）。on だけが緑で、他のコントロールの accent（青）とは別。",
       "on": { "$value": "{switchInk.onTint}" },
-      "off": { "$value": "{switchInk.offTrack}" }
+      "off": { "$value": "{controlInk.trackFill}" }
     },
     "switchThumb": {
       "$type": "color",
       "$description": "つまみの面。on / off で変えない。",
-      "$value": "{switchInk.thumb}"
+      "$value": "{controlInk.raised}"
     },
-    "switchThumbShadow": {
+    "raisedShadow": {
       "$type": "shadow",
-      "$description": "つまみの影。**2 層で「浮いている」を近似する**（近い層で接地、遠い層で浮き）。**spread は使わない** —— SwiftUI の .shadow に spread が無く、Modifiers.swift が報告して落とすので、書くと Web と Swift で絵が変わる（README の近似の表）。",
+      "$description": "浮いている面の影。**2 層で「浮いている」を近似する**（近い層で接地、遠い層で浮き）。**spread は使わない** —— SwiftUI の .shadow に spread が無く、Modifiers.swift が報告して落とすので、書くと Web と Swift で絵が変わる（README の近似の表）。**#196 では switchThumbShadow という名前だった**（値は同じ）—— Slider のつまみと SegmentedControl のインジケータが同じ影を使うので、役の名前に変えた。",
       "$value": [
         {
-          "color": "{switchInk.thumbShadowNear}",
+          "color": "{controlInk.raisedShadowNear}",
           "offsetX": { "value": 0, "unit": "px" },
           "offsetY": { "value": 1, "unit": "px" },
           "blur": { "value": 1, "unit": "px" }
         },
         {
-          "color": "{switchInk.thumbShadowFar}",
+          "color": "{controlInk.raisedShadowFar}",
           "offsetX": { "value": 0, "unit": "px" },
           "offsetY": { "value": 3, "unit": "px" },
           "blur": { "value": 8, "unit": "px" }
@@ -73,7 +73,147 @@
     "switchDisabled": {
       "$type": "number",
       "$description": "disabled の不透明度。**<State> なので Swift には写らない**（UIDSLRuntime に states を読む箇所が無い・docs/07 §2）。",
-      "$value": "{switchRatio.disabled}"
+      "$value": "{controlRatio.disabled}"
+    },
+    "pressedOpacity": {
+      "$type": "number",
+      "$description": "pressed の不透明度。**disabled と違って :active に写る**ので Web では実際に押すと効く。**Swift には写らない**（#201）。",
+      "$value": "{controlRatio.pressed}"
+    },
+    "sliderTrack": {
+      "$type": "color",
+      "$description": "Slider の未塗り。Switch の off と同じ灰。",
+      "$value": "{controlInk.trackFill}"
+    },
+    "sliderFill": {
+      "$type": "color",
+      "$description": "Slider の塗り。**値が絵に出る本体**。",
+      "$value": "{controlInk.accent}"
+    },
+    "sliderThumb": {
+      "$type": "color",
+      "$description": "Slider のつまみ。Switch のつまみと同じ白。",
+      "$value": "{controlInk.raised}"
+    },
+    "progressTrack": {
+      "$type": "color",
+      "$description": "ProgressBar の溝。",
+      "$value": "{controlInk.trackFill}"
+    },
+    "progressFill": {
+      "$type": "color",
+      "$description": "ProgressBar の塗り。**値が絵に出る本体**。",
+      "$value": "{controlInk.accent}"
+    },
+    "stepperBackground": {
+      "$type": "color",
+      "$description": "Stepper の地。",
+      "$value": "{controlInk.trackFill}"
+    },
+    "stepperGlyph": {
+      "$type": "color",
+      "$description": "Stepper の記号（− / ＋）。",
+      "$value": "{controlInk.accent}"
+    },
+    "stepperDivider": {
+      "$type": "color",
+      "$description": "Stepper の中央の区切り線。",
+      "$value": "{controlInk.separator}"
+    },
+    "segmentedBackground": {
+      "$type": "color",
+      "$description": "SegmentedControl の地。",
+      "$value": "{controlInk.trackFill}"
+    },
+    "segmentedIndicator": {
+      "$type": "color",
+      "$description": "選択中の区画。**選択が絵に出る本体**（位置は詰め物の幅で作る）。",
+      "$value": "{controlInk.raised}"
+    },
+    "segmentedLabel": {
+      "$type": "color",
+      "$description": "区画のラベル。**選択中でも変えない** —— <Variant> は共通属性しか受け付けず、2 つのラベルに別々の色を振る手段が無い（README の近似の表）。",
+      "$value": "{controlInk.label}"
+    },
+    "badgeNeutral": {
+      "$type": "color",
+      "$description": "Badge の tone: neutral。",
+      "$value": "{badgeInk.neutral}"
+    },
+    "badgeAccent": {
+      "$type": "color",
+      "$description": "Badge の tone: accent。",
+      "$value": "{controlInk.accent}"
+    },
+    "badgeDanger": {
+      "$type": "color",
+      "$description": "Badge の tone: danger（iOS の未読バッジ）。",
+      "$value": "{badgeInk.danger}"
+    },
+    "badgeLabel": {
+      "$type": "color",
+      "$description": "Badge の数字。3 tone とも同じ白。",
+      "$value": "{controlInk.onFill}"
+    },
+    "chipBackgroundOff": {
+      "$type": "color",
+      "$description": "Chip の非選択の面。",
+      "$value": "{controlInk.trackFill}"
+    },
+    "chipBackgroundOn": {
+      "$type": "color",
+      "$description": "Chip の選択の面。",
+      "$value": "{controlInk.accent}"
+    },
+    "chipLabelOff": {
+      "$type": "color",
+      "$description": "Chip の非選択のラベル。",
+      "$value": "{controlInk.label}"
+    },
+    "chipLabelOn": {
+      "$type": "color",
+      "$description": "Chip の選択のラベル。",
+      "$value": "{controlInk.onFill}"
+    },
+    "chipBorderOff": {
+      "$type": "color",
+      "$description": "Chip の非選択の縁。",
+      "$value": "{controlInk.separator}"
+    },
+    "chipBorderOn": {
+      "$type": "color",
+      "$description": "Chip の選択の縁。面と同じ色（縁を消さずに面と揃える —— borderWidth を 0 にすると『縁が無い』と『縁が透明』が同じ絵になり、Variant が同じ属性の組を持てなくなる）。",
+      "$value": "{controlInk.accent}"
+    },
+    "labelText": {
+      "$type": "typography",
+      "$description": "SegmentedControl / Chip のラベル。",
+      "$value": {
+        "fontFamily": "{controlFamily.sans}",
+        "fontSize": "{controlType.label}",
+        "fontWeight": "medium",
+        "lineHeight": 1.2
+      }
+    },
+    "badgeText": {
+      "$type": "typography",
+      "$description": "Badge の数字。",
+      "$value": {
+        "fontFamily": "{controlFamily.sans}",
+        "fontSize": "{controlType.badge}",
+        "fontWeight": "bold",
+        "lineHeight": 1.2
+      }
+    },
+    "glyphText": {
+      "$type": "typography",
+      "$description": "Stepper の記号。",
+      "$value": {
+        "fontFamily": "{controlFamily.sans}",
+        "fontSize": "{controlType.glyph}",
+        "fontWeight": "medium",
+        "lineHeight": 1.2
+      }
     }
   },
   "demo": {

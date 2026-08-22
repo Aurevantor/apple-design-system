@@ -40,29 +40,88 @@
       "$description": "ぼかさない。"
     }
   },
+  "controlInk": {
+    "$type": "color",
+    "$description": "**コントロールが共有する色**（#202）。ここに置くのは『iOS 側に実在する共有』だけ —— 同じ灰・同じ白・同じ影を 6 つの Component が別々の primitive として持つと、片方だけ変えたときに黙ってずれる。**共有するのは primitive だけで、component 層は Component 名で切ったまま**（$switch.trackOff と $slider.trackColor は別の Token）なので、『どれを変えると何が動くか』は component 層で読める。**出典: Figma UI kit も実機も未実測**（この環境に kit が無く、UIKit は macOS に無い）。値は差が絵に出る band 内の 1 点で、Apple の実装値ではない。",
+    "trackFill": {
+      "$value": "#78788029",
+      "$description": "溝・地の灰（16%）。Switch の off / Slider の未塗り / ProgressBar の溝 / Stepper の地 / SegmentedControl の地 / Chip の off が共有する。**#196 では switchInk.offTrack という名前で Switch 専用に見えていた**（値は同じ）。"
+    },
+    "raised": {
+      "$value": "#FFFFFF",
+      "$description": "浮いている面の白。Switch のつまみ / Slider のつまみ / SegmentedControl のインジケータ。"
+    },
+    "raisedShadowNear": {
+      "$value": "#0000003D",
+      "$description": "浮いている面の影の近い層（24%）。接地を見せる。"
+    },
+    "raisedShadowFar": {
+      "$value": "#00000026",
+      "$description": "浮いている面の影の遠い層（15%）。浮きを見せる。"
+    },
+    "accent": {
+      "$value": "#007AFF",
+      "$description": "値・選択を表す青。Slider の塗り / ProgressBar の塗り / Stepper の記号 / Chip の on / Badge の accent。**Switch の on だけは緑**（switchInk.onTint）—— iOS の Switch は system green で、青ではない。"
+    },
+    "separator": {
+      "$value": "#3C3C4349",
+      "$description": "区切り線（29%）。Stepper の中央 / Chip の off の縁。"
+    },
+    "onFill": {
+      "$value": "#FFFFFF",
+      "$description": "塗りの上に載る文字。Badge の数字 / Chip の on のラベル。**raised と同じ白だが役が違う**（あちらは面・こちらは文字）ので分けてある —— 面の白を変えたときに文字まで動くと、対比が壊れたことに気づけない。"
+    },
+    "label": {
+      "$value": "#000000",
+      "$description": "地の上に載る文字。SegmentedControl のラベル / Chip の off のラベル。"
+    }
+  },
   "switchInk": {
     "$type": "color",
-    "$description": "Switch の色。**出典: Figma UI kit も実機も未実測**（この環境に kit が無く、UIKit は macOS に無いので UISwitch を測れない）。値は on / off / disabled の差が絵に出る band 内の 1 点で、Apple の実装値ではない（#169 の 3-a と同じ扱い）。",
+    "$description": "Switch 固有の色。**共有するものは controlInk へ移した**（#202）ので、ここに残るのは Switch だけが使う 1 色。**出典: Figma UI kit も実機も未実測**（この環境に kit が無く、UIKit は macOS に無いので UISwitch を測れない）。値は on / off / disabled の差が絵に出る band 内の 1 点で、Apple の実装値ではない（#169 の 3-a と同じ扱い）。",
     "onTint": {
       "$value": "#34C759",
-      "$description": "on の溝。iOS の system green として広く知られている綴りだが、実機では測っていない。"
-    },
-    "offTrack": {
-      "$value": "#78788029",
-      "$description": "off の溝。灰色を 16% で置く（#RRGGBBAA は toColor が受ける唯一の透過表記）。"
-    },
-    "thumb": {
-      "$value": "#FFFFFF",
-      "$description": "つまみ。on / off で変えない（変わるのは溝の色と位置だけ）。"
-    },
-    "thumbShadowNear": {
-      "$value": "#0000003D",
-      "$description": "つまみの影の近い層（24%）。接地を見せる。"
-    },
-    "thumbShadowFar": {
-      "$value": "#00000026",
-      "$description": "つまみの影の遠い層（15%）。浮きを見せる。"
+      "$description": "on の溝。iOS の system green として広く知られている綴りだが、実機では測っていない。**controlInk.accent（青）とは別** —— Switch だけが緑を使う。"
     }
+  },
+  "badgeInk": {
+    "$type": "color",
+    "$description": "Badge 固有の色。accent は controlInk と共有する（tone 軸の 3 種のうち 1 つ）。**出典は controlInk と同じ**（Figma も実機も未実測）。",
+    "neutral": {
+      "$value": "#8E8E93",
+      "$description": "灰の tone。数を知らせるだけで急がないもの。"
+    },
+    "danger": {
+      "$value": "#FF3B30",
+      "$description": "赤の tone。iOS の未読バッジ。system red として広く知られている綴り。"
+    }
+  },
+  "controlRatio": {
+    "$type": "number",
+    "$description": "コントロールの不透明度。**#196 では switchRatio という名前だった**（disabled の値は同じ 0.4）。",
+    "disabled": {
+      "$value": 0.4,
+      "$description": "disabled の不透明度。**Web では forcedState でしか見えない**（README の「disabled の見せ方」）。"
+    },
+    "pressed": {
+      "$value": 0.6,
+      "$description": "pressed の不透明度。**こちらは :active に写る**（disabled と違って STATE_SELECTORS に在る）ので、Web では実際に押すと効く。**Swift には写らない**（#201）。"
+    }
+  },
+  "controlFamily": {
+    "$type": "fontFamily",
+    "$description": "コントロールの書体。demoFamily と同じ綴りだが、あちらは screens の標本専用で Component の契約ではないので分けてある。",
+    "sans": { "$value": ["SF Pro Text", "Helvetica Neue", "sans-serif"] }
+  },
+  "controlType": {
+    "$type": "dimension",
+    "$description": "コントロールの文字の大きさ。",
+    "label": {
+      "$value": { "value": 15, "unit": "px" },
+      "$description": "SegmentedControl / Chip のラベル。"
+    },
+    "badge": { "$value": { "value": 12, "unit": "px" }, "$description": "Badge の数字。" },
+    "glyph": { "$value": { "value": 20, "unit": "px" }, "$description": "Stepper の記号。" }
   },
   "switchMetric": {
     "$type": "dimension",
@@ -91,13 +150,92 @@
       "$description": "off のときの詰め物の幅。**0 も明示的に書く** —— Variant は base からの差分として読まれるので、片方だけ属性を落とすと『動かない』ではなく『on の位置が残る』になる（docs/02 §5.4）。"
     }
   },
-  "switchRatio": {
-    "$type": "number",
-    "$description": "Switch の不透明度。",
-    "disabled": {
-      "$value": 0.4,
-      "$description": "disabled の不透明度。**Web では forcedState でしか見えない**（README の「disabled の見せ方」）。"
+  "sliderMetric": {
+    "$type": "dimension",
+    "$description": "Slider の寸法。**Switch と同じく式で閉じている**（trackCorner*2 = trackHeight / thumbCorner*2 = thumb / trackWidth - thumb = fillMax / fillMax/2 = fillMid）。**幅が固定であることに依存する** —— 塗りの幅を pt で置くので、trackWidth を変えると比率が壊れる（README の近似の表）。",
+    "trackWidth": { "$value": 240, "$description": "溝の幅。**固定**（比率の前提）。" },
+    "trackHeight": { "$value": 4, "$description": "溝の高さ。" },
+    "trackCorner": { "$value": 2, "$description": "溝の角丸。trackHeight の半分ちょうど。" },
+    "thumb": { "$value": 28, "$description": "つまみの一辺。" },
+    "thumbCorner": {
+      "$value": 14,
+      "$description": "つまみの角丸。thumb の半分ちょうど（真円の近似）。"
+    },
+    "fillMin": {
+      "$value": 0,
+      "$description": "min の塗り幅。**0 も明示的に書く**（Switch の zeroTravel と同じ理由）。"
+    },
+    "fillMid": { "$value": 106, "$description": "mid の塗り幅。fillMax の半分ちょうど。" },
+    "fillMax": {
+      "$value": 212,
+      "$description": "max の塗り幅 = trackWidth - thumb。**つまみの左端が塗りの右端**なので、ここが上限（これを超えるとつまみが溝からはみ出す）。"
     }
+  },
+  "progressMetric": {
+    "$type": "dimension",
+    "$description": "ProgressBar の寸法。**幅が固定であることに依存する**（Slider と同じ）—— trackCorner*2 = trackHeight / fillHalf*2 = trackWidth / fillFull = trackWidth。",
+    "trackWidth": { "$value": 240, "$description": "溝の幅。**固定**（比率の前提）。" },
+    "trackHeight": { "$value": 4, "$description": "溝の高さ。" },
+    "trackCorner": { "$value": 2, "$description": "溝の角丸。trackHeight の半分ちょうど。" },
+    "fillEmpty": { "$value": 0, "$description": "0% の塗り幅。**0 も明示的に書く**。" },
+    "fillHalf": { "$value": 120, "$description": "50% の塗り幅。trackWidth の半分ちょうど。" },
+    "fillFull": { "$value": 240, "$description": "100% の塗り幅。trackWidth と同じ。" }
+  },
+  "stepperMetric": {
+    "$type": "dimension",
+    "$description": "Stepper の寸法。**segment*2 + divider = width** で閉じている。",
+    "width": { "$value": 94, "$description": "全体の幅。" },
+    "height": { "$value": 32, "$description": "全体の高さ。" },
+    "corner": {
+      "$value": 8,
+      "$description": "角丸。**capsule にしない** —— 高さに追随しないので、控えめに取ってこの近似を踏まない（GlassBar と同じ判断）。"
+    },
+    "segment": { "$value": 46.5, "$description": "片側の幅 =（width - divider）/ 2。" },
+    "divider": { "$value": 1, "$description": "中央の区切り線の太さ。" }
+  },
+  "segmentedMetric": {
+    "$type": "dimension",
+    "$description": "SegmentedControl の寸法。**inset*2 + segment*2 = width** / **inset*2 + indicatorHeight = height** で閉じている。**幅が固定であることに依存する**（インジケータの位置を pt で置くため）。",
+    "width": {
+      "$value": 200,
+      "$description": "全体の幅。**固定**（インジケータの移動距離の前提）。"
+    },
+    "height": { "$value": 32, "$description": "全体の高さ。" },
+    "corner": {
+      "$value": 9,
+      "$description": "外側の角丸。**capsule にしない**（Stepper と同じ）。"
+    },
+    "inset": { "$value": 2, "$description": "地とインジケータの間の余白。" },
+    "segment": { "$value": 98, "$description": "1 区画の幅 =（width - inset*2）/ 2。" },
+    "indicatorCorner": {
+      "$value": 7,
+      "$description": "インジケータの角丸。corner - inset（外側の丸みに沿う）。"
+    },
+    "indicatorHeight": { "$value": 28, "$description": "インジケータの高さ = height - inset*2。" },
+    "restLeading": {
+      "$value": 0,
+      "$description": "leading が選ばれているときの詰め物の幅。**0 も明示的に書く**。"
+    },
+    "restTrailing": {
+      "$value": 98,
+      "$description": "trailing が選ばれているときの詰め物の幅 = segment。"
+    }
+  },
+  "badgeMetric": {
+    "$type": "dimension",
+    "$description": "Badge の寸法。**corner*2 = height**（capsule の近似・高さ固定に依存する）。",
+    "height": { "$value": 20, "$description": "高さ。**固定** —— capsule の近似が成り立つ前提。" },
+    "corner": { "$value": 10, "$description": "角丸。height の半分ちょうど。" },
+    "paddingHorizontal": { "$value": 6, "$description": "左右の余白。桁が増えると横に伸びる。" },
+    "minWidth": { "$value": 20, "$description": "最小の幅 = height。1 桁のとき真円になる。" }
+  },
+  "chipMetric": {
+    "$type": "dimension",
+    "$description": "Chip の寸法。**corner*2 = height**（capsule の近似・高さ固定に依存する）。",
+    "height": { "$value": 32, "$description": "高さ。**固定** —— capsule の近似が成り立つ前提。" },
+    "corner": { "$value": 16, "$description": "角丸。height の半分ちょうど。" },
+    "paddingHorizontal": { "$value": 14, "$description": "左右の余白。" },
+    "border": { "$value": 1, "$description": "縁の太さ。" }
   },
   "glassMetric": {
     "$type": "dimension",

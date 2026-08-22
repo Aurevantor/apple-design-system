@@ -1,19 +1,31 @@
 <!--
-    apple-hig: Catalog / omitted: Switch の disabled（<State> は screen から宣言できず、
-    forcedState は Renderer に渡す描画オプションなので、静止したカタログには並べられない。
-    見るのは Studio の Inspector で、e2e/apple-hig.spec.ts が実際に操作して確かめている）と、
-    GlassBar の State（<State> を1つも宣言していない。タッチ反応は README の近似表のとおり
-    描かない）と、押した状態・スクロールに追随する屈折・周囲の色の反射
-    （いずれも v0.1 の言語機能に無い。近似したものの一覧は ../README.md）。
+    apple-hig: Catalog / omitted: Switch / Slider / SegmentedControl / Chip の disabled と
+    Stepper の disabled（<State> は screen から宣言できず、 forcedState は Renderer に渡す
+    描画オプションなので、静止したカタログには並べられない。 見るのは Studio の Inspector で、
+    e2e/apple-hig.spec.ts が実際に操作して確かめている）と、 GlassBar / ProgressBar / Badge の
+    State（<State> を1つも宣言していない。操作できない部品なので「操作できるかどうか」の軸が無い）と、
+    押した状態・スクロールに追随する屈折・周囲の色の反射・値の変化 （いずれも v0.1 の言語機能に無い。
+    近似したものの一覧は ../README.md）。
 
     **全 Variant を一望する見本帳。** screens/Showcase.uix は展開経路の検査が目的で、
     ここは「軸を並べて見る」ためだけの画面（#170）。GlassBar の背後の縞は Showcase と
     同じもの —— ガラスは背後に何か在って初めて絵になり、フラットな地では 3 種の
     透過差（72% / 28% / 0%）が見分けにくい。
 
-    **Switch は縞に載せない。** ガラスと違って背後を透かさないので、縞に載せると
-    「溝の色が背後で変わる」ように見えて **on / off の差（この Component の軸そのもの）が
-    読みにくくなる**。無地の面に置く。
+    **コントロールは縞に載せない。** ガラスと違って背後を透かさないので、縞に載せると
+    「溝の色が背後で変わる」ように見えて **軸そのものが読みにくくなる**。無地の面に置く。
+
+    **節を 2 つに割ってある**（#202）—— ガラスとコントロールで、標本の下地が違う
+    （縞 / 無地）。**1 つの VStack に 11 節を並べない**のは、SwiftUI の ViewBuilder が
+    1 ブロックに 10 個までしか置けないため（packages/codegen-swift の VIEW_BUILDER_LIMIT）。
+    割る前は **11 子**（cover 1 + glass 3 + controls 7）で、**割っていなければ拒否されていた**
+    —— #187 が入って生成対象になったので、これは実測できる（下記）。
+
+    **この画面は Swift に生成される**（#187 以降）。縞の grow が自作 Layout で比配分
+    できるようになり、packages/apple-hig が tools/generate-swift.mjs の SOURCES に戻った。
+    **8 Component すべてがここに並ぶので、生成検査の顔ぶれの縛りもこの画面が持つ**
+    （examples/hello-world/src/apple-hig.test.ts）。#187 の前は grow を使わない
+    screens/Controls.uix を足場として置いていたが、制約ごと無くなったので畳んだ。
 -->
 <Screen id="glass-catalog" name="Catalog" background="$demo.backdrop.canvas" padding="$demo.sample.padding">
 
@@ -26,91 +38,221 @@
                     Apple HIG — Catalog
                 </Text>
                 <Text id="catalog-note" style="$demo.text.label" color="$demo.label">
-                    GlassBar の glass 軸 3 種と Switch の on 軸 2 種を並べた見本帳。
+                    GlassBar の glass 軸 3 種と、コントロール 7 種の軸を並べた見本帳。
                 </Text>
             </VStack>
 
-            <VStack id="catalog-regular" spacing="$demo.sample.gap" align="stretch">
-                <ZStack id="catalog-sample-regular" width="fill" height="$demo.sample.height" align="center">
-                    <HStack id="catalog-backdrop-regular" width="fill" height="fill" align="stretch">
-                        <VStack grow="1" background="$demo.backdrop.dark" />
-                        <VStack grow="1" background="$demo.backdrop.light" />
-                        <VStack grow="1" background="$demo.backdrop.dark" />
-                        <VStack grow="1" background="$demo.backdrop.light" />
+            <VStack id="catalog-glass" spacing="$demo.sample.gap" align="stretch">
+
+                <VStack id="catalog-regular" spacing="$demo.sample.gap" align="stretch">
+                    <ZStack id="catalog-sample-regular" width="fill" height="$demo.sample.height" align="center">
+                        <HStack id="catalog-backdrop-regular" width="fill" height="fill" align="stretch">
+                            <VStack grow="1" background="$demo.backdrop.dark" />
+                            <VStack grow="1" background="$demo.backdrop.light" />
+                            <VStack grow="1" background="$demo.backdrop.dark" />
+                            <VStack grow="1" background="$demo.backdrop.light" />
+                        </HStack>
+                        <GlassBar id="catalog-bar-regular" glass="regular">
+                            <Content>
+                                <Text id="catalog-label-regular" style="$demo.text.label" color="$demo.label">
+                                    regular
+                                </Text>
+                            </Content>
+                        </GlassBar>
+                    </ZStack>
+                    <Text id="catalog-caption-regular" style="$demo.text.label" color="$demo.label">
+                        面 72% ・ ぼかし 20 ・ 縁 80% 1pt（既定）
+                    </Text>
+                </VStack>
+
+                <VStack id="catalog-clear" spacing="$demo.sample.gap" align="stretch">
+                    <ZStack id="catalog-sample-clear" width="fill" height="$demo.sample.height" align="center">
+                        <HStack id="catalog-backdrop-clear" width="fill" height="fill" align="stretch">
+                            <VStack grow="1" background="$demo.backdrop.dark" />
+                            <VStack grow="1" background="$demo.backdrop.light" />
+                            <VStack grow="1" background="$demo.backdrop.dark" />
+                            <VStack grow="1" background="$demo.backdrop.light" />
+                        </HStack>
+                        <GlassBar id="catalog-bar-clear" glass="clear">
+                            <Content>
+                                <Text id="catalog-label-clear" style="$demo.text.label" color="$demo.label">
+                                    clear
+                                </Text>
+                            </Content>
+                        </GlassBar>
+                    </ZStack>
+                    <Text id="catalog-caption-clear" style="$demo.text.label" color="$demo.label">
+                        面 28% ・ ぼかし 8 ・ 縁 40% 1pt（背後の形が残る）
+                    </Text>
+                </VStack>
+
+                <VStack id="catalog-identity" spacing="$demo.sample.gap" align="stretch">
+                    <ZStack id="catalog-sample-identity" width="fill" height="$demo.sample.height" align="center">
+                        <HStack id="catalog-backdrop-identity" width="fill" height="fill" align="stretch">
+                            <VStack grow="1" background="$demo.backdrop.dark" />
+                            <VStack grow="1" background="$demo.backdrop.light" />
+                            <VStack grow="1" background="$demo.backdrop.dark" />
+                            <VStack grow="1" background="$demo.backdrop.light" />
+                        </HStack>
+                        <GlassBar id="catalog-bar-identity" glass="identity">
+                            <Content>
+                                <Text id="catalog-label-identity" style="$demo.text.label" color="$demo.label">
+                                    identity
+                                </Text>
+                            </Content>
+                        </GlassBar>
+                    </ZStack>
+                    <Text id="catalog-caption-identity" style="$demo.text.label" color="$demo.label">
+                        面 0% ・ ぼかし 0 ・ 縁 0% 0pt（ガラスを当てない）
+                    </Text>
+                </VStack>
+
+            </VStack>
+
+            <VStack id="catalog-controls" spacing="$demo.sample.gap" align="stretch">
+
+                <VStack id="catalog-switch" spacing="$demo.sample.gap" align="stretch">
+                    <Text id="catalog-switch-title" style="$demo.text.label" color="$demo.label">
+                        Switch — on 軸 2 種
+                    </Text>
+                    <HStack id="catalog-switch-row"
+                            width="fill"
+                            padding="$demo.sample.padding"
+                            spacing="$demo.sample.gap"
+                            radius="$demo.sample.radius"
+                            align="center"
+                            background="$demo.backdrop.light">
+                        <Switch id="catalog-switch-off" on="off" />
+                        <Switch id="catalog-switch-on" on="on" />
                     </HStack>
-                    <GlassBar id="catalog-bar-regular" glass="regular">
-                        <Content>
-                            <Text id="catalog-label-regular" style="$demo.text.label" color="$demo.label">
-                                regular
-                            </Text>
-                        </Content>
-                    </GlassBar>
-                </ZStack>
-                <Text id="catalog-caption-regular" style="$demo.text.label" color="$demo.label">
-                    面 72% ・ ぼかし 20 ・ 縁 80% 1pt（既定）
-                </Text>
-            </VStack>
+                    <Text id="catalog-caption-switch" style="$demo.text.label" color="$demo.label">
+                        off = 灰の溝・つまみは左 ／ on = 緑の溝・つまみは右（詰め物 0 → 20）。
+                        disabled は forcedState でしか見えないのでここには並べていない。
+                    </Text>
+                </VStack>
 
-            <VStack id="catalog-clear" spacing="$demo.sample.gap" align="stretch">
-                <ZStack id="catalog-sample-clear" width="fill" height="$demo.sample.height" align="center">
-                    <HStack id="catalog-backdrop-clear" width="fill" height="fill" align="stretch">
-                        <VStack grow="1" background="$demo.backdrop.dark" />
-                        <VStack grow="1" background="$demo.backdrop.light" />
-                        <VStack grow="1" background="$demo.backdrop.dark" />
-                        <VStack grow="1" background="$demo.backdrop.light" />
+                <VStack id="catalog-slider" spacing="$demo.sample.gap" align="stretch">
+                    <Text id="catalog-slider-title" style="$demo.text.label" color="$demo.label">
+                        Slider — value 軸 3 種
+                    </Text>
+                    <VStack id="catalog-slider-row"
+                            width="fill"
+                            padding="$demo.sample.padding"
+                            spacing="$demo.sample.gap"
+                            radius="$demo.sample.radius"
+                            align="stretch"
+                            background="$demo.backdrop.light">
+                        <Slider id="catalog-slider-min" value="min" />
+                        <Slider id="catalog-slider-mid" value="mid" />
+                        <Slider id="catalog-slider-max" value="max" />
+                    </VStack>
+                    <Text id="catalog-caption-slider" style="$demo.text.label" color="$demo.label">
+                        塗り 0 / 106 / 212pt。**つまみの左端が塗りの右端**なので、振る値は 1 つで足りる。
+                        動かない（v0.1 は表示専用）。
+                    </Text>
+                </VStack>
+
+                <VStack id="catalog-progress" spacing="$demo.sample.gap" align="stretch">
+                    <Text id="catalog-progress-title" style="$demo.text.label" color="$demo.label">
+                        ProgressBar — value 軸 3 種
+                    </Text>
+                    <VStack id="catalog-progress-row"
+                            width="fill"
+                            padding="$demo.sample.padding"
+                            spacing="$demo.sample.gap"
+                            radius="$demo.sample.radius"
+                            align="stretch"
+                            background="$demo.backdrop.light">
+                        <ProgressBar id="catalog-progress-empty" value="empty" />
+                        <ProgressBar id="catalog-progress-half" value="half" />
+                        <ProgressBar id="catalog-progress-full" value="full" />
+                    </VStack>
+                    <Text id="catalog-caption-progress" style="$demo.text.label" color="$demo.label">
+                        塗り 0 / 120 / 240pt（溝の幅 240 に対する 0% / 50% / 100%）。
+                        比率は幅が固定であることに依存する。
+                    </Text>
+                </VStack>
+
+                <VStack id="catalog-stepper" spacing="$demo.sample.gap" align="stretch">
+                    <Text id="catalog-stepper-title" style="$demo.text.label" color="$demo.label">
+                        Stepper — 軸を持たない（差は State だけ）
+                    </Text>
+                    <HStack id="catalog-stepper-row"
+                            width="fill"
+                            padding="$demo.sample.padding"
+                            spacing="$demo.sample.gap"
+                            radius="$demo.sample.radius"
+                            align="center"
+                            background="$demo.backdrop.light">
+                        <Stepper id="catalog-stepper-rest" />
                     </HStack>
-                    <GlassBar id="catalog-bar-clear" glass="clear">
-                        <Content>
-                            <Text id="catalog-label-clear" style="$demo.text.label" color="$demo.label">
-                                clear
-                            </Text>
-                        </Content>
-                    </GlassBar>
-                </ZStack>
-                <Text id="catalog-caption-clear" style="$demo.text.label" color="$demo.label">
-                    面 28% ・ ぼかし 8 ・ 縁 40% 1pt（背後の形が残る）
-                </Text>
-            </VStack>
+                    <Text id="catalog-caption-stepper" style="$demo.text.label" color="$demo.label">
+                        pressed は :active に写るので、押すと実際に薄くなる（disabled と違って
+                        forcedState を使わずに見える）。どちらを押したかは描けない。
+                    </Text>
+                </VStack>
 
-            <VStack id="catalog-identity" spacing="$demo.sample.gap" align="stretch">
-                <ZStack id="catalog-sample-identity" width="fill" height="$demo.sample.height" align="center">
-                    <HStack id="catalog-backdrop-identity" width="fill" height="fill" align="stretch">
-                        <VStack grow="1" background="$demo.backdrop.dark" />
-                        <VStack grow="1" background="$demo.backdrop.light" />
-                        <VStack grow="1" background="$demo.backdrop.dark" />
-                        <VStack grow="1" background="$demo.backdrop.light" />
+                <VStack id="catalog-segmented" spacing="$demo.sample.gap" align="stretch">
+                    <Text id="catalog-segmented-title" style="$demo.text.label" color="$demo.label">
+                        SegmentedControl — selection 軸 2 種
+                    </Text>
+                    <VStack id="catalog-segmented-row"
+                            width="fill"
+                            padding="$demo.sample.padding"
+                            spacing="$demo.sample.gap"
+                            radius="$demo.sample.radius"
+                            align="stretch"
+                            background="$demo.backdrop.light">
+                        <SegmentedControl id="catalog-segmented-leading" selection="leading" />
+                        <SegmentedControl id="catalog-segmented-trailing" selection="trailing" />
+                    </VStack>
+                    <Text id="catalog-caption-segmented" style="$demo.text.label" color="$demo.label">
+                        白い区画が 0 → 98pt へ動く。ラベルの色は選択で変わらない（Variant に
+                        別々の色を振る手段が無い）。押しても切り替わらない。
+                    </Text>
+                </VStack>
+
+                <VStack id="catalog-badge" spacing="$demo.sample.gap" align="stretch">
+                    <Text id="catalog-badge-title" style="$demo.text.label" color="$demo.label">
+                        Badge — tone 軸 3 種
+                    </Text>
+                    <HStack id="catalog-badge-row"
+                            width="fill"
+                            padding="$demo.sample.padding"
+                            spacing="$demo.sample.gap"
+                            radius="$demo.sample.radius"
+                            align="center"
+                            background="$demo.backdrop.light">
+                        <Badge id="catalog-badge-neutral" tone="neutral" label="1" />
+                        <Badge id="catalog-badge-accent" tone="accent" label="12" />
+                        <Badge id="catalog-badge-danger" tone="danger" label="128" />
                     </HStack>
-                    <GlassBar id="catalog-bar-identity" glass="identity">
-                        <Content>
-                            <Text id="catalog-label-identity" style="$demo.text.label" color="$demo.label">
-                                identity
-                            </Text>
-                        </Content>
-                    </GlassBar>
-                </ZStack>
-                <Text id="catalog-caption-identity" style="$demo.text.label" color="$demo.label">
-                    面 0% ・ ぼかし 0 ・ 縁 0% 0pt（ガラスを当てない）
-                </Text>
-            </VStack>
+                    <Text id="catalog-caption-badge" style="$demo.text.label" color="$demo.label">
+                        1 桁は真円（minWidth = height）、桁が増えると横に伸びる capsule。
+                        State は持たない（操作できないため）。
+                    </Text>
+                </VStack>
 
-            <VStack id="catalog-switch" spacing="$demo.sample.gap" align="stretch">
-                <Text id="catalog-switch-title" style="$demo.text.label" color="$demo.label">
-                    Switch — on 軸 2 種
-                </Text>
-                <HStack id="catalog-switch-row"
-                        width="fill"
-                        padding="$demo.sample.padding"
-                        spacing="$demo.sample.gap"
-                        radius="$demo.sample.radius"
-                        align="center"
-                        background="$demo.backdrop.light">
-                    <Switch id="catalog-switch-off" on="off" />
-                    <Switch id="catalog-switch-on" on="on" />
-                </HStack>
-                <Text id="catalog-caption-switch" style="$demo.text.label" color="$demo.label">
-                    off = 灰の溝・つまみは左 ／ on = 緑の溝・つまみは右（詰め物 0 → 20）。
-                    disabled は forcedState でしか見えないのでここには並べていない。
-                </Text>
+                <VStack id="catalog-chip" spacing="$demo.sample.gap" align="stretch">
+                    <Text id="catalog-chip-title" style="$demo.text.label" color="$demo.label">
+                        Chip — selected 軸 2 種
+                    </Text>
+                    <HStack id="catalog-chip-row"
+                            width="fill"
+                            padding="$demo.sample.padding"
+                            spacing="$demo.sample.gap"
+                            radius="$demo.sample.radius"
+                            align="center"
+                            background="$demo.backdrop.light">
+                        <Chip id="catalog-chip-off" selected="off" label="Sans" />
+                        <Chip id="catalog-chip-on" selected="on" label="Serif" />
+                    </HStack>
+                    <Text id="catalog-caption-chip" style="$demo.text.label" color="$demo.label">
+                        面・文字・縁の 3 つが選択で変わる（ラベルが 1 つなので文字色も振れる）。
+                        HIG に Chip という部品名は無い（README）。
+                    </Text>
+                </VStack>
+
             </VStack>
 
         </VStack>

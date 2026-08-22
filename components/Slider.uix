@@ -1,0 +1,74 @@
+<!--
+    iOS の Slider。軸は `value` 1 本（#79 の 1 Component 1 軸）。
+
+    **塗りの幅とつまみの位置は同じ値。** つまみの左端＝塗りの右端になるように組んであるので、
+    `<Variant>` が振るのは **`width` 1 つだけ**で足りる（2 つの値を振る必要が無い）。
+    これは偶然ではなく**そう組んだ** —— `<Variant>` は共通属性 + `name` / `on` しか
+    受け付けないので、2 つ目の長さを振るには `minWidth` のような別の属性を
+    「幅として」借りることになり、読めなくなる（#196 が `justify` で踏んだのと同じ形）。
+
+    **2 枚重ねにする理由。** 溝は高さ 4pt、つまみは 28pt で**高さが違う**。1 つの `HStack` に
+    並べると、溝の高さに合わせるか、つまみの高さに合わせるかのどちらかしか選べない。
+    `ZStack` に「溝の行」と「つまみの行」を重ねると、両方が自分の高さを持てる。
+
+    **`<State name="disabled">` を持つ。** Slider は**操作できる**（v0.1 では動かないが、
+    HIG 上は操作するもの）ので、`Switch` と同じく「操作できるかどうか」を State に置く
+    —— 軸は値のほうに使い切っている（README の「State を持つのはどれか」）。
+    **`disabled` は Web では `forcedState` でしか見えない**（`Switch` と同じ。docs/03 §4）。
+
+    **幅が固定であることに依存する** —— `ProgressBar` と同じ近似。
+    `fillMax === trackWidth - thumbSize` / `fillMid × 2 === fillMax` を解決値で縛ってある。
+
+    **`grow` は使わない**（`ProgressBar` と同じ理由 —— 幅が固定であることが比率の前提。
+    #187 のあとは「生成できない」が理由ではなくなった）。
+
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+-->
+<Component name="Slider">
+
+    <Props>
+        <Prop name="value" type="string" default="mid" />
+    </Props>
+
+    <State name="normal" />
+    <State name="disabled" opacity="$slider.disabledOpacity" />
+
+    <!-- **3 種とも同じ 1 属性を書く**（`ProgressBar` と同じ理由）。 -->
+    <Variant on="value" name="min" width="$slider.fillMin" />
+    <Variant on="value" name="mid" width="$slider.fillMid" />
+    <Variant on="value" name="max" width="$slider.fillMax" />
+
+    <ZStack
+        width="$slider.trackWidth"
+        height="$slider.thumbSize"
+        alignX="leading"
+        alignY="center">
+
+        <!-- 溝の行。高さは 4pt で、つまみより低い。 -->
+        <HStack
+            width="fill"
+            height="$slider.trackHeight"
+            radius="$slider.trackRadius"
+            background="$slider.trackColor"
+            clip="true">
+            <VStack
+                width="{$variant.width}"
+                height="fill"
+                radius="$slider.trackRadius"
+                background="$slider.fillColor" />
+        </HStack>
+
+        <!-- つまみの行。先頭の詰め物が**塗りと同じ幅**なので、つまみは塗りの右端に着く。 -->
+        <HStack width="fill" height="fill" align="center">
+            <VStack width="{$variant.width}" height="$slider.thumbSize" />
+            <VStack
+                width="$slider.thumbSize"
+                height="$slider.thumbSize"
+                radius="$slider.thumbRadius"
+                background="$slider.thumbColor"
+                shadow="$slider.thumbShadow" />
+        </HStack>
+
+    </ZStack>
+
+</Component>

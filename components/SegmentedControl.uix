@@ -1,0 +1,77 @@
+<!--
+    iOS の SegmentedControl（2 区画）。軸は `selection` 1 本（#79 の 1 Component 1 軸）。
+
+    **選択の位置は `Switch` のつまみと同じ作り** —— 先頭に詰め物を置き、その `width` を
+    Variant で振る。`justify` は `<Variant>` に書けない（共通属性 + `name` / `on` だけ・
+    #196 の実測）ので、可変な配置は**詰め物の寸法**でしか作れない。
+
+    **2 枚重ねにする理由。** インジケータ（選択中の白い区画）はラベルの**下**に居る必要があり、
+    かつラベルは 2 つとも動かない。1 つの `HStack` では「動くもの」と「動かないもの」を
+    同じ並びに入れることになるので、`ZStack` で層を分ける。
+
+    **ラベルの色は選択で変えられない。** `<Variant>` は共通属性しか受け付けないので、
+    2 つのラベルに**別々の**色を振る手段が無い（1 つの `color` を両方が読むと、
+    選択・非選択が同じ色になる）。iOS は選択中のラベルを濃くするが、**それは描かない**
+    —— 選択は「白い区画がどちらに居るか」だけで表す（README の近似の表）。
+
+    **切り替わらない。** v0.1 は表示専用で、押しても選択は動かない。
+    `<State name="pressed">` にすると「押している間だけ別の絵」になり、
+    **選択そのものとは別物**になる（#155 が `selected` で踏んだ形）。だから採らない。
+
+    **`grow` は使わない** —— 区画を `grow` で等分したくなるが、**幅が固定であることが
+    インジケータの位置の前提**（`restTrailing` は pt で置いてある）。#187 のあとは
+    「生成できない」が理由ではなくなった。`inset × 2 + segment × 2 === width` を解決値で縛ってある。
+
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+-->
+<Component name="SegmentedControl">
+
+    <Props>
+        <Prop name="selection" type="string" default="leading" />
+        <Prop name="leadingLabel" type="string" default="One" />
+        <Prop name="trailingLabel" type="string" default="Two" />
+    </Props>
+
+    <State name="normal" />
+    <State name="disabled" opacity="$segmented.disabledOpacity" />
+
+    <!-- **2 種とも同じ 1 属性を書く**（片方を省くと「動かない」ではなく「相手の位置が残る」）。 -->
+    <Variant on="selection" name="leading"  width="$segmented.restLeading" />
+    <Variant on="selection" name="trailing" width="$segmented.restTrailing" />
+
+    <ZStack
+        width="$segmented.width"
+        height="$segmented.height"
+        alignX="leading"
+        alignY="center">
+
+        <!-- 地とインジケータ。詰め物の幅が選択そのもの。 -->
+        <HStack
+            width="fill"
+            height="fill"
+            radius="$segmented.radius"
+            background="$segmented.background"
+            padding="$segmented.inset"
+            align="center">
+            <VStack width="{$variant.width}" height="$segmented.indicatorHeight" />
+            <VStack
+                width="$segmented.segmentWidth"
+                height="$segmented.indicatorHeight"
+                radius="$segmented.indicatorRadius"
+                background="$segmented.indicatorColor"
+                shadow="$segmented.indicatorShadow" />
+        </HStack>
+
+        <!-- ラベル。**動かない**（選択で色も変えない）。 -->
+        <HStack width="fill" height="fill" padding="$segmented.inset" align="center">
+            <VStack width="$segmented.segmentWidth" height="fill" align="center" justify="center">
+                <Text style="$segmented.labelStyle" color="$segmented.labelColor">{$props.leadingLabel}</Text>
+            </VStack>
+            <VStack width="$segmented.segmentWidth" height="fill" align="center" justify="center">
+                <Text style="$segmented.labelStyle" color="$segmented.labelColor">{$props.trailingLabel}</Text>
+            </VStack>
+        </HStack>
+
+    </ZStack>
+
+</Component>

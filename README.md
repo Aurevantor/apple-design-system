@@ -4,6 +4,26 @@
 |---|---|---|
 | `GlassBar` | `glass` 3 種（`regular` / `clear` / `identity`） | — |
 | `Switch` | `on` 2 種（`off` / `on`） | `normal` / `disabled` |
+| `Slider` | `value` 3 種（`min` / `mid` / `max`） | `normal` / `disabled` |
+| `ProgressBar` | `value` 3 種（`empty` / `half` / `full`） | — |
+| `Stepper` | **持たない** | `normal` / **`pressed`** / `disabled` |
+| `SegmentedControl` | `selection` 2 種（`leading` / `trailing`） | `normal` / `disabled` |
+| `Badge` | `tone` 3 種（`neutral` / `accent` / `danger`） | — |
+| `Chip` | `selected` 2 種（`off` / `on`） | `normal` / `disabled` |
+
+### `<State>` を持つのはどれか —— 分かれ目は「**操作できるか**」
+
+- **操作できる**（`Switch` / `Slider` / `Stepper` / `SegmentedControl` / `Chip`）
+  → 「操作できるかどうか」を `disabled` で表す。**軸は値のほうに使い切っている**（#79 の 1 軸）
+- **操作できない**（`GlassBar` / `ProgressBar` / `Badge`）
+  → `<State>` を **1 つも持たない**。押せないものに「押せません」と描かない
+
+**`Stepper` だけが軸を持たない。** 値を見せる部品ではなく「値を変える口」なので、
+絵に出る差が **押しているかどうか**しかない。それは軸ではなく `<State>`。
+**「1 Component 1 軸」は「必ず 1 本持つ」ではない**（#79 は上限の話。`TextField` に先例）。
+
+**`pressed` だけは Web で実際に効く。** `STATE_SELECTORS` に在って `:active` に写るため
+（`disabled` は無いので `forcedState` が唯一の入口）。**どちらも Swift には写らない**（#201）。
 
 配るのは **UIX と Token だけ**で、TypeScript は置き場所を指す定数しか持たない
 （`packages/components` と同型）。
@@ -54,14 +74,21 @@ Liquid Glass は屈折・鏡面・縁のグラデーション・周囲の色の�
 | 面の明度差 | 半透明の白 1 枚（`background`） | 面の中で明るさが変わらない。ZStack に矩形を 2〜3 枚重ねれば段はつくが、段階的にしかならないので採らなかった |
 | capsule（`GlassBar`） | **採らない**（`radius` は 22pt 固定） | 角丸が高さに追随しない。capsule にするには `radius` に 999 のような値を置くしかなく、**高さが変わると破綻する**。角ごとの radius も無い |
 | capsule（`Switch` の溝とつまみ） | **採る**（`radius` に高さの半分をそのまま置く） | 角丸が高さに追随しないのは同じで、**高さが固定であることに依存している**。`trackHeight` だけ変えると診断も出ないまま角丸の四角になるので、`radius × 2 === height` を解決値で assert して縛ってある（言語に算術が無いので UIX には書けない） |
+| capsule（`Slider` の溝とつまみ・`Badge`・`Chip`） | **採る**（`radius` に高さの半分をそのまま置く） | `Switch` と同じで**高さが固定であることに依存している**。4 つとも `radius × 2 === height` を解決値で assert して縛ってある。`Badge` だけは**幅**が中身に追随する（`minWidth` = 高さ）ので、1 桁なら真円・2 桁以上なら横に伸びた capsule になる |
 | ぼかしの質 | `backdrop-filter: blur()` 1 種 | 屈折・鏡面・彩度上げが無い。`blur` は明度をならすだけで、背後の像を曲げない |
-| タッチ反応 | **描かない**（`<State name="pressed">` を書かない） | 押した見た目が無い。`<State>` は Swift 側に未接続なので、書くと Web でだけ動く |
+| タッチ反応（`GlassBar`） | **描かない**（`<State>` を 1 つも宣言しない） | 押した見た目が無い。帯は chrome なので押す対象は中身の側、という判断（#169） |
+| 押下（`Stepper`） | **採る**（`<State name="pressed">` + `:active`） | **どちらのボタンを押したかは描けない** —— `<State>` は Component の宣言部にしか書けないので、押下は部品全体に掛かる。**Swift へは写らない**（`<State>` そのものが未接続・#201）ので、Web と Swift で絵が変わる |
 | スクロールへの追随 | **描けない** | 静止した Preview には「下を流れる内容」が無い。「下に何もスクロールしていないガラスには屈折させるものが無い」（Apple） |
 | 周囲の色の反射 | **描けない** | 実行時の環境依存。`docs/08` が「v0.1 は表示専用」と明示している |
 | つまみの影 | 多層 `shadow` 2 枚（近い層で接地・遠い層で浮き） | **`spread` を使えない** —— SwiftUI の `.shadow` に spread が無く、`Modifiers.swift` が「写せないので無視します」と報告して落とすので、書くと Web と Swift で絵が変わる。だから Token に spread を書いていない |
 | つまみの移動 | 先頭に詰め物を置き、その `width` を Variant で振る（0 → 20） | 連続した移動にならない。**2 状態しか無い**（v0.1 は表示専用）。`justify` を軸で振る書き方は取れない —— `<Variant>` は共通属性 + `name` / `on` しか受け付けず、`{$variant.padding-leading}` も `-` が算術に読まれる（docs/02 §5.2.1） |
 | `Switch` の tint | 1 色に固定（`#34C759`） | iOS はシステムのアクセントカラーに追随する。実行時の環境依存なので描けない |
 | 切り替えのアニメーション | **描かない** | 押しても切り替わらない。v0.1 が持たないと決めたもの（`docs/08` / #195） |
+| 値の位置（`Slider` / `ProgressBar`） | 塗りの `width` を Variant で振る（3 段） | **動かない**。連続した値にならず、`min` / `mid` / `max` の 3 状態しか無い（v0.1 は表示専用）。`Slider` はつまみの左端＝塗りの右端になるよう組んであるので、振る値は 1 つで足りる |
+| 幅の固定（`Slider` / `ProgressBar` / `SegmentedControl`） | 溝や地の幅を Token で固定する | **幅を変えると比率が壊れる**。塗りやインジケータの位置を **pt で** Variant に置くので、「`fillHalf` は `trackWidth` の半分」という関係が Token の外にある。capsule と同じ族の近似で、`fillHalf × 2 === trackWidth` などを解決値で assert して縛ってある |
+| 選択の位置（`SegmentedControl`） | 先頭の詰め物の `width` を Variant で振る（0 → 98） | **切り替わらない**。`<State name="pressed">` にすると「押している間だけ別の絵」になり、選択そのものとは別物になる（#155 が `selected` で踏んだ形） |
+| 選択中のラベル（`SegmentedControl`） | **描かない**（2 つとも同じ色） | iOS は選択中のラベルを濃くするが、`<Variant>` は共通属性しか受け付けないので**2 つのラベルに別々の色を振る手段が無い**。選択は「白い区画がどちらに居るか」だけで表す |
+| `Chip` という名前 | **HIG の部品名ではない**（Material 由来） | iOS でこの形に当たるのは `UIButton.Configuration` の `.tinted()` / `.filled()` を capsule で使う書き方。#195 が挙げた 6 つに入っているのでその名前のまま作ったが、**Apple の部品を写したものではない** |
 
 この表は `examples/hello-world/src/apple-hig.test.ts` の `EXPECTED_APPROXIMATIONS` が
 **1 行ずつ固定している**（増えても減っても落ちる）。README を書き換えるときはそちらも動かす
@@ -71,17 +98,29 @@ Liquid Glass は屈折・鏡面・縁のグラデーション・周囲の色の�
 
 どちらも近似ではない。**軸ごと / 仕組みごと写らない。**
 
-#### `<State>`（`Switch` の `disabled`）
+#### `<State>`（`disabled` も `pressed` も）
 
 `swift/UIDSLRuntime` の Renderer には **`states` を読む箇所が 1 つも無い**
 （`UIDSLIR/Nodes.swift` は型として持ち、`Walk.swift` は差し替え子を歩くだけで、
 描画には届いていない）。`packages/codegen-swift` は `states` を**読む**（`reportUnwritable`）が、
 それは「書かないことを報告するため」（`grow` の拒否・#187 と同じ形）で、
 生成される Swift 自体には出てこない。
-`docs/07` §2 の表も写す先（`ButtonStyle` / `.hoverEffect` / `@FocusState`）を挙げるだけで、
-`disabled` は表にも無い。
+`docs/07` §2 の表も写す先（`ButtonStyle` / `.hoverEffect` / `@FocusState`）を
+Phase 4 に置くだけで、`disabled` は表にも無い。
 
-→ **`on` / `off` の差（Variant）は Swift に写るが、`disabled` の差（State）は写らない。**
+**その報告が、この 8 つに対して実際に出ることを #202 が固定した** ——
+`screens/Controls.uix` を生成すると、State を持つ Component 1 つにつき 1 件:
+
+```
+State（disabled / normal）は静的コードに写しません。
+Runtime Renderer も base のスタイルだけを描きます（docs/07 §2 の ButtonStyle / @FocusState は Phase 4）
+```
+
+`Stepper` だけは `State（disabled / normal / pressed）` と出る。
+**この診断そのものを `examples/hello-world/src/apple-hig.test.ts` が assert している**
+—— 散文で「写らない」と書くだけだと、写るようになったとき嘘のまま残る。
+
+→ **軸の差（Variant）は Swift に写るが、State の差は 1 つも写らない。**
 
 #### `glass` 軸
 
@@ -147,6 +186,102 @@ SwiftUI の `Glass` 構造と同じ 3 つ。実在することは確かめてあ
 （AGENTS.md「生成した CSS は『当たること』まで確かめる」——
 規則の文字列を見るテストでは、この壊れ方が丸ごと素通りする）。
 
+## コントロールの軸（#202）—— **振るのは「値」か「選択」か「色」**
+
+`Switch` の `on` 軸で固まった形が、6 つともそのまま乗る。
+
+| Component | 軸 | 何を振るか | 振る属性 |
+|---|---|---|---|
+| `Slider` | `value` | 塗りの幅（0 / 106 / 212pt） | `width` **1 つだけ** |
+| `ProgressBar` | `value` | 塗りの幅（0 / 120 / 240pt） | `width` **1 つだけ** |
+| `SegmentedControl` | `selection` | 詰め物の幅（0 / 98pt） | `width` **1 つだけ** |
+| `Badge` | `tone` | 面の色 | `background` **1 つだけ** |
+| `Chip` | `selected` | 面・文字・縁 | `background` / `color` / `borderColor` |
+| `Stepper` | **無し** | —— | —— |
+
+**どれも「各 Variant が同じ属性の組を書く」。** Variant は base からの差分として読まれるので、
+片方だけ属性を落とすと「動かない」ではなく「**相手の値が残る**」になる（docs/02 §5.4）。
+`examples/hello-world/src/apple-hig.test.ts` が Component ごとにキーの集合を突き合わせている
+（**数ではなく集合** —— 数だけだと別々の属性を同じ個数書いても通る）。
+
+### `Slider` が 1 つの値で足りる理由
+
+つまみの左端＝塗りの右端になるように組んである。**そう組んだのは、2 つ目の長さを
+Variant で振る手段が無いから** —— `<Variant>` は共通属性 + `name` / `on` しか受け付けないので、
+2 つ目を振るには `minWidth` のような別の属性を「幅として」借りることになり、読めなくなる。
+
+### `Chip` だけが文字色を振れる理由
+
+ラベルが **1 つしか無い**から。`SegmentedControl` はラベルが 2 つあり、
+Variant に書けるのは 1 つの `color` だけなので、**両方に同じ色が当たってしまう**
+（だから選択中のラベルを濃くする HIG の見た目は描かない・近似の表）。
+
+**書く名前と読む名前が違う**ことに注意（#72）—— `<Variant color="…">` と書いて
+`{$variant.foreground}` で読む。同じ形が `style` → `typography` /
+`radius` → `cornerRadius` にもある（`packages/compiler/src/compile.ts` の
+`IR_KEY_TO_UIX_ATTRIBUTE`）。間違えると診断が案内するので静かには壊れない。
+
+### 寸法は式で閉じている（縛りは解決値の assert）
+
+言語に算術が無いので UIX には書けない。**1 つだけ動かすと検査が落ちる**形にしてある:
+
+| Component | 閉じている式 |
+|---|---|
+| `Switch` | `inset×2 + thumb = trackHeight` / `inset×2 + thumb + travel = trackWidth` / `trackRadius×2 = trackHeight` / `thumbRadius×2 = thumbSize` |
+| `Slider` | `trackRadius×2 = trackHeight` / `thumbRadius×2 = thumbSize` / `trackWidth − thumbSize = fillMax` / `fillMid×2 = fillMax` |
+| `ProgressBar` | `trackRadius×2 = trackHeight` / `fillHalf×2 = trackWidth` / `fillFull = trackWidth` |
+| `Stepper` | `segmentWidth×2 + dividerWidth = width` |
+| `SegmentedControl` | `inset×2 + segmentWidth×2 = width` / `inset×2 + indicatorHeight = height` / `restTrailing = segmentWidth` |
+| `Badge` | `radius×2 = height` / `minWidth = height` |
+| `Chip` | `radius×2 = height` |
+
+## Swift に生成できることの確かめ方（#202）—— **生成器に聞く**
+
+#202 の受け入れ条件に「`grow` を使っていない（**Swift に生成できる**ことを確かめる）」が
+あるが、**#196 の時点ではそれを確かめる手段が無かった** ——
+`packages/apple-hig` は `tools/generate-swift.mjs` の `SOURCES` に入っていなかった
+（`Showcase` / `Catalog` の縞が `grow` を使い、#26 の決裁で生成を拒否していたため）。
+
+**#187 が入って `SOURCES` に戻った。** `Stack` を自作 `Layout`（`UIXFlexStack`）に移して
+比配分できるようになったので、縞の `grow` は拒否されなくなった。
+いまは `tools/generate-swift.test.ts` が repo 全体で「拒否は 0 件」を見ており、
+`examples/hello-world/src/apple-hig.test.ts` が**この 8 つが実際に Swift の中身になっている**
+ことを別に見ている（`Tokens.Switch.trackOn` などが生成物に出ること）。
+
+**「IR に `grow` が無い」を数える検査にはしていない。** それは必要条件でしかなく、
+`packages/codegen-swift` の拒否には**もう 1 つの理由**がある ——
+`VIEW_BUILDER_LIMIT`（SwiftUI の `ViewBuilder` が 1 ブロックに置ける 10 個の上限）。
+しかもその判定は **`justify` が挿入する `Spacer` も数える**（`view.ts` の `emitStack`。
+`center` / `start` / `spaceEvenly` で +1、`spaceAround` で +2）ので、
+**子が 9 個でも踏みうる**。数え方をテスト側に写すと規則が 2 か所に分裂する
+（AGENTS.md「正本を持つ表を消費者側に書き写さない」）。**生成器に聞けば、
+拒否の理由が何であっても落ちる。**
+
+### `Catalog` の節を割ってあるのはこのため（実測で裏づいた）
+
+`Catalog` は「ガラス」と「コントロール」の 2 節に `<VStack>` で割ってある。
+割る前は **11 子**（cover 1 + glass 3 + controls 7）で、**上限 10 を超えていた**。
+
+| | 1 ブロックの最大子数 | `refused` |
+|---|---|---|
+| いまの形（割ってある） | **7** | **0 件** |
+| 11 子にした標本 | **11** | **`子が 11 個あり、…上限（10）を超えます`** |
+
+**`grow` を 1 つも使っていない**ことに注意 —— 「`grow` が 0 件」を数える案では、
+この枝は**素通りする**。`apple-hig.test.ts` の「陽性対照」がこの 2 行をそのまま検査にしている
+（10 子なら通る、という境界の反対側も一緒に）。
+
+### 足場（`screens/Controls.uix`）は畳んだ
+
+#187 の前は「**`grow` を 1 つも使わない screen が 1 枚あれば生成器を呼べる**」という形で
+`screens/Controls.uix` を置いていた。**#187 でその制約ごと無くなったので消した** ——
+`Catalog` に 8 Component すべてが並ぶので、「Component を足したとき生成検査から漏れない」
+という顔ぶれの縛りも `Catalog` に移せる（`Controls` は縞を必要とする `GlassBar` を
+欠いた 7 つだった）。
+
+**足場は、それを必要にしていた制約が消えたら畳む。** 残すと「なぜあるのか」を
+説明できなくなり、次に読む人が**存在しない制約を推測する**。
+
 ## Token の値の出典 —— **Figma UI kit は未実測**
 
 **「Figma の ○○ を実測」とは書いていない。** この作業環境に Apple の UI kit が無く、
@@ -165,13 +300,40 @@ intrinsic content size として広く知られている綴りだが、**この�
 
 **kit や実機の数値が手に入ったら差し替える。** 差し替えるのは
 `tokens/primitive.tokens.json` の値と `semantic` 側の `$description` だけで、
-`GlassBar.uix` も `Switch.uix` も使う側も動かない。
+`.uix` も使う側も動かない。
+
+### 共有するのは primitive だけ —— **component 層は Component 名で切ったまま**（#202）
+
+6 つ増えたとき、同じ灰・同じ白・同じ影を **8 つの Component が別々に持つ**形が出た。
+そのまま持つと「片方だけ変えた」が起きるので、**primitive に共有名を作って寄せた**:
+
+| primitive | 値 | 使う先 |
+|---|---|---|
+| `controlInk.trackFill` | `#78788029` | `Switch` の off / `Slider` の未塗り / `ProgressBar` の溝 / `Stepper` の地 / `SegmentedControl` の地 / `Chip` の off |
+| `controlInk.raised` | `#FFFFFF` | `Switch` のつまみ / `Slider` のつまみ / `SegmentedControl` のインジケータ |
+| `controlInk.accent` | `#007AFF` | `Slider` の塗り / `ProgressBar` の塗り / `Stepper` の記号 / `Chip` の on / `Badge` の accent |
+| `control.raisedShadow` | 2 層 | 上の 3 つが載る面の影 |
+
+**`Switch` の on だけは緑**（`switchInk.onTint`）—— iOS の Switch は system green で、
+他のコントロールの accent（青）とは別。**「同じに見えるから共有する」ではなく、
+iOS 側に実在する共有だけを寄せる**（`demo.sample.radius` が `glassMetric.corner` を
+借りない理由の裏返し —— あちらは**無い依存を作らない**、こちらは**在る依存を 1 か所にする**）。
+
+**component 層は動かしていない。** `$switch.trackOff` と `$slider.trackColor` は
+別々の Token のままなので、「どれを変えると何が動くか」は component 層だけ読めば分かる。
+
+**改名で値は 1 件も動いていない**（`$switch.*` / `$glass*` / `$demo.*` の解決値 37 件を
+改名の前後でダンプして突き合わせた・2026-08-22）。`#196` からの名前の変化は 3 つ:
+`switchInk.offTrack` → `controlInk.trackFill` / `switchInk.thumb` → `controlInk.raised` /
+`control.switchThumbShadow` → `control.raisedShadow`（`switchRatio` → `controlRatio` も同様）。
 
 ## 何が「動いている」を担保しているか
 
 | 検査 | 何を見るか |
 |---|---|
-| `examples/hello-world/src/apple-hig.test.ts` | `uix lint` 診断 0 件 / 全 Variant の**解決値**（直書き）/ 展開 / `RenderIssue` 0 件 / CSS の宣言 / **寸法どうしの関係**（capsule の縛り）/ `forcedState` の有無で `disabled` が出入りすること |
+| `examples/hello-world/src/apple-hig.test.ts` | `uix lint` 診断 0 件 / 全 Variant の**解決値**（直書き）/ 展開 / `RenderIssue` 0 件 / CSS の宣言 / **寸法どうしの関係**（capsule と比率の縛り）/ `forcedState` の有無で `disabled` が出入りすること / **`generateWorkspace` が 1 件も拒否しないこと**と、**その器が拒否を出しうること**（陽性対照 2 本・#202） |
+| `tools/generate-swift.test.ts` | repo 全体で「拒否は 0 件」（#187 で `apple-hig` も対象に入った） |
+| `swift/UIDSLRuntime` の `GeneratedConformanceTests` | **生成した Swift が実際にコンパイルでき、同じ絵になること**（`make swift-check`） |
 | **`e2e/apple-hig.spec.ts`** | **Studio の Preview で描いた画素**。`glass` 3 種が互いに違う絵になること / **Inspector から `disabled` を強制表示すると絵が変わること** |
 | `swift/UIDSLRuntime` の `RenderTests` | `backdropBlur: 0` が material を出さないこと（`identity` が Swift でガラスを持たない） |
 
@@ -185,10 +347,13 @@ IR や markup を見るテストからは分からない。
 ## 見るとき
 
 Studio が 4 つ目のワークスペースとしてこれを開く（`apps/studio/vite.config.ts` の
-`WORKSPACES`）。`make dev` して Files から `apple-hig` の下の screen を選ぶ ——
-`screens/Showcase.uix`（`GlassBar` の展開経路の検査。目的は「定義側だけの検査は展開で
-落ちるものを見逃す」を塞ぐこと）と `screens/Catalog.uix`（全 Component の全 Variant を
-一望する見本帳。#170 / #196）の 2 つがある。**`Switch` は Catalog のほうに居る。****台は増えていない** —— `.uix` と `tokens/` しか持たない
+`WORKSPACES`）。`make dev` して Files から `apple-hig` の下の screen を選ぶ。**3 枚あり、
+目的が違う**:
+
+| screen | 目的 |
+|---|---|
+| `screens/Showcase.uix` | `GlassBar` の**展開経路**の検査（「定義側だけの検査は展開で落ちるものを見逃す」を塞ぐ） |
+| `screens/Catalog.uix` | **全 Component の全 Variant を一望する見本帳**（#170 / #196 / #202）。コントロールはここに居る |**台は増えていない** —— `.uix` と `tokens/` しか持たない
 ワークスペースなので、AGENTS.md #98 の「台を新しく作るときは、その台ぶんの検査も作る」は
 発動しない（見る道具は既にある = Studio 自身）。
 

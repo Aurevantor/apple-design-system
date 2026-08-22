@@ -19,9 +19,10 @@
     `{$variant.padding-leading}` も駄目 —— `{}` の中では `-` が算術に読まれる（docs/02 §5.2.1）。
     **だから「先頭に詰め物を置き、その `width` を Variant で振る」形にしてある。**
 
-    **`grow` は使わない。** 詰め物を `grow` で伸ばすと (a) Runtime Renderer が比で配分しない（#187）
-    (b) codegen が `grow` を生成拒否する（#26 の決裁）ので、**Swift へ生成できない Component になる**。
-    固定幅ならどちらも踏まない。
+    **`grow` は使わない。** #196 の時点では「使うと Swift へ生成できなくなる」が理由だったが、
+    **#187 が入って `Stack` の中なら比配分できるようになった**ので、その理由は消えた。
+    それでも使わないのは、**`travel`（つまみの移動距離）を pt で置いている**ため ——
+    `grow` で伸ばすと移動距離が幅に依存し、`inset×2 + thumb + travel === trackWidth` が崩れる。
 
     近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
 -->
