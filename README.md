@@ -75,7 +75,9 @@ Liquid Glass は屈折・鏡面・縁のグラデーション・周囲の色の�
 
 `swift/UIDSLRuntime` の Renderer には **`states` を読む箇所が 1 つも無い**
 （`UIDSLIR/Nodes.swift` は型として持ち、`Walk.swift` は差し替え子を歩くだけで、
-描画には届いていない）。`packages/codegen-swift` にも `State` は出てこない。
+描画には届いていない）。`packages/codegen-swift` は `states` を**読む**（`reportUnwritable`）が、
+それは「書かないことを報告するため」（`grow` の拒否・#187 と同じ形）で、
+生成される Swift 自体には出てこない。
 `docs/07` §2 の表も写す先（`ButtonStyle` / `.hoverEffect` / `@FocusState`）を挙げるだけで、
 `disabled` は表にも無い。
 
