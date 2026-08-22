@@ -94,8 +94,10 @@ SwiftUI の `Glass` 構造と同じ 3 つ。実在することは確かめてあ
 ## 見るとき
 
 Studio が 4 つ目のワークスペースとしてこれを開く（`apps/studio/vite.config.ts` の
-`WORKSPACES`）。`make dev` して Files から `liquid-glass` の下の
-`screens/Showcase.uix` を選ぶ。**台は増えていない** —— `.uix` と `tokens/` しか持たない
+`WORKSPACES`）。`make dev` して Files から `liquid-glass` の下の screen を選ぶ ——
+`screens/Showcase.uix`（展開経路の検査。目的は「定義側だけの検査は展開で落ちるものを
+見逃す」を塞ぐこと）と `screens/Catalog.uix`（全 Variant を一望する見本帳。#170）の
+2 つがある。**台は増えていない** —— `.uix` と `tokens/` しか持たない
 ワークスペースなので、AGENTS.md #98 の「台を新しく作るときは、その台ぶんの検査も作る」は
 発動しない（見る道具は既にある = Studio 自身）。
 

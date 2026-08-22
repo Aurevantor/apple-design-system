@@ -40,7 +40,7 @@
     }
   },
   "demo": {
-    "$description": "Showcase の標本だけが使う。**Component の契約ではない**（帯の見た目を決めるのは glass.* と glassBar.* だけ）。",
+    "$description": "Showcase と Catalog の標本だけが使う（#170）。**Component の契約ではない**（帯の見た目を決めるのは glass.* と glassBar.* だけ）。",
     "backdrop": {
       "$type": "color",
       "dark": { "$value": "{demoInk.stripeDark}" },

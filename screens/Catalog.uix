@@ -1,0 +1,93 @@
+<!--
+    liquid-glass: Catalog / omitted: State（GlassBar は <State> を1つも宣言していない。
+    タッチ反応は README の近似表のとおり描かない）と、押した状態・スクロールに追随する
+    屈折・周囲の色の反射（いずれも v0.1 の言語機能に無い。近似したものの一覧は ../README.md）。
+
+    **全 Variant を一望する見本帳。** screens/Showcase.uix は展開経路の検査が目的で、
+    ここは「glass 軸 3 種を並べて見る」ためだけの画面（#170）。背後の縞は Showcase と
+    同じもの —— ガラスは背後に何か在って初めて絵になり、フラットな地では 3 種の
+    透過差（72% / 28% / 0%）が見分けにくい。
+-->
+<Screen id="glass-catalog" name="Catalog" background="$demo.backdrop.canvas" padding="$demo.sample.padding">
+
+    <ScrollView width="fill" height="fill">
+
+        <VStack spacing="$demo.sample.gap" align="stretch">
+
+            <VStack id="catalog-cover" spacing="$demo.sample.gap" align="stretch">
+                <Text id="catalog-title" style="$demo.text.label" color="$demo.label">
+                    Liquid Glass — Catalog
+                </Text>
+                <Text id="catalog-note" style="$demo.text.label" color="$demo.label">
+                    GlassBar の glass 軸 3 種を並べた見本帳。State は宣言されていないため対象外。
+                </Text>
+            </VStack>
+
+            <VStack id="catalog-regular" spacing="$demo.sample.gap" align="stretch">
+                <ZStack id="catalog-sample-regular" width="fill" height="$demo.sample.height" align="center">
+                    <HStack id="catalog-backdrop-regular" width="fill" height="fill" align="stretch">
+                        <VStack grow="1" background="$demo.backdrop.dark" />
+                        <VStack grow="1" background="$demo.backdrop.light" />
+                        <VStack grow="1" background="$demo.backdrop.dark" />
+                        <VStack grow="1" background="$demo.backdrop.light" />
+                    </HStack>
+                    <GlassBar id="catalog-bar-regular" glass="regular">
+                        <Content>
+                            <Text id="catalog-label-regular" style="$demo.text.label" color="$demo.label">
+                                regular
+                            </Text>
+                        </Content>
+                    </GlassBar>
+                </ZStack>
+                <Text id="catalog-caption-regular" style="$demo.text.label" color="$demo.label">
+                    面 72% ・ ぼかし 20 ・ 縁 80% 1pt（既定）
+                </Text>
+            </VStack>
+
+            <VStack id="catalog-clear" spacing="$demo.sample.gap" align="stretch">
+                <ZStack id="catalog-sample-clear" width="fill" height="$demo.sample.height" align="center">
+                    <HStack id="catalog-backdrop-clear" width="fill" height="fill" align="stretch">
+                        <VStack grow="1" background="$demo.backdrop.dark" />
+                        <VStack grow="1" background="$demo.backdrop.light" />
+                        <VStack grow="1" background="$demo.backdrop.dark" />
+                        <VStack grow="1" background="$demo.backdrop.light" />
+                    </HStack>
+                    <GlassBar id="catalog-bar-clear" glass="clear">
+                        <Content>
+                            <Text id="catalog-label-clear" style="$demo.text.label" color="$demo.label">
+                                clear
+                            </Text>
+                        </Content>
+                    </GlassBar>
+                </ZStack>
+                <Text id="catalog-caption-clear" style="$demo.text.label" color="$demo.label">
+                    面 28% ・ ぼかし 8 ・ 縁 40% 1pt（背後の形が残る）
+                </Text>
+            </VStack>
+
+            <VStack id="catalog-identity" spacing="$demo.sample.gap" align="stretch">
+                <ZStack id="catalog-sample-identity" width="fill" height="$demo.sample.height" align="center">
+                    <HStack id="catalog-backdrop-identity" width="fill" height="fill" align="stretch">
+                        <VStack grow="1" background="$demo.backdrop.dark" />
+                        <VStack grow="1" background="$demo.backdrop.light" />
+                        <VStack grow="1" background="$demo.backdrop.dark" />
+                        <VStack grow="1" background="$demo.backdrop.light" />
+                    </HStack>
+                    <GlassBar id="catalog-bar-identity" glass="identity">
+                        <Content>
+                            <Text id="catalog-label-identity" style="$demo.text.label" color="$demo.label">
+                                identity
+                            </Text>
+                        </Content>
+                    </GlassBar>
+                </ZStack>
+                <Text id="catalog-caption-identity" style="$demo.text.label" color="$demo.label">
+                    面 0% ・ ぼかし 0 ・ 縁 0% 0pt（ガラスを当てない）
+                </Text>
+            </VStack>
+
+        </VStack>
+
+    </ScrollView>
+
+</Screen>
