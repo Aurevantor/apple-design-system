@@ -1,0 +1,85 @@
+<!--
+    iOS のタブバーの 1 項目（記号 + ラベル）。軸は `selected` 1 本（#79 の 1 Component 1 軸）。
+
+    **なぜ帯と項目に割れているのか（#227）。** `TabBar` は軸を 2 つ欲しがる ——
+    帯の見た目（`glass`）と、項目ごとの選択（`selected`）。1 つの Component に入れると
+    軸が 2 本になるので、**容れ物（`TabBar`）と項目（ここ）に割る**。
+    帯の見た目は `TabBar` が `GlassBar` を中に置いて借りるので、どこにも書き写されない。
+
+    **`<State>` は軸が触る属性と重ねない。** ここは `color` を軸で振り、`disabled` は
+    `opacity` に置いてある。**重ねると、その属性を軸が上書きしている Variant では
+    State の規則が 1 本も出なくなる** —— `packages/renderer-web/src/state-css.ts` の
+    `changedOnly` が「base から変わったものだけ」を残すので、`selected="on"` の色と
+    同じ色を State に書くと、**`on` の側だけ規則が消える**（#227 の実測）。
+    しかも**絵は正しく見える**（その色は既に当たっている）ので、目で見ても気づけない。
+    `GlassBar` の「片方だけ属性を落とさない」と**同じ族** —— あちらは Variant どうし、
+    こちらは Variant と State のあいだで、**どちらも「差分として読まれる」ことから来る**。
+    `examples/hello-world/src/apple-hig.test.ts` が**軸と `<State>` の触る属性の交わりが
+    0 件であること**を見ているので、重ねた瞬間に落ちる（`Switch` / `Slider` /
+    `SegmentedControl` / `Chip` にも同じ検査が当たっている）。
+    **症状ではなく原因を見る形にしてある** —— 「2 種とも同じ本数の規則が出る」を測ると、
+    `disabled` のように疑似クラスへ写らない State では**規則が元から 0 本**なので、
+    何も検査しないまま緑になる。
+
+    **記号は `<Text>` に 1 文字（幾何学記号）。** SF Symbols は無く、`<Image source>` は資産ファイルが要る
+    （このワークスペースは `.uix` と `tokens/` しか持たない）。**`Stepper` が既に `−` / `＋` で
+    同じことをしている**ので、新しい近似ではない。**絵文字は使わない** —— 字形が環境依存で、
+    同じ綴りが環境ごとに別の絵になる。**幾何学記号でも「絵文字表示」を持つ符号は避ける**
+    —— `◼`（U+25FC）は emoji presentation を持つので環境によって色付きの絵になる。
+    `●`（U+25CF）/ `◇`（U+25C7）/ `■`（U+25A0）はどれも持たない。
+    どの記号を出すかは `icon` Prop なので使う側が決める。
+    **選択で記号は変わらない**（iOS は outline → filled になるが、1 文字では表せない）。
+
+    **箱の高さは行の高さちょうど。** 記号とラベルを `iconBox` / `labelBox` の箱に入れてあり、
+    `paddingVertical×2 + iconBox + spacing + labelBox === height` で閉じている。
+    **項目の高さを書体の行送りに依存させないため** —— 依存させると同じ UIX が Web と Swift で
+    別の高さになり、帯の高さまで動く（`examples/hello-world/src/apple-hig.test.ts` が
+    解決値で assert して縛っている）。
+
+    **`grow` は使わない。** 等幅のタブを `grow` で割りたくなるが、`SegmentedControl` が
+    同じ誘惑を先に書いている（「区画を `grow` で等分したくなるが、幅が固定であることが…」）。
+    幅は `$tabItem.width` で固定する。
+
+    **ここに書く `id` は IR に残らない。** 定義側の `id` は展開で落ちる
+    （`packages/compiler/src/expand.ts`「`id` はファイル内で一意」）ので、
+    **検査は `irId` か利用側に書いた `id` から辿る**（#227 の実測。書いても見つからない）。
+
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+-->
+<Component name="TabItem">
+
+    <Props>
+        <Prop name="selected" type="string" default="off" />
+        <Prop name="icon" type="string" default="●" />
+        <Prop name="label" type="string" default="Tab" />
+    </Props>
+
+    <State name="normal" />
+    <State name="disabled" opacity="$tabItem.disabledOpacity" />
+
+    <!--
+        **2 種とも同じ 1 属性を書く**（片方を省くと「色が変わらない」ではなく「相手の色が残る」）。
+        **書く名前と読む名前が違う** —— `<Variant color="…">` と書いて `{$variant.foreground}`
+        で読む（#72。`packages/compiler/src/compile.ts` の `IR_KEY_TO_UIX_ATTRIBUTE`）。
+    -->
+    <Variant on="selected" name="off" color="$tabItem.inkOff" />
+    <Variant on="selected" name="on"  color="$tabItem.inkOn" />
+
+    <VStack
+        width="$tabItem.width"
+        height="$tabItem.height"
+        padding-vertical="$tabItem.paddingVertical"
+        spacing="$tabItem.spacing"
+        align="center">
+
+        <VStack width="fill" height="$tabItem.iconBox" align="center" justify="center">
+            <Text style="$tabItem.iconStyle" color="{$variant.foreground}">{$props.icon}</Text>
+        </VStack>
+
+        <VStack width="fill" height="$tabItem.labelBox" align="center" justify="center">
+            <Text style="$tabItem.labelStyle" color="{$variant.foreground}">{$props.label}</Text>
+        </VStack>
+
+    </VStack>
+
+</Component>

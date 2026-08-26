@@ -74,6 +74,10 @@
     "label": {
       "$value": "#000000",
       "$description": "地の上に載る文字。SegmentedControl のラベル / Chip の off のラベル。"
+    },
+    "secondaryLabel": {
+      "$value": "#8E8E93",
+      "$description": "選ばれていないものの記号と文字（systemGray）。TabItem の off。**badgeInk.neutral と同じ綴りだが別の Token** —— あちらは面の色（塗り）、こちらは文字と記号の色。役が違うので片方を変えても他方は動かない（raised と onFill が同じ白のまま分かれているのと同じ理由）。"
     }
   },
   "switchInk": {
@@ -121,7 +125,15 @@
       "$description": "SegmentedControl / Chip のラベル。"
     },
     "badge": { "$value": { "value": 12, "unit": "px" }, "$description": "Badge の数字。" },
-    "glyph": { "$value": { "value": 20, "unit": "px" }, "$description": "Stepper の記号。" }
+    "glyph": { "$value": { "value": 20, "unit": "px" }, "$description": "Stepper の記号。" },
+    "tab": {
+      "$value": { "value": 10, "unit": "px" },
+      "$description": "TabItem のラベル。**行送り 1.2 を掛けると tabItemMetric.labelBox（12）ちょうど** —— 箱の高さを行の高さに一致させることで、項目の高さが書体に依存しなくなる。"
+    },
+    "tabGlyph": {
+      "$value": { "value": 20, "unit": "px" },
+      "$description": "TabItem の記号。**controlType.glyph と同じ綴りだが別の Token**（あちらは Stepper の ＋ / −）—— 役が違うので、片方を変えても他方は動かない。**行送り 1.2 を掛けると tabItemMetric.iconBox（24）ちょうど。**"
+    }
   },
   "switchMetric": {
     "$type": "dimension",
@@ -236,6 +248,33 @@
     "corner": { "$value": 16, "$description": "角丸。height の半分ちょうど。" },
     "paddingHorizontal": { "$value": 14, "$description": "左右の余白。" },
     "border": { "$value": 1, "$description": "縁の太さ。" }
+  },
+  "tabItemMetric": {
+    "$type": "dimension",
+    "$description": "TabItem の寸法。**paddingVertical*2 + iconBox + spacing + labelBox = height** で閉じている。**記号とラベルを高さの決まった箱に入れる**のは、項目の高さを書体の行送りに依存させないため —— 依存させると同じ UIX が Web と Swift で別の高さになり、帯の高さまで動く。iconBox / labelBox は controlType.tabGlyph / controlType.tab に行送り 1.2 を掛けた値ちょうど。",
+    "width": {
+      "$value": 76,
+      "$description": "1 項目の幅。**固定**（grow で等分しない —— 他の Component と同じく寸法を Token で固定して式で閉じる）。"
+    },
+    "height": { "$value": 50, "$description": "1 項目の高さ。" },
+    "paddingVertical": {
+      "$value": 6,
+      "$description": "上下の余白。左右は width で決まるので持たない。"
+    },
+    "iconBox": {
+      "$value": 24,
+      "$description": "記号を入れる箱の高さ = controlType.tabGlyph(20) * 1.2。"
+    },
+    "labelBox": {
+      "$value": 12,
+      "$description": "ラベルを入れる箱の高さ = controlType.tab(10) * 1.2。"
+    },
+    "gap": { "$value": 2, "$description": "記号とラベルのあいだ。" }
+  },
+  "tabBarMetric": {
+    "$type": "dimension",
+    "$description": "TabBar の寸法。**帯そのものの寸法は持たない** —— 帯は GlassBar が描き、幅も高さも中身（TabItem）と GlassBar の padding から決まる。ここに在るのは項目どうしの間隔だけ。",
+    "gap": { "$value": 4, "$description": "項目どうしの間隔。" }
   },
   "glassMetric": {
     "$type": "dimension",

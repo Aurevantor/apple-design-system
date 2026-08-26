@@ -419,6 +419,70 @@
       "$description": "disabled の不透明度。"
     }
   },
+  "tabItem": {
+    "width": {
+      "$type": "dimension",
+      "$value": "{tabItemMetric.width}",
+      "$description": "1 項目の幅。**固定**（grow で等分しない）。"
+    },
+    "height": {
+      "$type": "dimension",
+      "$value": "{tabItemMetric.height}",
+      "$description": "1 項目の高さ。"
+    },
+    "paddingVertical": {
+      "$type": "dimension",
+      "$value": "{tabItemMetric.paddingVertical}",
+      "$description": "上下の余白。"
+    },
+    "iconBox": {
+      "$type": "dimension",
+      "$value": "{tabItemMetric.iconBox}",
+      "$description": "記号を入れる箱の高さ。**行の高さちょうど**なので、書体が変わっても項目の高さは動かない。"
+    },
+    "labelBox": {
+      "$type": "dimension",
+      "$value": "{tabItemMetric.labelBox}",
+      "$description": "ラベルを入れる箱の高さ。iconBox と同じ理由。"
+    },
+    "spacing": {
+      "$type": "dimension",
+      "$value": "{tabItemMetric.gap}",
+      "$description": "記号とラベルのあいだ。"
+    },
+    "inkOff": {
+      "$type": "color",
+      "$value": "{control.tabItemInk.off}",
+      "$description": "非選択の記号とラベル。"
+    },
+    "inkOn": {
+      "$type": "color",
+      "$value": "{control.tabItemInk.on}",
+      "$description": "選択中の記号とラベル。"
+    },
+    "iconStyle": {
+      "$type": "typography",
+      "$value": "{control.tabGlyphText}",
+      "$description": "記号の書体。"
+    },
+    "labelStyle": {
+      "$type": "typography",
+      "$value": "{control.tabText}",
+      "$description": "ラベルの書体。"
+    },
+    "disabledOpacity": {
+      "$type": "number",
+      "$value": "{control.tabItemDisabled}",
+      "$description": "disabled の不透明度。**軸が触る color とは別の属性**（semantic 側の $description）。"
+    }
+  },
+  "tabBar": {
+    "spacing": {
+      "$type": "dimension",
+      "$value": "{tabBarMetric.gap}",
+      "$description": "項目どうしの間隔。**帯の寸法は持たない** —— 帯は GlassBar が描く。"
+    }
+  },
   "glassBar": {
     "padding": {
       "$type": "dimension",

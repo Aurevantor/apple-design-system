@@ -1,0 +1,58 @@
+<!--
+    iOS のタブバー（帯）。項目は Slot で受ける。**軸を持たない**（`Stepper` と同じ ——
+    #79 の「1 Component 1 軸」は上限の話で、必ず 1 本持つという意味ではない）。
+    振るものは項目の側（`TabItem` の `selected`）に在り、帯そのものには無い。
+
+    ## **この Component だけが `GlassBar` を中に置いている**（#227）
+
+    帯の見た目（面・ぼかし・縁）の正本は `GlassBar` で、**ここはそれを借りるだけ**。
+    自前で `HStack` に `background` / `backdropBlur` / `borderColor` / `borderWidth` を
+    書くと、**同じ規則が 2 か所になる**（AGENTS.md「正本を持つ表を消費者側に書き写さない」）。
+    `glass` 軸の 3 種の値は `$glass.*` に在り、ここには 1 つも現れない。
+
+    **`glass="regular"` を明示的に書く。** 既定と同じ値だが、`GlassBar` の Variant は
+    base からの差分として読まれるので、**どの種を借りているかを利用側に書く**のが
+    この repo の書き方（`Catalog` / `Showcase` も 3 種とも明示している）。
+    タブバーは chrome の帯なので `regular` —— `clear` は「下を流れる内容の形を残す」ための種で、
+    タブバーは常に最前面に留まる。
+
+    **Component の入れ子は #227 が初めて通した枝**（`packages/compiler/src/expand.ts` に
+    仕組みは在ったが、12 Component のどれも使っていなかった）。実測したことは 5 つ:
+    展開される / 内側の `<SlotOutlet>` に外側から差した中身が届く / 入れ子でも `<State>` と
+    `forcedState` が効く / Slot に複数のノードを差せる / `codegen-swift` を通る（詳細は #227）。
+
+    ## **並べられる項目は 10 個まで**
+
+    `packages/codegen-swift` が `VIEW_BUILDER_LIMIT`（SwiftUI の `ViewBuilder` が 1 ブロックに
+    置ける上限）で拒否する。**11 個目を置くと生成時に赤くなる**ので静かには壊れないが、
+    **拒否のメッセージからは理由が分からない** —— `ComponentInstance` は展開で消えるので、
+    書いた人は「Component を 11 個置いた」つもりでも、数えられているのは**展開後の子**。
+    `justify` が挿す `Spacer` も数に入る（`view.ts` の `emitStack`）ので、**10 個でも踏みうる**。
+    iOS のタブバーは 5 個が上限なので、実用上は当たらない。
+
+    **`grow` は使わない。** 等幅のタブを `grow` で割りたくなるが、先例に従って
+    `TabItem` 側で幅を固定する（`SegmentedControl` が同じ誘惑を先に書いている）。
+
+    **帯の寸法は持たない。** 幅も高さも中身（`TabItem`）と `GlassBar` の padding から決まるので、
+    `$tabBar.*` に在るのは項目どうしの間隔だけ。
+
+    **ここに書く `id` は IR に残らない**（定義側の `id` は展開で落ちる・#227）。
+    検査は `irId` か利用側に書いた `id` から辿る。
+
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+-->
+<Component name="TabBar">
+
+    <Slots>
+        <Slot name="items" />
+    </Slots>
+
+    <GlassBar glass="regular">
+        <Content>
+            <HStack spacing="$tabBar.spacing" align="center">
+                <SlotOutlet name="items" />
+            </HStack>
+        </Content>
+    </GlassBar>
+
+</Component>

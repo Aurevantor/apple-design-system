@@ -1,9 +1,10 @@
 <!--
-    apple-hig: Catalog / omitted: Switch / Slider / SegmentedControl / Chip の disabled と
+    apple-hig: Catalog / omitted: Switch / Slider / SegmentedControl / Chip / TabItem の disabled と
     Stepper の disabled（<State> は screen から宣言できず、 forcedState は Renderer に渡す
     描画オプションなので、静止したカタログには並べられない。 見るのは Studio の Inspector で、
-    e2e/apple-hig.spec.ts が実際に操作して確かめている）と、 GlassBar / ProgressBar / Badge の
-    State（<State> を1つも宣言していない。操作できない部品なので「操作できるかどうか」の軸が無い）と、
+    e2e/apple-hig.spec.ts が実際に操作して確かめている）と、 GlassBar / ProgressBar / Badge /
+    TabBar の State（<State> を1つも宣言していない。操作できない部品なので「操作できるかどうか」の
+    軸が無い。TabBar は押す対象が中身の TabItem の側）と、
     押した状態・スクロールに追随する屈折・周囲の色の反射・値の変化 （いずれも v0.1 の言語機能に無い。
     近似したものの一覧は ../README.md）。
 
@@ -20,6 +21,9 @@
     1 ブロックに 10 個までしか置けないため（packages/codegen-swift の VIEW_BUILDER_LIMIT）。
     割る前は **11 子**（cover 1 + glass 3 + controls 7）で、**割っていなければ拒否されていた**
     —— #187 が入って生成対象になったので、これは実測できる（下記）。
+    **#227 で TabBar が glass 節へ・TabItem が controls 節へ入って 4 + 8 になった**
+    ——割ったままなので上限には当たらない（cover 1 + glass 4 + controls 8 = 13 を
+    1 ブロックに並べていたら拒否されている）。
 
     **この画面は Swift に生成される**（#187 以降）。縞の grow が自作 Layout で比配分
     できるようになり、packages/apple-hig が tools/generate-swift.mjs の SOURCES に戻った。
@@ -104,6 +108,39 @@
                     </ZStack>
                     <Text id="catalog-caption-identity" style="$demo.text.label" color="$demo.label">
                         面 0% ・ ぼかし 0 ・ 縁 0% 0pt（ガラスを当てない）
+                    </Text>
+                </VStack>
+
+                <!--
+                    **TabBar はここ（ガラスの節）に居る。** 帯そのものが GlassBar なので、
+                    背後に何か在って初めて絵になる —— コントロールの節（無地）に置くと
+                    「ガラスを借りている」ことが見えない。
+
+                    **3 項目なのは preset に収まる数**（iPhone 375pt − screen の外周 40 −
+                    帯の padding 24 = 311pt。1 項目 76pt + 間隔 4pt なので 3 個で 236pt）。
+                    iOS のタブは 5 個までだが、この見本帳の幅では 4 個目が溢れる。
+                    生成器の上限（ViewBuilder の 10 個）はもっと先に在る（TabBar.uix）。
+                -->
+                <VStack id="catalog-tabbar" spacing="$demo.sample.gap" align="stretch">
+                    <ZStack id="catalog-sample-tabbar" width="fill" height="$demo.sample.height" align="center">
+                        <HStack id="catalog-backdrop-tabbar" width="fill" height="fill" align="stretch">
+                            <VStack grow="1" background="$demo.backdrop.dark" />
+                            <VStack grow="1" background="$demo.backdrop.light" />
+                            <VStack grow="1" background="$demo.backdrop.dark" />
+                            <VStack grow="1" background="$demo.backdrop.light" />
+                        </HStack>
+                        <TabBar id="catalog-bar-tabs">
+                            <Items>
+                                <TabItem id="catalog-tab-home" selected="on" icon="●" label="Home" />
+                                <TabItem id="catalog-tab-search" selected="off" icon="◇" label="Search" />
+                                <TabItem id="catalog-tab-settings" selected="off" icon="■" label="Settings" />
+                            </Items>
+                        </TabBar>
+                    </ZStack>
+                    <Text id="catalog-caption-tabbar" style="$demo.text.label" color="$demo.label">
+                        TabBar は軸を持たない（振るものは TabItem の側）。帯の見た目は GlassBar の
+                        regular をそのまま借りていて、面・ぼかし・縁の 4 属性は、ここにも TabBar.uix にも
+                        1 つも書いていない。**Component の入れ子を使っているのはこれだけ**（#227）。
                     </Text>
                 </VStack>
 
@@ -250,6 +287,31 @@
                     <Text id="catalog-caption-chip" style="$demo.text.label" color="$demo.label">
                         面・文字・縁の 3 つが選択で変わる（ラベルが 1 つなので文字色も振れる）。
                         HIG に Chip という部品名は無い（README）。
+                    </Text>
+                </VStack>
+
+                <!--
+                    **TabItem は単体でもここに並べる。** 上の TabBar の中にも居るが、
+                    あちらは帯の中なので**軸の 2 種が隣り合わない**（1 つだけ on）。
+                    軸を一望するのがこの見本帳の仕事なので、無地の上に 2 種を並べる。
+                -->
+                <VStack id="catalog-tabitem" spacing="$demo.sample.gap" align="stretch">
+                    <Text id="catalog-tabitem-title" style="$demo.text.label" color="$demo.label">
+                        TabItem — selected 軸 2 種
+                    </Text>
+                    <HStack id="catalog-tabitem-row"
+                            width="fill"
+                            padding="$demo.sample.padding"
+                            spacing="$demo.sample.gap"
+                            radius="$demo.sample.radius"
+                            align="center"
+                            background="$demo.backdrop.light">
+                        <TabItem id="catalog-tabitem-off" selected="off" icon="●" label="Library" />
+                        <TabItem id="catalog-tabitem-on" selected="on" icon="●" label="Library" />
+                    </HStack>
+                    <Text id="catalog-caption-tabitem" style="$demo.text.label" color="$demo.label">
+                        変わるのは記号とラベルの色だけ（灰 → 青）。iOS は選択で記号を outline から
+                        filled に変えるが、1 文字では表せない。記号は Prop なので使う側が決める。
                     </Text>
                 </VStack>
 

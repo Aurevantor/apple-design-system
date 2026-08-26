@@ -185,6 +185,43 @@
       "$description": "Chip の選択の縁。面と同じ色（縁を消さずに面と揃える —— borderWidth を 0 にすると『縁が無い』と『縁が透明』が同じ絵になり、Variant が同じ属性の組を持てなくなる）。",
       "$value": "{controlInk.accent}"
     },
+    "tabItemInk": {
+      "$type": "color",
+      "$description": "TabItem の記号とラベルの色。**軸そのもの**（選択で変わるのはこの 1 つだけ）。**記号とラベルが同じ色を読む** —— <Variant> は共通属性しか受け付けないので 2 つに別々の色は振れず、iOS の『選択で outline から filled へ変わる』も 1 文字では表せない（README の近似の表）。",
+      "on": {
+        "$value": "{controlInk.accent}",
+        "$description": "選択中。iOS のタブは app の tint（既定は青）で描く。"
+      },
+      "off": {
+        "$value": "{controlInk.secondaryLabel}",
+        "$description": "非選択。systemGray。"
+      }
+    },
+    "tabItemDisabled": {
+      "$type": "number",
+      "$description": "TabItem の disabled の不透明度。**軸が触る color とは別の属性に置く** —— 同じ属性に置くと、その属性を軸が上書きしている Variant では State の規則が 1 本も出なくなる（`state-css.ts` の changedOnly が base からの差分だけを出すため）。",
+      "$value": "{controlRatio.disabled}"
+    },
+    "tabText": {
+      "$type": "typography",
+      "$description": "TabItem のラベル。**行送りは 1.2** —— fontSize(10) を掛けた 12 が tabItemMetric.labelBox ちょうどで、これが『項目の高さが書体に依存しない』の根拠。",
+      "$value": {
+        "fontFamily": "{controlFamily.sans}",
+        "fontSize": "{controlType.tab}",
+        "fontWeight": "medium",
+        "lineHeight": 1.2
+      }
+    },
+    "tabGlyphText": {
+      "$type": "typography",
+      "$description": "TabItem の記号。**行送りは 1.2** —— fontSize(20) を掛けた 24 が tabItemMetric.iconBox ちょうど。",
+      "$value": {
+        "fontFamily": "{controlFamily.sans}",
+        "fontSize": "{controlType.tabGlyph}",
+        "fontWeight": "medium",
+        "lineHeight": 1.2
+      }
+    },
     "labelText": {
       "$type": "typography",
       "$description": "SegmentedControl / Chip のラベル。",

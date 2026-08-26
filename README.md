@@ -10,17 +10,27 @@
 | `SegmentedControl` | `selection` 2 種（`leading` / `trailing`） | `normal` / `disabled` |
 | `Badge` | `tone` 3 種（`neutral` / `accent` / `danger`） | — |
 | `Chip` | `selected` 2 種（`off` / `on`） | `normal` / `disabled` |
+| `TabBar` | **持たない** | — |
+| `TabItem` | `selected` 2 種（`off` / `on`） | `normal` / `disabled` |
 
 ### `<State>` を持つのはどれか —— 分かれ目は「**操作できるか**」
 
-- **操作できる**（`Switch` / `Slider` / `Stepper` / `SegmentedControl` / `Chip`）
+- **操作できる**（`Switch` / `Slider` / `Stepper` / `SegmentedControl` / `Chip` / `TabItem`）
   → 「操作できるかどうか」を `disabled` で表す。**軸は値のほうに使い切っている**（#79 の 1 軸）
-- **操作できない**（`GlassBar` / `ProgressBar` / `Badge`）
-  → `<State>` を **1 つも持たない**。押せないものに「押せません」と描かない
+- **操作できない**（`GlassBar` / `ProgressBar` / `Badge` / `TabBar`）
+  → `<State>` を **1 つも持たない**。押せないものに「押せません」と描かない。
+  **`TabBar` は押す対象が中身の `TabItem` の側**なので、帯そのものは `GlassBar` と同じ扱い
 
-**`Stepper` だけが軸を持たない。** 値を見せる部品ではなく「値を変える口」なので、
-絵に出る差が **押しているかどうか**しかない。それは軸ではなく `<State>`。
+**軸を持たないのは `Stepper` と `TabBar`。** `Stepper` は値を見せる部品ではなく「値を変える口」なので、
+絵に出る差が **押しているかどうか**しかない。`TabBar` は**振るものを `TabItem` に渡してある** ——
+帯の見た目は `GlassBar` が正本で、選択は項目の側の軸（#227）。
 **「1 Component 1 軸」は「必ず 1 本持つ」ではない**（#79 は上限の話。`TextField` に先例）。
+
+**`<State>` は軸が触る属性と重ねない。** 重ねると、その属性を軸が上書きしている Variant では
+**State の規則が 1 本も出なくなる**（`state-css.ts` の `changedOnly` が base からの差分だけを
+残すため）。しかも**絵は正しく見える**ので目で見ても気づけない —— この 5 つはどれも
+`<State>` を `opacity` に置いて軸の属性と分けてあり、
+`examples/hello-world/src/apple-hig.test.ts` が**交わりが 0 件であること**を見ている（#227）。
 
 **`pressed` だけは Web で実際に効く。** `STATE_SELECTORS` に在って `:active` に写るため
 （`disabled` は無いので `forcedState` が唯一の入口）。**どちらも Swift には写らない**（#201）。
@@ -88,6 +98,8 @@ Liquid Glass は屈折・鏡面・縁のグラデーション・周囲の色の�
 | 幅の固定（`Slider` / `ProgressBar` / `SegmentedControl`） | 溝や地の幅を Token で固定する | **幅を変えると比率が壊れる**。塗りやインジケータの位置を **pt で** Variant に置くので、「`fillHalf` は `trackWidth` の半分」という関係が Token の外にある。capsule と同じ族の近似で、`fillHalf × 2 === trackWidth` などを解決値で assert して縛ってある |
 | 選択の位置（`SegmentedControl`） | 先頭の詰め物の `width` を Variant で振る（0 → 98） | **切り替わらない**。`<State name="pressed">` にすると「押している間だけ別の絵」になり、選択そのものとは別物になる（#155 が `selected` で踏んだ形） |
 | 選択中のラベル（`SegmentedControl`） | **描かない**（2 つとも同じ色） | iOS は選択中のラベルを濃くするが、`<Variant>` は共通属性しか受け付けないので**2 つのラベルに別々の色を振る手段が無い**。選択は「白い区画がどちらに居るか」だけで表す |
+| アイコン（`TabItem`） | `<Text>` に**記号 1 文字**（`icon` Prop で差し替える） | **SF Symbols ではない。** 字形は書体に依存し、Web と Swift で同じ字が同じ形になる保証が無い。`<Image source>` を採らなかったのは資産ファイルが要るため（このワークスペースは `.uix` と `tokens/` しか持たず、足すと台が増える。#98）。**絵文字は採らない** —— 同じ綴りが環境ごとに別の絵になる。**`Stepper` が既に `−` / `＋` で同じことをしている**ので、新しい近似ではない |
+| 選択の表し方（`TabItem`） | **色だけ**（灰 → 青） | iOS は選択で記号を outline から filled に変えるが、**1 文字では表せない**（`<Variant>` は共通属性しか受け付けず、記号の中身は Prop なので軸で振れない）。`SegmentedControl` の「選択中のラベル」と同じ族の制約 |
 | `Chip` という名前 | **HIG の部品名ではない**（Material 由来） | iOS でこの形に当たるのは `UIButton.Configuration` の `.tinted()` / `.filled()` を capsule で使う書き方。#195 が挙げた 6 つに入っているのでその名前のまま作ったが、**Apple の部品を写したものではない** |
 
 この表は `examples/hello-world/src/apple-hig.test.ts` の `EXPECTED_APPROXIMATIONS` が
@@ -198,6 +210,8 @@ SwiftUI の `Glass` 構造と同じ 3 つ。実在することは確かめてあ
 | `Badge` | `tone` | 面の色 | `background` **1 つだけ** |
 | `Chip` | `selected` | 面・文字・縁 | `background` / `color` / `borderColor` |
 | `Stepper` | **無し** | —— | —— |
+| `TabItem` | `selected` | 記号とラベルの色 | `color` **1 つだけ** |
+| `TabBar` | **無し** | —— | —— |
 
 **どれも「各 Variant が同じ属性の組を書く」。** Variant は base からの差分として読まれるので、
 片方だけ属性を落とすと「動かない」ではなく「**相手の値が残る**」になる（docs/02 §5.4）。
@@ -234,6 +248,55 @@ Variant に書けるのは 1 つの `color` だけなので、**両方に同じ�
 | `SegmentedControl` | `inset×2 + segmentWidth×2 = width` / `inset×2 + indicatorHeight = height` / `restTrailing = segmentWidth` |
 | `Badge` | `radius×2 = height` / `minWidth = height` |
 | `Chip` | `radius×2 = height` |
+| `TabItem` | `paddingVertical×2 + iconBox + spacing + labelBox = height` / `iconBox = tabGlyph の行の高さ` / `labelBox = tab の行の高さ` |
+
+## 帯と項目（#227）—— **`TabBar` は `GlassBar` を中に置く**
+
+**`TabBar` は軸を 2 つ欲しがる** —— 帯の見た目（`glass`）と、項目ごとの選択（`selected`）。
+1 つの Component に入れると軸が 2 本になる（#79）ので、**容れ物と項目に割った**:
+
+| | 何を持つか |
+|---|---|
+| `TabBar` | 帯。**軸は無く、Slot（`items`）だけ**。`GlassBar` を中に置いて帯の見た目を借りる |
+| `TabItem` | 1 項目。軸 `selected` 2 種（記号とラベルの色）+ `<State>` の `disabled` |
+
+**この repo で Component の入れ子を使っているのはここだけ。** `TabBar.uix` に
+`background` / `backdropBlur` / `borderColor` / `borderWidth` は **1 つも書いていない**
+——`glass` 軸の値の正本は `GlassBar` で、写すと規則が分裂する（AGENTS.md の禁止事項）。
+`examples/hello-world/src/apple-hig.test.ts` が**綴り**（4 属性を書いていない）と**値**
+（展開後の帯が `$glass.*` の `regular` と一致する）の両方を見ている ——
+片方だけだと「書き写していないが別の値」「値は同じだが書き写している」を取り逃す。
+
+### 入れ子は「仕組みは在って、通ったことがない枝」だった（2026-08-26 の実測）
+
+`packages/compiler/src/expand.ts` は入れ子を**意図的に扱っている**（深さ上限・定義 identity での
+循環検出・`SlotOutlet` が中身を受け取る経路）が、**#227 の前は 12 Component のどれも
+別の Component を置いていなかった**。着手前に最小の 2 段標本で 5 つを実測した:
+
+| 前提 | 結果 |
+|---|---|
+| 定義の本体に置いた Component が展開される | ✅ diagnostics 0 件・2 段とも `expanded` を持つ |
+| 内側の `<SlotOutlet>` に外側から差した中身が届く | ✅ screen → `TabBar.items` → `GlassBar.content` の **2 段中継**が通る |
+| 入れ子でも `<State>` / `forcedState` が効く | ✅ document 全体でも `{ state, irId }` の範囲つきでも届く |
+| Slot に複数のノードを差せる | ✅ 項目 N 個 |
+| `codegen-swift` を通る | ✅ `refused` 0 件（**ただし「生成できた」は「コンパイルできる」ではない**。#187。`make swift-check` で別に確かめる） |
+
+**定義側に書いた `id` は IR に残らない**（`expand.ts`「`id` はファイル内で一意」）。
+`TabBar.uix` / `TabItem.uix` の中に `id` を書いても**検査から引けない**ので、
+検査は `irId` か**利用側に書いた `id`** から辿る。
+
+### **並べられる項目は 10 個まで**
+
+`packages/codegen-swift` の `VIEW_BUILDER_LIMIT`（SwiftUI の `ViewBuilder` が 1 ブロックに
+置ける上限）に当たる。**11 個目は生成時に拒否される**ので静かには壊れないが、
+**拒否のメッセージからは理由が分からない** —— `ComponentInstance` は展開で消えるので、
+書いた人は「Component を 11 個置いた」つもりでも、数えられているのは**展開後の子**。
+`justify` が挿す `Spacer` も数に入るので、**10 個でも踏みうる**。
+iOS のタブは 5 個までなので、実用上は当たらない。
+
+**`Catalog` の標本が 3 個なのは別の理由**（preset の幅）——
+iPhone preset 375pt − screen の外周 40 − 帯の padding 24 = 311pt に、
+1 項目 76pt + 間隔 4pt が 3 個で 236pt。4 個目は溢れる。
 
 ## Swift に生成できることの確かめ方（#202）—— **生成器に聞く**
 

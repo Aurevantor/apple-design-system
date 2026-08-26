@@ -54,6 +54,8 @@ export const APPLE_HIG_COMPONENTS = [
   'Slider',
   'Stepper',
   'Switch',
+  'TabBar',
+  'TabItem',
 ] as const
 
 export type AppleHIGComponent = (typeof APPLE_HIG_COMPONENTS)[number]
@@ -100,6 +102,18 @@ export const CHIP_VARIANTS = ['off', 'on'] as const
 export type ChipVariant = (typeof CHIP_VARIANTS)[number]
 
 /**
+ * `TabItem` の `selected` 軸（#227）。**記号とラベルの色だけが変わる。**
+ *
+ * 1 属性しか振らないのは、`<Variant>` が共通属性しか受け付けず、記号とラベルに
+ * **別々の**色を振る手段が無いため（`SegmentedControl` の 2 つのラベルと同じ制約）。
+ * iOS は選択で記号を outline から filled へ変えるが、**1 文字では表せない**
+ * （README の近似の表）。
+ */
+export const TAB_ITEM_VARIANTS = ['off', 'on'] as const
+
+export type TabItemVariant = (typeof TAB_ITEM_VARIANTS)[number]
+
+/**
  * **`<State>` を宣言する Component と、その State**（#202）。
  *
  * 分かれ目は「**操作できるか**」——
@@ -128,6 +142,21 @@ export const SEGMENTED_CONTROL_STATES = ['normal', 'disabled'] as const
 export const CHIP_STATES = ['normal', 'disabled'] as const
 
 /**
+ * `TabItem` の `<State>`（#227。`Switch` と同じ顔ぶれ）。
+ *
+ * **軸が触る属性（`color`）とは別の属性（`opacity`）に置いてある。** 重ねると、
+ * その属性を軸が上書きしている Variant では**State の規則が 1 本も出ない** ——
+ * `packages/renderer-web/src/state-css.ts` の `changedOnly` が base からの差分だけを
+ * 残すため。しかも**絵は正しく見える**ので目で見ても気づけない（#227 の実測）。
+ * `examples/hello-world/src/apple-hig.test.ts` が**軸と `<State>` の触る属性の交わりが
+ * 0 件であること**で縛っている（`Switch` / `Slider` / `SegmentedControl` / `Chip` も同じ）。
+ * **原因の側を見る形にしてある** —— 症状（「2 種とも同じ本数の規則が出る」）を測ると、
+ * `disabled` のように疑似クラスへ写らない State では**規則が元から 0 本**なので、
+ * 何も検査しないまま緑になる。
+ */
+export const TAB_ITEM_STATES = ['normal', 'disabled'] as const
+
+/**
  * `Stepper` の `<State>`。**`pressed` を持つのはここだけ** ——
  * 軸を持たない Component なので、絵に出る差が State しか無い。
  */
@@ -140,4 +169,17 @@ export const STEPPER_STATES = ['normal', 'pressed', 'disabled'] as const
  * 「本当に 0 件か」を IR から確かめるため —— 散文で書くと、あとから
  * `<State>` を足したときに**嘘のまま残る**（#170 で `GlassBar` について同じ形を置いた）。
  */
-export const STATELESS_COMPONENTS = ['GlassBar', 'ProgressBar', 'Badge'] as const
+export const STATELESS_COMPONENTS = ['GlassBar', 'ProgressBar', 'Badge', 'TabBar'] as const
+
+/**
+ * **軸を 1 つも持たない Component**（#227）。
+ *
+ * `Stepper` は「値を見せる部品ではなく値を変える口」なので絵に出る差が `<State>` しか無い。
+ * `TabBar` は**振るものを `TabItem` に渡してある** —— 帯の見た目は `GlassBar` が正本で、
+ * 選択は項目の側の軸。**#79 の「1 Component 1 軸」は上限の話**で、1 本必ず持つという
+ * 意味ではない（`TextField` に先例）。
+ *
+ * 表にしてあるのは `STATELESS_COMPONENTS` と同じ理由 ——
+ * 散文で書くと、あとから軸を足したときに嘘のまま残る。
+ */
+export const AXISLESS_COMPONENTS = ['Stepper', 'TabBar'] as const
