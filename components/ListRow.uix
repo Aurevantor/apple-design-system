@@ -1,0 +1,105 @@
+<!--
+    iOS のリストの 1 行。軸は `accessory` 1 本（#79 の 1 Component 1 軸）。
+    Slot は `leading`（アイコン）/ `content`（本文）/ `trailing`（右寄せの値）の 3 つ。
+
+    ## **`GlassBar` を包まない**（`NavBar` / `TabBar` とここが違う・#229）
+
+    **ガラスは chrome に置くもので content area ではない** ——`GlassBar.uix` が
+    「下に何もスクロールしていないガラスには屈折させるものが無い」と書いているとおりで、
+    **リストの行は content そのもの**。包むと**ガラスの使い方そのものが間違いになる**
+    （行がスクロールする内容の側なので、その下に「透かす背後」が無い）。
+
+    **だから「帯は借りるのに、なぜこれは借りないのか」の答えは「これは帯ではないから」。**
+    `NavBar` / `TabBar` は chrome の帯なので `GlassBar` を中に置くが、ここは置かない ——
+    **`glass` の 4 属性を書き写していないのは同じ**で、そもそも 1 つも要らない。
+
+    ## `accessory` 軸が 2 種しかない理由
+
+    iOS には chevron（`›`）と detail（`ⓘ`）が在るが、**`<Variant>` は文字の中身を振れない**
+    （#227 の `TabItem` の記号と同じ制約）ので、**1 つの軸に 2 種類の記号を置けない**。
+    だから軸は「記号が見えるかどうか」の 2 種にしてある。
+
+    **`none` は「描かない」ではなく「透明を塗る」。** Variant は base からの差分として
+    読まれるので、片方だけ `color` を落とすと「記号が消える」ではなく
+    「**chevron の色が残る**」になる（`GlassBar` の「片方だけ属性を落とさない」と同じ族）。
+    **`glassInk.opaque00` が面の白について同じことをしている**ので、新しい手ではない。
+
+    **箱の幅は軸で振らない。** 幅を 0 にする案も採れるが、**記号の箱が消えると
+    行の中身の左端が軸で動く** —— 2 種を並べたときに本文が揃わなくなる。
+
+    **`<State>` は軸が触る `color` とは別の属性（`opacity`）に置く。** 重ねると、
+    その属性を軸が上書きしている Variant では**State の規則が 1 本も出なくなる**
+    （`state-css.ts` の `changedOnly`。#227 の実測）。
+    `examples/hello-world/src/apple-hig.test.ts` の
+    `軸と <State> は同じ属性を触らない（#227）` が交わり 0 件を縛っている。
+
+    ## 寸法
+
+    **3 つの式で閉じている**（`../README.md` の表）。**幅が固定であることに依存する**
+    ——`grow` は使わない（他の Component と同じ）。区切り線は iOS と同じく
+    **本文の左端から**引くので、`paddingHorizontal + leadingBox + spacing` ぶん下げる。
+
+    **`<ForEach>` は使わない。** カタログは静止画で、行は手で並べる ——
+    使いたくなったらそれは「動くリスト」を作ろうとしている合図で、
+    v0.1 の非ゴール（#195 の presentation / navigation / 入力）に踏み込んでいる。
+
+    **ここに書く `id` は IR に残らない**（定義側の `id` は展開で落ちる・#227）。
+    検査は `irId` か利用側に書いた `id` から辿る。
+
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+-->
+<Component name="ListRow">
+
+    <Props>
+        <Prop name="accessory" type="string" default="chevron" />
+    </Props>
+
+    <Slots>
+        <Slot name="leading" />
+        <Slot name="content" />
+        <Slot name="trailing" />
+    </Slots>
+
+    <State name="normal" />
+    <State name="disabled" opacity="$listRow.disabledOpacity" />
+
+    <!-- **2 種とも同じ 1 属性を書く**（片方を省くと「消える」ではなく「相手の色が残る」）。 -->
+    <Variant on="accessory" name="none"    color="$listRow.accessoryNone" />
+    <Variant on="accessory" name="chevron" color="$listRow.accessoryChevron" />
+
+    <VStack width="$listRow.width" align="stretch">
+
+        <HStack
+            width="fill"
+            height="$listRow.height"
+            padding-horizontal="$listRow.paddingHorizontal"
+            spacing="$listRow.spacing"
+            align="center">
+
+            <VStack width="$listRow.leadingBox" height="fill" align="center" justify="center">
+                <SlotOutlet name="leading" />
+            </VStack>
+
+            <VStack width="$listRow.contentWidth" height="fill" align="leading" justify="center">
+                <SlotOutlet name="content" />
+            </VStack>
+
+            <VStack width="$listRow.trailingBox" height="fill" align="trailing" justify="center">
+                <SlotOutlet name="trailing" />
+            </VStack>
+
+            <VStack width="$listRow.accessoryBox" height="fill" align="center" justify="center">
+                <Text style="$listRow.accessoryStyle" color="{$variant.foreground}">›</Text>
+            </VStack>
+
+        </HStack>
+
+        <!-- 区切り線。**本文の左端から**引く（iOS と同じ）。 -->
+        <HStack width="fill" height="$listRow.separatorHeight" align="stretch">
+            <VStack width="$listRow.separatorInset" />
+            <VStack width="$listRow.separatorWidth" background="$listRow.separatorColor" />
+        </HStack>
+
+    </VStack>
+
+</Component>

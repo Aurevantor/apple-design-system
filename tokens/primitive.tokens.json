@@ -77,7 +77,11 @@
     },
     "secondaryLabel": {
       "$value": "#8E8E93",
-      "$description": "選ばれていないものの記号と文字（systemGray）。TabItem の off。**badgeInk.neutral と同じ綴りだが別の Token** —— あちらは面の色（塗り）、こちらは文字と記号の色。役が違うので片方を変えても他方は動かない（raised と onFill が同じ白のまま分かれているのと同じ理由）。"
+      "$description": "選ばれていないものの記号と文字（systemGray）。TabItem の off / ListRow の chevron。**badgeInk.neutral と同じ綴りだが別の Token** —— あちらは面の色（塗り）、こちらは文字と記号の色。役が違うので片方を変えても他方は動かない（raised と onFill が同じ白のまま分かれているのと同じ理由）。"
+    },
+    "transparent": {
+      "$value": "#00000000",
+      "$description": "**「描かない」を「透明を塗る」で表す**（#229）。ListRow の accessory=none がこれ —— Variant は base からの差分として読まれるので、片方だけ color を落とすと『記号が消える』ではなく『chevron の色が残る』になる。**glassInk.opaque00 と同じ理由で在る**（あちらは面の白 0%・こちらは記号の色 0%）が、名前空間が違うので別の Token。"
     }
   },
   "switchInk": {
@@ -129,6 +133,14 @@
     "tab": {
       "$value": { "value": 10, "unit": "px" },
       "$description": "TabItem のラベル。**行送り 1.2 を掛けると tabItemMetric.labelBox（12）ちょうど** —— 箱の高さを行の高さに一致させることで、項目の高さが書体に依存しなくなる。"
+    },
+    "navTitle": {
+      "$value": { "value": 17, "unit": "px" },
+      "$description": "NavBar のタイトル。iOS の inline title と同じ大きさ。**large title（34px）は作らない** —— 差の本質は位置で、<Variant> は align / justify を受け付けない（README の近似の表）。"
+    },
+    "chevron": {
+      "$value": { "value": 13, "unit": "px" },
+      "$description": "ListRow の accessory の記号。"
     },
     "tabGlyph": {
       "$value": { "value": 20, "unit": "px" },
@@ -248,6 +260,50 @@
     "corner": { "$value": 16, "$description": "角丸。height の半分ちょうど。" },
     "paddingHorizontal": { "$value": 14, "$description": "左右の余白。" },
     "border": { "$value": 1, "$description": "縁の太さ。" }
+  },
+  "navBarMetric": {
+    "$type": "dimension",
+    "$description": "NavBar の寸法。**sideWidth*2 + titleWidth = width** で閉じている。**幅が固定であることに依存する** —— タイトルを中央に置くために左右の箱を同じ幅で固定しており、grow を使わない（SegmentedControl と同じ形）。**帯そのものの寸法は持たない**（帯は GlassBar が描く）。",
+    "width": {
+      "$value": 300,
+      "$description": "3 つの箱の合計。**固定**（中央に見えることの前提）。iPhone preset 375pt − screen の外周 40 − 帯の padding 24 = 311pt に収まる。"
+    },
+    "height": { "$value": 44, "$description": "行の高さ。iOS の nav bar と同じ。" },
+    "sideWidth": {
+      "$value": 66,
+      "$description": "leading / trailing の箱の幅。**左右で同じ**でないとタイトルが中央に来ない。"
+    },
+    "titleWidth": {
+      "$value": 168,
+      "$description": "タイトルの箱の幅 = width − sideWidth*2。**文字はこの箱の中で中央寄せ**（箱の幅が固定なので、文字数が変わっても中央のまま）。"
+    }
+  },
+  "listRowMetric": {
+    "$type": "dimension",
+    "$description": "ListRow の寸法。**2 つの式で閉じている**（paddingHorizontal*2 + leadingBox + contentWidth + trailingBox + accessoryBox + gap*3 = width / paddingHorizontal + leadingBox + gap = separatorInset / separatorInset + separatorWidth = width）。**幅が固定であることに依存する**（grow を使わない）。",
+    "width": { "$value": 288, "$description": "行の幅。**固定**（区切り線の inset の前提）。" },
+    "height": {
+      "$value": 44,
+      "$description": "行の高さ（区切り線を含まない）。iOS の list row と同じ。"
+    },
+    "paddingHorizontal": { "$value": 16, "$description": "左右の余白。" },
+    "gap": { "$value": 12, "$description": "箱どうしの間隔。4 箱なので 3 つ入る。" },
+    "leadingBox": { "$value": 28, "$description": "先頭の箱（アイコンなど）の幅。" },
+    "contentWidth": {
+      "$value": 120,
+      "$description": "本文の箱の幅 = width − paddingHorizontal*2 − leadingBox − trailingBox − accessoryBox − gap*3。"
+    },
+    "trailingBox": { "$value": 60, "$description": "右寄せの値を置く箱の幅。" },
+    "accessoryBox": { "$value": 12, "$description": "accessory の記号の箱の幅。" },
+    "separatorInset": {
+      "$value": 56,
+      "$description": "区切り線の左の余白 = paddingHorizontal + leadingBox + gap。**iOS は本文の左端から線を引く**ので、先頭の箱のぶんだけ下げる。"
+    },
+    "separatorWidth": {
+      "$value": 232,
+      "$description": "区切り線の幅 = width − separatorInset。**言語に算術が無いので手で置いた値**（検査が式で縛る）。"
+    },
+    "separatorHeight": { "$value": 1, "$description": "区切り線の太さ。" }
   },
   "tabItemMetric": {
     "$type": "dimension",

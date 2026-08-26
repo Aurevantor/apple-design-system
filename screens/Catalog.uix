@@ -1,10 +1,13 @@
 <!--
-    apple-hig: Catalog / omitted: Switch / Slider / SegmentedControl / Chip / TabItem の disabled と
-    Stepper の disabled（<State> は screen から宣言できず、 forcedState は Renderer に渡す
-    描画オプションなので、静止したカタログには並べられない。 見るのは Studio の Inspector で、
-    e2e/apple-hig.spec.ts が実際に操作して確かめている）と、 GlassBar / ProgressBar / Badge /
-    TabBar の State（<State> を1つも宣言していない。操作できない部品なので「操作できるかどうか」の
-    軸が無い。TabBar は押す対象が中身の TabItem の側）と、
+    apple-hig: Catalog / omitted: Switch / Slider / SegmentedControl / Chip / TabItem /
+    ListRow の disabled と Stepper の disabled（<State> は screen から宣言できず、 forcedState は
+    Renderer に渡す 描画オプションなので、静止したカタログには並べられない。 見るのは Studio の
+    Inspector で、 e2e/apple-hig.spec.ts が実際に操作して確かめている）と、
+    GlassBar / ProgressBar / Badge / TabBar / NavBar の
+    State（<State> を1つも宣言していない。操作できない部品なので「操作できるかどうか」の
+    軸が無い。TabBar / NavBar は押す対象が中身の側）と、 NavBar の large title
+    （軸で作れない —— <Variant> は align / justify を受け付けず、位置が差の本質なので
+    字の大きさだけ振っても large title にはならない。理由は ../README.md）と、
     押した状態・スクロールに追随する屈折・周囲の色の反射・値の変化 （いずれも v0.1 の言語機能に無い。
     近似したものの一覧は ../README.md）。
 
@@ -24,10 +27,14 @@
     **#227 で TabBar が glass 節へ・TabItem が controls 節へ入って 4 + 8 になった**
     ——割ったままなので上限には当たらない（cover 1 + glass 4 + controls 8 = 13 を
     1 ブロックに並べていたら拒否されている）。
+    **#229 で NavBar が glass 節へ入り（5）、ListRow は 3 つ目の節に分けた**（list 2）。
+    **controls に足すと 9 で上限まで 1 つになる**のが理由の半分で、もう半分は下地 ——
+    ListRow は帯でもコントロールでもなく content なので、ガラス（縞）にもコントロール（無地）にも
+    属さない。いまは cover 1 + glass 5 + controls 8 + list 2 で、**外側は 4 子**。
 
     **この画面は Swift に生成される**（#187 以降）。縞の grow が自作 Layout で比配分
     できるようになり、packages/apple-hig が tools/generate-swift.mjs の SOURCES に戻った。
-    **8 Component すべてがここに並ぶので、生成検査の顔ぶれの縛りもこの画面が持つ**
+    **12 Component すべてがここに並ぶので、生成検査の顔ぶれの縛りもこの画面が持つ**
     （examples/hello-world/src/apple-hig.test.ts）。#187 の前は grow を使わない
     screens/Controls.uix を足場として置いていたが、制約ごと無くなったので畳んだ。
 -->
@@ -140,7 +147,35 @@
                     <Text id="catalog-caption-tabbar" style="$demo.text.label" color="$demo.label">
                         TabBar は軸を持たない（振るものは TabItem の側）。帯の見た目は GlassBar の
                         regular をそのまま借りていて、面・ぼかし・縁の 4 属性は、ここにも TabBar.uix にも
-                        1 つも書いていない。**Component の入れ子を使っているのはこれだけ**（#227）。
+                        1 つも書いていない。**Component の入れ子は TabBar と NavBar が使っている**（#227 / #229）。
+                    </Text>
+                </VStack>
+
+                <!--
+                    **NavBar も帯なのでここ（ガラスの節）。** TabBar と同じく GlassBar を中に置く。
+                    **large title は並べられない** —— 軸で作れないので Variant が無い（NavBar.uix）。
+                -->
+                <VStack id="catalog-navbar" spacing="$demo.sample.gap" align="stretch">
+                    <ZStack id="catalog-sample-navbar" width="fill" height="$demo.sample.height" align="center">
+                        <HStack id="catalog-backdrop-navbar" width="fill" height="fill" align="stretch">
+                            <VStack grow="1" background="$demo.backdrop.dark" />
+                            <VStack grow="1" background="$demo.backdrop.light" />
+                            <VStack grow="1" background="$demo.backdrop.dark" />
+                            <VStack grow="1" background="$demo.backdrop.light" />
+                        </HStack>
+                        <NavBar id="catalog-bar-nav" title="Library">
+                            <Leading>
+                                <Text id="catalog-nav-back" style="$demo.text.label" color="$demo.label">‹ Back</Text>
+                            </Leading>
+                            <Trailing>
+                                <Text id="catalog-nav-edit" style="$demo.text.label" color="$demo.label">Edit</Text>
+                            </Trailing>
+                        </NavBar>
+                    </ZStack>
+                    <Text id="catalog-caption-navbar" style="$demo.text.label" color="$demo.label">
+                        NavBar も軸を持たない。タイトルは左右と同じ幅の箱に挟まれて中央に来る
+                        （sideWidth×2 + titleWidth = width）ので、文字数が変わっても中央のまま。
+                        iOS の large title は作らない（位置が軸で振れないため・README）。
                     </Text>
                 </VStack>
 
@@ -314,6 +349,56 @@
                         filled に変えるが、1 文字では表せない。記号は Prop なので使う側が決める。
                     </Text>
                 </VStack>
+
+            </VStack>
+
+            <!--
+                **3 つ目の節（#229）。** ListRow は**帯でもコントロールでもなく content** で、
+                だから GlassBar を包まない（ガラスは chrome に置くもの・ListRow.uix）。
+                下地は無地だがコントロールとは別の節にしてあるのは、
+                **controls が 8 子で、足すと上限 10 まで 1 つになる**ため。
+            -->
+            <VStack id="catalog-list" spacing="$demo.sample.gap" align="stretch">
+
+                <Text id="catalog-list-title" style="$demo.text.label" color="$demo.label">
+                    ListRow — accessory 軸 2 種
+                </Text>
+
+                <VStack id="catalog-list-row"
+                        width="fill"
+                        padding="$demo.sample.padding"
+                        radius="$demo.sample.radius"
+                        align="center"
+                        background="$demo.backdrop.light">
+                    <ListRow id="catalog-listrow-chevron" accessory="chevron">
+                        <Leading>
+                            <Text id="catalog-listrow-icon-1" style="$demo.text.label" color="$demo.label">◆</Text>
+                        </Leading>
+                        <Content>
+                            <Text id="catalog-listrow-title-1" style="$demo.text.label" color="$demo.label">Wi-Fi</Text>
+                        </Content>
+                        <Trailing>
+                            <Text id="catalog-listrow-value-1" style="$demo.text.label" color="$demo.label">Home</Text>
+                        </Trailing>
+                    </ListRow>
+                    <ListRow id="catalog-listrow-none" accessory="none">
+                        <Leading>
+                            <Text id="catalog-listrow-icon-2" style="$demo.text.label" color="$demo.label">◇</Text>
+                        </Leading>
+                        <Content>
+                            <Text id="catalog-listrow-title-2" style="$demo.text.label" color="$demo.label">Airplane Mode</Text>
+                        </Content>
+                        <Trailing>
+                            <Text id="catalog-listrow-value-2" style="$demo.text.label" color="$demo.label">Off</Text>
+                        </Trailing>
+                    </ListRow>
+                </VStack>
+
+                <Text id="catalog-caption-list" style="$demo.text.label" color="$demo.label">
+                    変わるのは accessory の記号の色だけ（灰 → 透明）。**箱の幅は振らない**ので、
+                    2 行の本文の左端が揃う。detail（ⓘ）は軸に入れられない（Variant は文字の中身を
+                    振れない）。区切り線は本文の左端から引く（paddingHorizontal + leadingBox + spacing）。
+                </Text>
 
             </VStack>
 

@@ -49,6 +49,8 @@ export const APPLE_HIG_COMPONENTS = [
   'Badge',
   'Chip',
   'GlassBar',
+  'ListRow',
+  'NavBar',
   'ProgressBar',
   'SegmentedControl',
   'Slider',
@@ -114,6 +116,21 @@ export const TAB_ITEM_VARIANTS = ['off', 'on'] as const
 export type TabItemVariant = (typeof TAB_ITEM_VARIANTS)[number]
 
 /**
+ * `ListRow` の `accessory` 軸（#229）。**記号の色だけが変わる。**
+ *
+ * **2 種しかないのは `<Variant>` が文字の中身を振れないから** —— iOS には
+ * chevron（`›`）と detail（`ⓘ`）が在るが、1 つの軸に 2 種類の記号は置けない
+ * （#227 の `TabItem` の記号と同じ制約）。だから軸は「記号が見えるかどうか」。
+ *
+ * **`none` は「描かない」ではなく「透明を塗る」** —— Variant は base からの差分として
+ * 読まれるので、片方だけ `color` を落とすと「記号が消える」ではなく
+ * 「chevron の色が残る」になる（`glassInk.opaque00` が面の白について同じことをしている）。
+ */
+export const LIST_ROW_VARIANTS = ['none', 'chevron'] as const
+
+export type ListRowVariant = (typeof LIST_ROW_VARIANTS)[number]
+
+/**
  * **`<State>` を宣言する Component と、その State**（#202）。
  *
  * 分かれ目は「**操作できるか**」——
@@ -156,6 +173,9 @@ export const CHIP_STATES = ['normal', 'disabled'] as const
  */
 export const TAB_ITEM_STATES = ['normal', 'disabled'] as const
 
+/** `ListRow` の `<State>`（#229。軸が触る `color` とは別の `opacity` に置いてある）。 */
+export const LIST_ROW_STATES = ['normal', 'disabled'] as const
+
 /**
  * `Stepper` の `<State>`。**`pressed` を持つのはここだけ** ——
  * 軸を持たない Component なので、絵に出る差が State しか無い。
@@ -169,7 +189,13 @@ export const STEPPER_STATES = ['normal', 'pressed', 'disabled'] as const
  * 「本当に 0 件か」を IR から確かめるため —— 散文で書くと、あとから
  * `<State>` を足したときに**嘘のまま残る**（#170 で `GlassBar` について同じ形を置いた）。
  */
-export const STATELESS_COMPONENTS = ['GlassBar', 'ProgressBar', 'Badge', 'TabBar'] as const
+export const STATELESS_COMPONENTS = [
+  'GlassBar',
+  'ProgressBar',
+  'Badge',
+  'TabBar',
+  'NavBar',
+] as const
 
 /**
  * **軸を 1 つも持たない Component**（#227）。
@@ -182,4 +208,18 @@ export const STATELESS_COMPONENTS = ['GlassBar', 'ProgressBar', 'Badge', 'TabBar
  * 表にしてあるのは `STATELESS_COMPONENTS` と同じ理由 ——
  * 散文で書くと、あとから軸を足したときに嘘のまま残る。
  */
-export const AXISLESS_COMPONENTS = ['Stepper', 'TabBar'] as const
+export const AXISLESS_COMPONENTS = ['Stepper', 'TabBar', 'NavBar'] as const
+
+/**
+ * **`GlassBar` を中に置く Component**（#227 / #229）。
+ *
+ * 帯の見た目（面・ぼかし・縁）の正本は `GlassBar` なので、chrome の帯は borrow する。
+ * **`ListRow` は入らない** —— ガラスは chrome に置くもので content area ではなく
+ * （`GlassBar.uix`「下に何もスクロールしていないガラスには屈折させるものが無い」）、
+ * リストの行は content そのもの。**包むとガラスの使い方が間違いになる。**
+ *
+ * 表にしてあるのは、`examples/hello-world/src/apple-hig.test.ts` が
+ * 「**この顔ぶれ以外は `GlassBar` を中に置いていない**」を IR から確かめるため ——
+ * 散文で書くと、あとから包んだときに嘘のまま残る。
+ */
+export const GLASS_BORROWING_COMPONENTS = ['NavBar', 'TabBar'] as const

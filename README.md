@@ -12,18 +12,21 @@
 | `Chip` | `selected` 2 種（`off` / `on`） | `normal` / `disabled` |
 | `TabBar` | **持たない** | — |
 | `TabItem` | `selected` 2 種（`off` / `on`） | `normal` / `disabled` |
+| `NavBar` | **持たない** | — |
+| `ListRow` | `accessory` 2 種（`none` / `chevron`） | `normal` / `disabled` |
 
 ### `<State>` を持つのはどれか —— 分かれ目は「**操作できるか**」
 
-- **操作できる**（`Switch` / `Slider` / `Stepper` / `SegmentedControl` / `Chip` / `TabItem`）
+- **操作できる**（`Switch` / `Slider` / `Stepper` / `SegmentedControl` / `Chip` / `TabItem` / `ListRow`）
   → 「操作できるかどうか」を `disabled` で表す。**軸は値のほうに使い切っている**（#79 の 1 軸）
-- **操作できない**（`GlassBar` / `ProgressBar` / `Badge` / `TabBar`）
+- **操作できない**（`GlassBar` / `ProgressBar` / `Badge` / `TabBar` / `NavBar`）
   → `<State>` を **1 つも持たない**。押せないものに「押せません」と描かない。
-  **`TabBar` は押す対象が中身の `TabItem` の側**なので、帯そのものは `GlassBar` と同じ扱い
+  **`TabBar` / `NavBar` は押す対象が中身の側**なので、帯そのものは `GlassBar` と同じ扱い
 
-**軸を持たないのは `Stepper` と `TabBar`。** `Stepper` は値を見せる部品ではなく「値を変える口」なので、
-絵に出る差が **押しているかどうか**しかない。`TabBar` は**振るものを `TabItem` に渡してある** ——
-帯の見た目は `GlassBar` が正本で、選択は項目の側の軸（#227）。
+**軸を持たないのは `Stepper` / `TabBar` / `NavBar`。** `Stepper` は値を見せる部品ではなく
+「値を変える口」なので、絵に出る差が **押しているかどうか**しかない。
+`TabBar` は**振るものを `TabItem` に渡してある** —— 帯の見た目は `GlassBar` が正本で、
+選択は項目の側の軸（#227）。`NavBar` は**振りたいものが軸で作れなかった**（下の「帯と行」）。
 **「1 Component 1 軸」は「必ず 1 本持つ」ではない**（#79 は上限の話。`TextField` に先例）。
 
 **`<State>` は軸が触る属性と重ねない。** 重ねると、その属性を軸が上書きしている Variant では
@@ -98,6 +101,8 @@ Liquid Glass は屈折・鏡面・縁のグラデーション・周囲の色の�
 | 幅の固定（`Slider` / `ProgressBar` / `SegmentedControl`） | 溝や地の幅を Token で固定する | **幅を変えると比率が壊れる**。塗りやインジケータの位置を **pt で** Variant に置くので、「`fillHalf` は `trackWidth` の半分」という関係が Token の外にある。capsule と同じ族の近似で、`fillHalf × 2 === trackWidth` などを解決値で assert して縛ってある |
 | 選択の位置（`SegmentedControl`） | 先頭の詰め物の `width` を Variant で振る（0 → 98） | **切り替わらない**。`<State name="pressed">` にすると「押している間だけ別の絵」になり、選択そのものとは別物になる（#155 が `selected` で踏んだ形） |
 | 選択中のラベル（`SegmentedControl`） | **描かない**（2 つとも同じ色） | iOS は選択中のラベルを濃くするが、`<Variant>` は共通属性しか受け付けないので**2 つのラベルに別々の色を振る手段が無い**。選択は「白い区画がどちらに居るか」だけで表す |
+| large title（`NavBar`） | **作らない**（inline title の形だけ） | iOS の large title は**タイトルが leading / trailing の下の段・左寄せ**に来るが、**`<Variant>` は `align` / `justify` を受け付けない**（#229 の実測。`visible` も載らない）。`Switch` / `SegmentedControl` の「詰め物の幅を振る」手も使えない —— **タイトルの幅は文字数で決まる**ので中央に寄せる詰め物の幅を pt で置けない（あちらは区画の幅が固定だった）。**字の大きさは振れる**（fontSize 34 / 17 が IR に届くことを実測）が、それだけを振ると「大きい字の inline title」になり、**「作った」の主張が実態より広くなる** |
+| accessory の種類（`ListRow`） | **`none` / `chevron` の 2 種だけ**（`none` は透明な記号） | iOS には detail（`ⓘ`）も在るが、**`<Variant>` は文字の中身を振れない**ので 1 つの軸に 2 種類の記号を置けない（`TabItem` の記号と同じ制約）。**箱の幅は軸で振らない** —— 幅を 0 にすると 2 行の本文の左端がずれる |
 | アイコン（`TabItem`） | `<Text>` に**記号 1 文字**（`icon` Prop で差し替える） | **SF Symbols ではない。** 字形は書体に依存し、Web と Swift で同じ字が同じ形になる保証が無い。`<Image source>` を採らなかったのは資産ファイルが要るため（このワークスペースは `.uix` と `tokens/` しか持たず、足すと台が増える。#98）。**絵文字は採らない** —— 同じ綴りが環境ごとに別の絵になる。**`Stepper` が既に `−` / `＋` で同じことをしている**ので、新しい近似ではない |
 | 選択の表し方（`TabItem`） | **色だけ**（灰 → 青） | iOS は選択で記号を outline から filled に変えるが、**1 文字では表せない**（`<Variant>` は共通属性しか受け付けず、記号の中身は Prop なので軸で振れない）。`SegmentedControl` の「選択中のラベル」と同じ族の制約 |
 | `Chip` という名前 | **HIG の部品名ではない**（Material 由来） | iOS でこの形に当たるのは `UIButton.Configuration` の `.tinted()` / `.filled()` を capsule で使う書き方。#195 が挙げた 6 つに入っているのでその名前のまま作ったが、**Apple の部品を写したものではない** |
@@ -212,6 +217,8 @@ SwiftUI の `Glass` 構造と同じ 3 つ。実在することは確かめてあ
 | `Stepper` | **無し** | —— | —— |
 | `TabItem` | `selected` | 記号とラベルの色 | `color` **1 つだけ** |
 | `TabBar` | **無し** | —— | —— |
+| `ListRow` | `accessory` | accessory の記号の色 | `color` **1 つだけ** |
+| `NavBar` | **無し** | —— | —— |
 
 **どれも「各 Variant が同じ属性の組を書く」。** Variant は base からの差分として読まれるので、
 片方だけ属性を落とすと「動かない」ではなく「**相手の値が残る**」になる（docs/02 §5.4）。
@@ -249,8 +256,10 @@ Variant に書けるのは 1 つの `color` だけなので、**両方に同じ�
 | `Badge` | `radius×2 = height` / `minWidth = height` |
 | `Chip` | `radius×2 = height` |
 | `TabItem` | `paddingVertical×2 + iconBox + spacing + labelBox = height` / `iconBox = tabGlyph の行の高さ` / `labelBox = tab の行の高さ` |
+| `NavBar` | `sideWidth×2 + titleWidth = width` |
+| `ListRow` | `paddingHorizontal×2 + leadingBox + contentWidth + trailingBox + accessoryBox + spacing×3 = width` / `paddingHorizontal + leadingBox + spacing = separatorInset` / `separatorInset + separatorWidth = width` |
 
-## 帯と項目（#227）—— **`TabBar` は `GlassBar` を中に置く**
+## 帯と行（#227 / #229）—— **借りるのは chrome だけ**
 
 **`TabBar` は軸を 2 つ欲しがる** —— 帯の見た目（`glass`）と、項目ごとの選択（`selected`）。
 1 つの Component に入れると軸が 2 本になる（#79）ので、**容れ物と項目に割った**:
@@ -260,17 +269,70 @@ Variant に書けるのは 1 つの `color` だけなので、**両方に同じ�
 | `TabBar` | 帯。**軸は無く、Slot（`items`）だけ**。`GlassBar` を中に置いて帯の見た目を借りる |
 | `TabItem` | 1 項目。軸 `selected` 2 種（記号とラベルの色）+ `<State>` の `disabled` |
 
-**この repo で Component の入れ子を使っているのはここだけ。** `TabBar.uix` に
-`background` / `backdropBlur` / `borderColor` / `borderWidth` は **1 つも書いていない**
+`NavBar` も同じ形（#229）—— 帯なので `GlassBar` を中に置き、Slot は
+`leading` / `trailing`、タイトルは Prop。**軸は持たない**（下記）。
+
+| | 何を持つか |
+|---|---|
+| `NavBar` | 帯。Slot は `leading` / `trailing`、タイトルは Prop。**軸は無い** |
+| `ListRow` | 行。軸 `accessory` 2 種 + `<State>` の `disabled`。**`GlassBar` を包まない** |
+
+**`background` / `backdropBlur` / `borderColor` / `borderWidth` は借りる側に 1 つも書いていない**
 ——`glass` 軸の値の正本は `GlassBar` で、写すと規則が分裂する（AGENTS.md の禁止事項）。
 `examples/hello-world/src/apple-hig.test.ts` が**綴り**（4 属性を書いていない）と**値**
 （展開後の帯が `$glass.*` の `regular` と一致する）の両方を見ている ——
 片方だけだと「書き写していないが別の値」「値は同じだが書き写している」を取り逃す。
 
+### **`ListRow` は借りない** —— ガラスは chrome のもの
+
+`GlassBar.uix` が書いているとおり、**Liquid Glass は chrome に置くもので content area ではない**
+（「下に何もスクロールしていないガラスには屈折させるものが無い」）。
+**リストの行は content そのもの**なので、包むと**ガラスの使い方そのものが間違いになる** ——
+行がスクロールする内容の側で、その下に「透かす背後」が無い。
+
+**「帯は借りるのに、なぜこれは借りないのか」の答えは「これは帯ではないから」。**
+借りる側の顔ぶれは `GLASS_BORROWING_COMPONENTS` が表にしていて、
+`apple-hig.test.ts` が **`ListRow` がそこに入っていないこと**と
+**`ListRow.uix` が `<GlassBar` を書いていないこと**を別に見ている ——
+借りる側の数だけを見ても、**借りてはいけない側が借り始めたことは分からない**。
+
+### **`NavBar` が軸を持たない理由** —— 振れたものは求めていたものではなかった
+
+iOS には large title と inline title があり、**絵に大きく出る差**なので軸の候補だった。
+実測（2026-08-26）は「**振れるが、振れたものは求めていたものではない**」:
+
+| 書きたいもの | 結果 |
+|---|---|
+| `<Variant style="…">` → `{$variant.typography}` | **振れる**（`fontSize` 34 / 17 が IR に届く） |
+| `<Variant height="…">` / `padding="…"` | **振れる** |
+| `<Variant padding-vertical="…">` | **❌** `{}` の中で `-` が引き算に読まれる（`Switch.uix` が既に書いている） |
+| `<Variant align="…">` / `justify="…"` | **❌** `semantic.unknown-attribute` + `invalid-attribute-value` |
+| `<Variant visible="…">` | **❌** `semantic.unknown-variant-key`（共通属性だが `compileVariantProps` が集めない） |
+
+**差の本質は位置**で、それは軸で作れない。詰め物の手も使えない
+（**タイトルの幅は文字数で決まる**ので中央に寄せる幅を pt で置けない）。
+**字の大きさだけを振ると「大きい字の inline title」になる**ので、
+`large` という名前の Variant にすると**主張が実態より広くなる** —— だから作らない。
+
+## **`Toolbar` は作らない** —— `GlassBar` がそれ（#229）
+
+**「まだ作っていない」ではなく「作らない」。** 測った結果、
+**`GlassBar` に対して増える属性が 0 件**だった:
+
+`GlassBar` は **`HStack`（`padding` / `spacing` / `radius` / `align="center"` / `clip`）+ Slot 1 つ**で、
+`Toolbar` が要求する「ガラスの帯に項目を並べる」はこの上に**何も足さない** ——
+項目の並べ方は Slot に `HStack` を差せば済み、それは **`TabBar` が既にやっている形**（#227）。
+**別 Component である理由を「絵に出る差」として書けない**ので、作らない。
+
+**将来これを覆すなら、覆す理由は「絵に出る差」でなければならない**
+（「iOS に Toolbar という名前がある」は理由にならない —— 名前は `GlassBar` が持っている
+「ツールバー / タブバーの chrome」という説明で既に覆えている）。
+
+
 ### 入れ子は「仕組みは在って、通ったことがない枝」だった（2026-08-26 の実測）
 
 `packages/compiler/src/expand.ts` は入れ子を**意図的に扱っている**（深さ上限・定義 identity での
-循環検出・`SlotOutlet` が中身を受け取る経路）が、**#227 の前は 12 Component のどれも
+循環検出・`SlotOutlet` が中身を受け取る経路）が、**#227 の前は、この repo のどの Component も
 別の Component を置いていなかった**。着手前に最小の 2 段標本で 5 つを実測した:
 
 | 前提 | 結果 |
@@ -338,7 +400,7 @@ iPhone preset 375pt − screen の外周 40 − 帯の padding 24 = 311pt に、
 
 #187 の前は「**`grow` を 1 つも使わない screen が 1 枚あれば生成器を呼べる**」という形で
 `screens/Controls.uix` を置いていた。**#187 でその制約ごと無くなったので消した** ——
-`Catalog` に 8 Component すべてが並ぶので、「Component を足したとき生成検査から漏れない」
+`Catalog` に 12 Component すべてが並ぶので、「Component を足したとき生成検査から漏れない」
 という顔ぶれの縛りも `Catalog` に移せる（`Controls` は縞を必要とする `GlassBar` を
 欠いた 7 つだった）。
 
@@ -364,6 +426,12 @@ intrinsic content size として広く知られている綴りだが、**この�
 **kit や実機の数値が手に入ったら差し替える。** 差し替えるのは
 `tokens/primitive.tokens.json` の値と `semantic` 側の `$description` だけで、
 `.uix` も使う側も動かない。
+
+**`NavBar` / `ListRow` / `TabItem` / `TabBar` の寸法も同じ扱い**（#227 / #229）——
+nav bar と list row の 44pt、tab item の 76 × 50pt は**広く知られている綴り**だが、
+**この環境では実機でも SDK でも測れない**。値は「式が閉じていて、preset の幅に収まる」
+band 内の 1 点で、Apple の実装値ではない。**式のほうは検査が縛っている**ので、
+値を差し替えるときは**式を保ったまま全部を動かす**（1 つだけ動かすと落ちる）。
 
 ### 共有するのは primitive だけ —— **component 層は Component 名で切ったまま**（#202）
 

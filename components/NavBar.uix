@@ -1,0 +1,72 @@
+<!--
+    iOS のナビゲーションバー（帯）。**軸を持たない**（`TabBar` / `Stepper` と同じ ——
+    #79 の「1 Component 1 軸」は上限の話）。Slot は `leading` / `trailing` の 2 つで、
+    タイトルは Prop（軸に合わせて書体を振らないので Slot にする理由が無い）。
+
+    **`GlassBar` を中に置く**（#227 の `TabBar` と同じ形）。帯の見た目（面・ぼかし・縁）の
+    正本は `GlassBar` なので、`background` / `backdropBlur` / `borderColor` / `borderWidth` は
+    ここに 1 つも書かない（AGENTS.md「正本を持つ表を消費者側に書き写さない」）。
+
+    ## **large title を作らない理由**（#229 の実測・2026-08-26）
+
+    iOS には large title と inline title があり、**絵に大きく出る差**なので軸の候補だった。
+    測った結果は「**振れるが、振れたものは求めていたものではない**」:
+
+    | 書きたいもの | 結果 |
+    |---|---|
+    | `<Variant style="…">` → `{$variant.typography}` | **振れる**（fontSize 34 / 17 が IR に届く） |
+    | `<Variant align="…">` / `justify="…"` | **書けない**（`semantic.unknown-attribute` + `invalid-attribute-value`） |
+    | `<Variant visible="…">` → `{$variant.visible}` | **書けない**（`semantic.unknown-variant-key`。`visible` は共通属性だが `compileVariantProps` が集めない） |
+
+    **large と inline の差の本質は「位置」** —— large はタイトルが leading / trailing の
+    **下の段・左寄せ**、inline は**同じ段の中央**。`<Variant>` は `align` / `justify` を
+    受け付けないので位置は振れず、**`Switch` / `SegmentedControl` の「詰め物の幅を振る」手も
+    使えない** —— あちらは**区画の幅が固定**だから詰め物の幅を pt で置けたが、
+    **タイトルの幅は文字数で決まる**ので中央に寄せる詰め物の幅を書けない（言語に算術が無い）。
+
+    **字の大きさだけを振ると「大きい字の inline title」になり、large title には見えない。**
+    それを `large` という名前の Variant で出すと、**「作った」の主張が実態より広くなる**
+    （`../README.md` の近似の表が潰している形そのもの）。だから **inline の形だけを作り、
+    large title は「描かない」**として近似の表に書いてある。
+
+    **タイトルを中央に置く手** —— 左右の箱を**同じ幅で固定**し、真ん中の箱で `justify="center"`。
+    `sideWidth×2 + titleWidth === width` で閉じているので、**文字数が変わっても中央のまま**。
+    `grow` は使わない（他の Component と同じ）。
+
+    **ここに書く `id` は IR に残らない**（定義側の `id` は展開で落ちる・#227）。
+    検査は `irId` か利用側に書いた `id` から辿る。
+
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+-->
+<Component name="NavBar">
+
+    <Props>
+        <Prop name="title" type="string" default="Title" />
+    </Props>
+
+    <Slots>
+        <Slot name="leading" />
+        <Slot name="trailing" />
+    </Slots>
+
+    <GlassBar glass="regular">
+        <Content>
+            <HStack width="$navBar.width" height="$navBar.height" align="center">
+
+                <VStack width="$navBar.sideWidth" height="fill" align="leading" justify="center">
+                    <SlotOutlet name="leading" />
+                </VStack>
+
+                <VStack width="$navBar.titleWidth" height="fill" align="center" justify="center">
+                    <Text style="$navBar.titleStyle" color="$navBar.titleColor">{$props.title}</Text>
+                </VStack>
+
+                <VStack width="$navBar.sideWidth" height="fill" align="trailing" justify="center">
+                    <SlotOutlet name="trailing" />
+                </VStack>
+
+            </HStack>
+        </Content>
+    </GlassBar>
+
+</Component>

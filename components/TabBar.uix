@@ -3,7 +3,7 @@
     #79 の「1 Component 1 軸」は上限の話で、必ず 1 本持つという意味ではない）。
     振るものは項目の側（`TabItem` の `selected`）に在り、帯そのものには無い。
 
-    ## **この Component だけが `GlassBar` を中に置いている**（#227）
+    ## **`GlassBar` を中に置く**（#227。#229 で `NavBar` も同じ形になった）
 
     帯の見た目（面・ぼかし・縁）の正本は `GlassBar` で、**ここはそれを借りるだけ**。
     自前で `HStack` に `background` / `backdropBlur` / `borderColor` / `borderWidth` を
@@ -16,8 +16,11 @@
     タブバーは chrome の帯なので `regular` —— `clear` は「下を流れる内容の形を残す」ための種で、
     タブバーは常に最前面に留まる。
 
+    **`GlassBar` を借りるのは chrome の帯だけ** —— `ListRow` は包まない（#229）。
+    ガラスは chrome に置くもので content area ではないため（`ListRow.uix` に理由が在る）。
+
     **Component の入れ子は #227 が初めて通した枝**（`packages/compiler/src/expand.ts` に
-    仕組みは在ったが、12 Component のどれも使っていなかった）。実測したことは 5 つ:
+    仕組みは在ったが、当時のどの Component も使っていなかった）。実測したことは 5 つ:
     展開される / 内側の `<SlotOutlet>` に外側から差した中身が届く / 入れ子でも `<State>` と
     `forcedState` が効く / Slot に複数のノードを差せる / `codegen-swift` を通る（詳細は #227）。
 

@@ -185,6 +185,53 @@
       "$description": "Chip の選択の縁。面と同じ色（縁を消さずに面と揃える —— borderWidth を 0 にすると『縁が無い』と『縁が透明』が同じ絵になり、Variant が同じ属性の組を持てなくなる）。",
       "$value": "{controlInk.accent}"
     },
+    "navTitleInk": {
+      "$type": "color",
+      "$description": "NavBar のタイトルの色。**軸を持たない**（NavBar は帯で、振るものは無い）。",
+      "$value": "{controlInk.label}"
+    },
+    "navTitleText": {
+      "$type": "typography",
+      "$description": "NavBar のタイトル。iOS の inline title と同じ大きさ・太さ。",
+      "$value": {
+        "fontFamily": "{controlFamily.sans}",
+        "fontSize": "{controlType.navTitle}",
+        "fontWeight": "semi-bold",
+        "lineHeight": 1.2
+      }
+    },
+    "listRowAccessory": {
+      "$type": "color",
+      "$description": "ListRow の accessory の記号の色。**軸そのもの**。**none を『描かない』ではなく『透明を塗る』で表す** —— Variant は base からの差分として読まれるので、片方だけ color を落とすと『記号が消える』ではなく『chevron の色が残る』になる（glassInk.opaque00 と同じ理由）。",
+      "chevron": {
+        "$value": "{controlInk.secondaryLabel}",
+        "$description": "systemGray の山括弧。"
+      },
+      "none": {
+        "$value": "{controlInk.transparent}",
+        "$description": "透明。箱の幅は変えないので、行の中身の左端は軸で動かない。"
+      }
+    },
+    "listRowSeparator": {
+      "$type": "color",
+      "$description": "ListRow の区切り線。Stepper の中央や Chip の縁と同じ separator。",
+      "$value": "{controlInk.separator}"
+    },
+    "listRowDisabled": {
+      "$type": "number",
+      "$description": "ListRow の disabled の不透明度。**軸が触る color とは別の属性に置く**（#227 の TabItem と同じ理由）。",
+      "$value": "{controlRatio.disabled}"
+    },
+    "chevronText": {
+      "$type": "typography",
+      "$description": "ListRow の accessory の記号。",
+      "$value": {
+        "fontFamily": "{controlFamily.sans}",
+        "fontSize": "{controlType.chevron}",
+        "fontWeight": "semi-bold",
+        "lineHeight": 1.2
+      }
+    },
     "tabItemInk": {
       "$type": "color",
       "$description": "TabItem の記号とラベルの色。**軸そのもの**（選択で変わるのはこの 1 つだけ）。**記号とラベルが同じ色を読む** —— <Variant> は共通属性しか受け付けないので 2 つに別々の色は振れず、iOS の『選択で outline から filled へ変わる』も 1 文字では表せない（README の近似の表）。",

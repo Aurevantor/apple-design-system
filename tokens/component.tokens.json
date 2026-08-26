@@ -419,6 +419,120 @@
       "$description": "disabled の不透明度。"
     }
   },
+  "navBar": {
+    "width": {
+      "$type": "dimension",
+      "$value": "{navBarMetric.width}",
+      "$description": "3 つの箱の合計。**固定**（中央に見えることの前提）。"
+    },
+    "height": {
+      "$type": "dimension",
+      "$value": "{navBarMetric.height}",
+      "$description": "行の高さ。"
+    },
+    "sideWidth": {
+      "$type": "dimension",
+      "$value": "{navBarMetric.sideWidth}",
+      "$description": "leading / trailing の箱の幅。**左右で同じ**。"
+    },
+    "titleWidth": {
+      "$type": "dimension",
+      "$value": "{navBarMetric.titleWidth}",
+      "$description": "タイトルの箱の幅。"
+    },
+    "titleColor": {
+      "$type": "color",
+      "$value": "{control.navTitleInk}",
+      "$description": "タイトルの色。"
+    },
+    "titleStyle": {
+      "$type": "typography",
+      "$value": "{control.navTitleText}",
+      "$description": "タイトルの書体。"
+    }
+  },
+  "listRow": {
+    "width": {
+      "$type": "dimension",
+      "$value": "{listRowMetric.width}",
+      "$description": "行の幅。**固定**。"
+    },
+    "height": {
+      "$type": "dimension",
+      "$value": "{listRowMetric.height}",
+      "$description": "行の高さ（区切り線を含まない）。"
+    },
+    "paddingHorizontal": {
+      "$type": "dimension",
+      "$value": "{listRowMetric.paddingHorizontal}",
+      "$description": "左右の余白。"
+    },
+    "spacing": {
+      "$type": "dimension",
+      "$value": "{listRowMetric.gap}",
+      "$description": "箱どうしの間隔。"
+    },
+    "leadingBox": {
+      "$type": "dimension",
+      "$value": "{listRowMetric.leadingBox}",
+      "$description": "先頭の箱の幅。"
+    },
+    "contentWidth": {
+      "$type": "dimension",
+      "$value": "{listRowMetric.contentWidth}",
+      "$description": "本文の箱の幅。"
+    },
+    "trailingBox": {
+      "$type": "dimension",
+      "$value": "{listRowMetric.trailingBox}",
+      "$description": "右寄せの値を置く箱の幅。"
+    },
+    "accessoryBox": {
+      "$type": "dimension",
+      "$value": "{listRowMetric.accessoryBox}",
+      "$description": "accessory の記号の箱の幅。**軸で変えない** —— 幅を振ると行の中身の左端が動く。"
+    },
+    "separatorInset": {
+      "$type": "dimension",
+      "$value": "{listRowMetric.separatorInset}",
+      "$description": "区切り線の左の余白。"
+    },
+    "separatorWidth": {
+      "$type": "dimension",
+      "$value": "{listRowMetric.separatorWidth}",
+      "$description": "区切り線の幅。"
+    },
+    "separatorHeight": {
+      "$type": "dimension",
+      "$value": "{listRowMetric.separatorHeight}",
+      "$description": "区切り線の太さ。"
+    },
+    "separatorColor": {
+      "$type": "color",
+      "$value": "{control.listRowSeparator}",
+      "$description": "区切り線の色。"
+    },
+    "accessoryChevron": {
+      "$type": "color",
+      "$value": "{control.listRowAccessory.chevron}",
+      "$description": "accessory=chevron の記号の色。"
+    },
+    "accessoryNone": {
+      "$type": "color",
+      "$value": "{control.listRowAccessory.none}",
+      "$description": "accessory=none の記号の色（透明）。"
+    },
+    "accessoryStyle": {
+      "$type": "typography",
+      "$value": "{control.chevronText}",
+      "$description": "accessory の記号の書体。"
+    },
+    "disabledOpacity": {
+      "$type": "number",
+      "$value": "{control.listRowDisabled}",
+      "$description": "disabled の不透明度。**軸が触る color とは別の属性**（#227）。"
+    }
+  },
   "tabItem": {
     "width": {
       "$type": "dimension",
