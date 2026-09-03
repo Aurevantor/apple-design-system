@@ -8,8 +8,7 @@
 
 ## この repo は単独ではビルドも検査もできない
 
-`uix lint` も描画も Swift 生成も
-[`ui-dsl-studio`](https://github.com/Aurevantor/ui-dsl-studio) の
+`uix lint` も描画も Swift 生成も `ui-dsl-studio`（**非公開**）の
 `@ui-dsl/*` が要るが、それらは publish されていない
 （`tsconfig.json` が `../../tsconfig.base.json` を extends しているのはそのため ——
 **親の中でだけ解決する**）。**受け入れ条件は ui-dsl-studio 側にある**:
