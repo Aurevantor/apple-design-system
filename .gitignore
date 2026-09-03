@@ -1,0 +1,5 @@
+# `tsc -b` が作る（親 repo の中で submodule として建てられると、ここに出る）。
+dist/
+*.tsbuildinfo
+node_modules/
+.DS_Store

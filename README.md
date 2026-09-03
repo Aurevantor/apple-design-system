@@ -1,4 +1,37 @@
-# @ui-dsl/apple-hig — Apple HIG の部品（Liquid Glass の帯を含む）
+# apple-design-system — UIX で書かれた Apple HIG の Design System
+
+**配るのは TypeScript ではなく UIX と Token。** 中身は `components/*.uix` /
+`screens/*.uix` / `tokens/*.json` で、それ自体が 1 つの UIX ワークスペース
+（`uix.json` が目印）。`src/index.ts` が持っているのは**軸と State の宣言**で、
+「`Switch` は `off` / `on` を持ち、`normal` / `disabled` で描く」という
+**この Design System の性質**を機械が読める形にしたもの。
+
+## この repo は単独ではビルドも検査もできない
+
+`uix lint` も描画も Swift 生成も
+[`ui-dsl-studio`](https://github.com/Aurevantor/ui-dsl-studio) の
+`@ui-dsl/*` が要るが、それらは publish されていない
+（`tsconfig.json` が `../../tsconfig.base.json` を extends しているのはそのため ——
+**親の中でだけ解決する**）。**受け入れ条件は ui-dsl-studio 側にある**:
+
+| 検査 | 場所 |
+|---|---|
+| Component の構造・Token の解決・Swift 生成 | `examples/hello-world/src/apple-hig.test.ts` |
+| Studio の Preview で描いて画素を測る | `e2e/apple-hig.spec.ts` |
+| SwiftUI へ写る／写らないの突き合わせ | `tools/swift-runtime-states.test.ts` |
+
+## 2 通りの食べられ方
+
+| 器 | 役 |
+|---|---|
+| **submodule** —— ui-dsl-studio の `packages/apple-hig` | **検査の足場。** パスが変わらないので、上の 3 つがそのまま動く |
+| **`uix scan`** —— 任意の場所に clone する | **実運用。** `uix.json` が目印なので、どこに置いても Studio が見つけて開ける |
+
+同じ中身が両方の役をこなす。
+
+---
+
+## Component 一覧
 
 | Component | 軸 | State |
 |---|---|---|
