@@ -20,7 +20,7 @@
     `grow` で伸ばすと `fillHalf` が「半分」でなくなる（README の近似の表）。
     `Screen` / `Scroll` の直下の `grow` は #187 のあとも拒否される。
 
-    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-design-system.test.ts が固定）。
 -->
 <Component name="ProgressBar">
 

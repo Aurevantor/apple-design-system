@@ -149,7 +149,7 @@
   },
   "switchMetric": {
     "$type": "dimension",
-    "$description": "Switch の寸法。**4 つが 1 つの式で閉じている**（inset*2 + thumb = trackHeight / inset*2 + thumb + travel = trackWidth / trackCorner*2 = trackHeight / thumbCorner*2 = thumb）。言語に算術が無いので式では書けず、examples/hello-world/src/apple-hig.test.ts が解決値で assert して縛る —— 1 つだけ動かすと落ちる。",
+    "$description": "Switch の寸法。**4 つが 1 つの式で閉じている**（inset*2 + thumb = trackHeight / inset*2 + thumb + travel = trackWidth / trackCorner*2 = trackHeight / thumbCorner*2 = thumb）。言語に算術が無いので式では書けず、examples/hello-world/src/apple-design-system.test.ts が解決値で assert して縛る —— 1 つだけ動かすと落ちる。",
     "trackWidth": { "$value": 51, "$description": "溝の幅。" },
     "trackHeight": {
       "$value": 31,

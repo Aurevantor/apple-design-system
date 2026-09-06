@@ -15,15 +15,15 @@
 
 | 検査 | 場所 |
 |---|---|
-| Component の構造・Token の解決・Swift 生成 | `examples/hello-world/src/apple-hig.test.ts` |
-| Studio の Preview で描いて画素を測る | `e2e/apple-hig.spec.ts` |
+| Component の構造・Token の解決・Swift 生成 | `examples/hello-world/src/apple-design-system.test.ts` |
+| Studio の Preview で描いて画素を測る | `e2e/apple-design-system.spec.ts` |
 | SwiftUI へ写る／写らないの突き合わせ | `tools/swift-runtime-states.test.ts` |
 
 ## 2 通りの食べられ方
 
 | 器 | 役 |
 |---|---|
-| **submodule** —— ui-dsl-studio の `packages/apple-hig` | **検査の足場。** パスが変わらないので、上の 3 つがそのまま動く |
+| **submodule** —— ui-dsl-studio の `tests/fixtures/apple-design-system` | **検査の足場。** パスが変わらないので、上の 3 つがそのまま動く |
 | **`uix scan`** —— 任意の場所に clone する | **実運用。** `uix.json` が目印なので、どこに置いても Studio が見つけて開ける |
 
 同じ中身が両方の役をこなす。
@@ -65,7 +65,7 @@
 **State の規則が 1 本も出なくなる**（`state-css.ts` の `changedOnly` が base からの差分だけを
 残すため）。しかも**絵は正しく見える**ので目で見ても気づけない —— この 5 つはどれも
 `<State>` を `opacity` に置いて軸の属性と分けてあり、
-`examples/hello-world/src/apple-hig.test.ts` が**交わりが 0 件であること**を見ている（#227）。
+`examples/hello-world/src/apple-design-system.test.ts` が**交わりが 0 件であること**を見ている（#227）。
 
 **`pressed` だけは Web で実際に効く。** `STATE_SELECTORS` に在って `:active` に写るため
 （`disabled` は無いので `forcedState` が唯一の入口）。**どちらも Swift には写らない**（#201）。
@@ -75,7 +75,7 @@
 
 ```jsonc
 // 使う側の uix.json
-{ "dependencies": ["../../packages/apple-hig"] }
+{ "dependencies": ["../../tests/fixtures/apple-design-system"] }
 ```
 
 ## なぜ `liquid-glass` から改名したのか（#196）
@@ -85,14 +85,14 @@
 `liquid-glass` に入る**形になる —— 名前と中身のずれは、この repo が最も高い代償を
 払って潰している形（AGENTS.md「正本を持つ表を消費者側に書き写さない」の隣）。
 
-**`ios` ではなく `apple-hig`。** Swift Runtime は **macOS でも動く**
+**`ios` ではなく `apple-design-system`。** Swift Runtime は **macOS でも動く**
 （`Package.swift` は `.macOS(.v14)` / `.iOS(.v17)`、`swift-macos` job が macOS で
 `RenderHarness` を回す）ので、`ios` と名乗るとそこを狭める。HIG は iOS / iPadOS / macOS に
 共通する規範で、**Liquid Glass もその一部**なので、統合しても名前が正しいまま残る。
 
 ### 分けずに 1 つにした理由 —— **依存を引くと診断が 17 件降ってくる**（#196 の実測）
 
-「新しいワークスペースを作って `apple-hig` を `dependencies` で引く」案は測って捨てた。
+「新しいワークスペースを作って `apple-design-system` を `dependencies` で引く」案は測って捨てた。
 引いた側に `lint.unused-token` が **17 件**出る —— このワークスペースの `demo.*` は
 `screens/` の標本だけが使う Token で、**依存の `screens/` は読まない**
 （`packages/cli/src/workspace.ts`「画面は書いている本人のもの」）ため、
@@ -139,7 +139,7 @@ Liquid Glass は屈折・鏡面・縁のグラデーション・周囲の色の�
 | 選択の表し方（`TabItem`） | **色だけ**（灰 → 青） | iOS は選択で記号を outline から filled に変えるが、**1 文字では表せない**（`<Variant>` は共通属性しか受け付けず、記号の中身は Prop なので軸で振れない）。`SegmentedControl` の「選択中のラベル」と同じ族の制約 |
 | `Chip` という名前 | **HIG の部品名ではない**（Material 由来） | iOS でこの形に当たるのは `UIButton.Configuration` の `.tinted()` / `.filled()` を capsule で使う書き方。#195 が挙げた 6 つに入っているのでその名前のまま作ったが、**Apple の部品を写したものではない** |
 
-この表は `examples/hello-world/src/apple-hig.test.ts` の `EXPECTED_APPROXIMATIONS` が
+この表は `examples/hello-world/src/apple-design-system.test.ts` の `EXPECTED_APPROXIMATIONS` が
 **1 行ずつ固定している**（増えても減っても落ちる）。README を書き換えるときはそちらも動かす
 —— それが「静かに近似を増やす」を止める壁。
 
@@ -166,7 +166,7 @@ Runtime Renderer も base のスタイルだけを描きます（docs/07 §2 の
 ```
 
 `Stepper` だけは `State（disabled / normal / pressed）` と出る。
-**この診断そのものを `examples/hello-world/src/apple-hig.test.ts` が assert している**
+**この診断そのものを `examples/hello-world/src/apple-design-system.test.ts` が assert している**
 —— 散文で「写らない」と書くだけだと、写るようになったとき嘘のまま残る。
 
 → **軸の差（Variant）は Swift に写るが、State の差は 1 つも写らない。**
@@ -212,7 +212,7 @@ SwiftUI の `Glass` 構造と同じ 3 つ。実在することは確かめてあ
 寸法は 4 つが 1 つの式で閉じている —— `inset×2 + thumb = trackHeight` /
 `inset×2 + thumb + travel = trackWidth` / `trackRadius×2 = trackHeight` /
 `thumbRadius×2 = thumbSize`。**言語に算術が無いので式では書けず**、
-`examples/hello-world/src/apple-hig.test.ts` が解決値で assert して縛っている
+`examples/hello-world/src/apple-design-system.test.ts` が解決値で assert して縛っている
 （1 つだけ動かすと落ちる）。
 
 ### `disabled` の見せ方 —— **`forcedState` が唯一の入口**
@@ -231,7 +231,7 @@ SwiftUI の `Glass` 構造と同じ 3 つ。実在することは確かめてあ
 | テスト | `IRView` に `forcedState: 'disabled'` を渡す |
 | **カタログには並べられない** | `<State>` は Component の宣言部にしか書けず、`forcedState` は Renderer に渡す描画オプションなので、**静止した screen からは宣言できない** |
 
-`e2e/apple-hig.spec.ts` が Studio で**実際に操作して**、Preview の絵が変わることを確かめている
+`e2e/apple-design-system.spec.ts` が Studio で**実際に操作して**、Preview の絵が変わることを確かめている
 （AGENTS.md「生成した CSS は『当たること』まで確かめる」——
 規則の文字列を見るテストでは、この壊れ方が丸ごと素通りする）。
 
@@ -254,7 +254,7 @@ SwiftUI の `Glass` 構造と同じ 3 つ。実在することは確かめてあ
 
 **どれも「各 Variant が同じ属性の組を書く」。** Variant は base からの差分として読まれるので、
 片方だけ属性を落とすと「動かない」ではなく「**相手の値が残る**」になる（docs/02 §5.4）。
-`examples/hello-world/src/apple-hig.test.ts` が Component ごとにキーの集合を突き合わせている
+`examples/hello-world/src/apple-design-system.test.ts` が Component ごとにキーの集合を突き合わせている
 （**数ではなく集合** —— 数だけだと別々の属性を同じ個数書いても通る）。
 
 ### `Slider` が 1 つの値で足りる理由
@@ -311,7 +311,7 @@ Variant に書けるのは 1 つの `color` だけなので、**両方に同じ�
 
 **`background` / `backdropBlur` / `borderColor` / `borderWidth` は借りる側に 1 つも書いていない**
 ——`glass` 軸の値の正本は `GlassBar` で、写すと規則が分裂する（AGENTS.md の禁止事項）。
-`examples/hello-world/src/apple-hig.test.ts` が**綴り**（4 属性を書いていない）と**値**
+`examples/hello-world/src/apple-design-system.test.ts` が**綴り**（4 属性を書いていない）と**値**
 （展開後の帯が `$glass.*` の `regular` と一致する）の両方を見ている ——
 片方だけだと「書き写していないが別の値」「値は同じだが書き写している」を取り逃す。
 
@@ -324,7 +324,7 @@ Variant に書けるのは 1 つの `color` だけなので、**両方に同じ�
 
 **「帯は借りるのに、なぜこれは借りないのか」の答えは「これは帯ではないから」。**
 借りる側の顔ぶれは `GLASS_BORROWING_COMPONENTS` が表にしていて、
-`apple-hig.test.ts` が **`ListRow` がそこに入っていないこと**と
+`apple-design-system.test.ts` が **`ListRow` がそこに入っていないこと**と
 **`ListRow.uix` が `<GlassBar` を書いていないこと**を別に見ている ——
 借りる側の数だけを見ても、**借りてはいけない側が借り始めたことは分からない**。
 
@@ -396,13 +396,13 @@ iPhone preset 375pt − screen の外周 40 − 帯の padding 24 = 311pt に、
 
 #202 の受け入れ条件に「`grow` を使っていない（**Swift に生成できる**ことを確かめる）」が
 あるが、**#196 の時点ではそれを確かめる手段が無かった** ——
-`packages/apple-hig` は `tools/generate-swift.mjs` の `SOURCES` に入っていなかった
+`tests/fixtures/apple-design-system` は `tools/generate-swift.mjs` の `SOURCES` に入っていなかった
 （`Showcase` / `Catalog` の縞が `grow` を使い、#26 の決裁で生成を拒否していたため）。
 
 **#187 が入って `SOURCES` に戻った。** `Stack` を自作 `Layout`（`UIXFlexStack`）に移して
 比配分できるようになったので、縞の `grow` は拒否されなくなった。
 いまは `tools/generate-swift.test.ts` が repo 全体で「拒否は 0 件」を見ており、
-`examples/hello-world/src/apple-hig.test.ts` が**この 8 つが実際に Swift の中身になっている**
+`examples/hello-world/src/apple-design-system.test.ts` が**この 8 つが実際に Swift の中身になっている**
 ことを別に見ている（`Tokens.Switch.trackOn` などが生成物に出ること）。
 
 **「IR に `grow` が無い」を数える検査にはしていない。** それは必要条件でしかなく、
@@ -425,7 +425,7 @@ iPhone preset 375pt − screen の外周 40 − 帯の padding 24 = 311pt に、
 | 11 子にした標本 | **11** | **`子が 11 個あり、…上限（10）を超えます`** |
 
 **`grow` を 1 つも使っていない**ことに注意 —— 「`grow` が 0 件」を数える案では、
-この枝は**素通りする**。`apple-hig.test.ts` の「陽性対照」がこの 2 行をそのまま検査にしている
+この枝は**素通りする**。`apple-design-system.test.ts` の「陽性対照」がこの 2 行をそのまま検査にしている
 （10 子なら通る、という境界の反対側も一緒に）。
 
 ### 足場（`screens/Controls.uix`）は畳んだ
@@ -447,7 +447,7 @@ iPhone preset 375pt − screen の外周 40 − 帯の padding 24 = 311pt に、
 
 いま書いてある値の出典は **「この repo の Web Preview の画素実測」**で、
 「それらしい値」ではなく **3 種の差が絵に出る band に入っていること**を確かめて置いた
-（`e2e/apple-hig.spec.ts` の実測表）。同じことが
+（`e2e/apple-design-system.spec.ts` の実測表）。同じことが
 `tokens/semantic.tokens.json` の `$description` にも書いてある。
 
 **`Switch` も同じ扱い。** `51 × 31` / つまみ `27` は UIKit の `UISwitch` の
@@ -494,10 +494,10 @@ iOS 側に実在する共有だけを寄せる**（`demo.sample.radius` が `gla
 
 | 検査 | 何を見るか |
 |---|---|
-| `examples/hello-world/src/apple-hig.test.ts` | `uix lint` 診断 0 件 / 全 Variant の**解決値**（直書き）/ 展開 / `RenderIssue` 0 件 / CSS の宣言 / **寸法どうしの関係**（capsule と比率の縛り）/ `forcedState` の有無で `disabled` が出入りすること / **`generateWorkspace` が 1 件も拒否しないこと**と、**その器が拒否を出しうること**（陽性対照 2 本・#202） |
-| `tools/generate-swift.test.ts` | repo 全体で「拒否は 0 件」（#187 で `apple-hig` も対象に入った） |
+| `examples/hello-world/src/apple-design-system.test.ts` | `uix lint` 診断 0 件 / 全 Variant の**解決値**（直書き）/ 展開 / `RenderIssue` 0 件 / CSS の宣言 / **寸法どうしの関係**（capsule と比率の縛り）/ `forcedState` の有無で `disabled` が出入りすること / **`generateWorkspace` が 1 件も拒否しないこと**と、**その器が拒否を出しうること**（陽性対照 2 本・#202） |
+| `tools/generate-swift.test.ts` | repo 全体で「拒否は 0 件」（#187 で `apple-design-system` も対象に入った） |
 | `swift/UIDSLRuntime` の `GeneratedConformanceTests` | **生成した Swift が実際にコンパイルでき、同じ絵になること**（`make swift-check`） |
-| **`e2e/apple-hig.spec.ts`** | **Studio の Preview で描いた画素**。`glass` 3 種が互いに違う絵になること / **Inspector から `disabled` を強制表示すると絵が変わること** |
+| **`e2e/apple-design-system.spec.ts`** | **Studio の Preview で描いた画素**。`glass` 3 種が互いに違う絵になること / **Inspector から `disabled` を強制表示すると絵が変わること** |
 | `swift/UIDSLRuntime` の `RenderTests` | `backdropBlur: 0` が material を出さないこと（`identity` が Swift でガラスを持たない） |
 
 **画素まで降りる理由。** `backdrop-filter: blur(20px)` は**構文として正しいまま一度も効かない**
@@ -510,7 +510,7 @@ IR や markup を見るテストからは分からない。
 ## 見るとき
 
 Studio が 4 つ目のワークスペースとしてこれを開く（`apps/studio/vite.config.ts` の
-`WORKSPACES`）。`make dev` して Files から `apple-hig` の下の screen を選ぶ。**3 枚あり、
+`WORKSPACES`）。`make dev` して Files から `apple-design-system` の下の screen を選ぶ。**3 枚あり、
 目的が違う**:
 
 | screen | 目的 |
@@ -524,7 +524,7 @@ Studio が 4 つ目のワークスペースとしてこれを開く（`apps/stud
 
 `packages/components` は**標準 Design System**（Button / TextField / Card / Avatar）で、
 こちらは **Apple のプラットフォーム固有の外装**。客も依存も違う ——
-`apps/studio/design` の `chrome.*` を標準と名前が 1 つも交わらないように切ったのと
+`tests/fixtures/ui-dsl-studio-design-system` の `chrome.*` を標準と名前が 1 つも交わらないように切ったのと
 同じ判断（#152 / #169）。実測での差は 2 つ:
 
 - **標準に足すと既存テストの期待値が 6 か所動く**（別パッケージなら 0）

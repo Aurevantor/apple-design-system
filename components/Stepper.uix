@@ -10,9 +10,9 @@
     `packages/renderer-web/src/state-css.ts` の `STATE_SELECTORS` に `pressed` は**在り**、
     `:active` に写る（`disabled` は無いので `forcedState` が唯一の入口）。
     **この Component が Catalog に並ぶと、Catalog に stylesheet が出るようになる** ——
-    #196 の時点では apple-hig のどの Component も疑似クラスへ写る State を持っておらず、
+    #196 の時点では apple-design-system のどの Component も疑似クラスへ写る State を持っておらず、
     「`<style>` が 1 つも無い」が検査の前提だった。**その前提はここで変わる**
-    （`examples/hello-world/src/apple-hig.test.ts` の該当箇所に書いてある）。
+    （`examples/hello-world/src/apple-design-system.test.ts` の該当箇所に書いてある）。
 
     **`pressed` は Swift へ写らない**（#201）。`docs/07` §2 の表で `ButtonStyle` が
     Phase 4 に置かれており、`packages/codegen-swift` は `<State>` を見ると
@@ -27,7 +27,7 @@
     Token で固定して式で閉じる**ほうを採った（#187 のあとは「生成できない」が理由ではない）。
     `segment × 2 + divider === width` を解決値で縛ってある。
 
-    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-design-system.test.ts が固定）。
 -->
 <Component name="Stepper">
 

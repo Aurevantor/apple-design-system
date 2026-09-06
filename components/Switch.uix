@@ -10,7 +10,7 @@
     `packages/renderer-web/src/state-css.ts` の `STATE_SELECTORS` に無く（`:disabled` は
     `<div>` に効かないので、書けても一度も真にならない）、**規則を 1 行も出さない**。
     しかも診断も `RenderIssue` も出ないので、知らないと「書いたのに効かない」に見える。
-    見るのは Studio の Inspector の強制表示で、それを `e2e/apple-hig.spec.ts` が操作して確かめている。
+    見るのは Studio の Inspector の強制表示で、それを `e2e/apple-design-system.spec.ts` が操作して確かめている。
     仕様は docs/03 §4。
 
     **つまみの移動を `justify` で書けない。** `<Variant>` が受け付けるのは共通属性 + `name` / `on`
@@ -24,7 +24,7 @@
     それでも使わないのは、**`travel`（つまみの移動距離）を pt で置いている**ため ——
     `grow` で伸ばすと移動距離が幅に依存し、`inset×2 + thumb + travel === trackWidth` が崩れる。
 
-    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-design-system.test.ts が固定）。
 -->
 <Component name="Switch">
 

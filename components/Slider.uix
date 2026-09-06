@@ -22,7 +22,7 @@
     **`grow` は使わない**（`ProgressBar` と同じ理由 —— 幅が固定であることが比率の前提。
     #187 のあとは「生成できない」が理由ではなくなった）。
 
-    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-design-system.test.ts が固定）。
 -->
 <Component name="Slider">
 

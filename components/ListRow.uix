@@ -30,7 +30,7 @@
     **`<State>` は軸が触る `color` とは別の属性（`opacity`）に置く。** 重ねると、
     その属性を軸が上書きしている Variant では**State の規則が 1 本も出なくなる**
     （`state-css.ts` の `changedOnly`。#227 の実測）。
-    `examples/hello-world/src/apple-hig.test.ts` の
+    `examples/hello-world/src/apple-design-system.test.ts` の
     `軸と <State> は同じ属性を触らない（#227）` が交わり 0 件を縛っている。
 
     ## 寸法
@@ -46,7 +46,7 @@
     **ここに書く `id` は IR に残らない**（定義側の `id` は展開で落ちる・#227）。
     検査は `irId` か利用側に書いた `id` から辿る。
 
-    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-design-system.test.ts が固定）。
 -->
 <Component name="ListRow">
 

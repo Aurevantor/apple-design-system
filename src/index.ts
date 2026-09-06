@@ -3,7 +3,7 @@
  *
  * **このパッケージが配るのは TypeScript ではなく UIX と Token**（`packages/components` と同型）。
  * 中身は `components/*.uix` / `screens/*.uix` / `tokens/*.json` で、それ自体が 1 つの
- * ワークスペースになっているので、`uix lint packages/apple-hig` がそのまま通る。
+ * ワークスペースになっているので、`uix lint tests/fixtures/apple-design-system` がそのまま通る。
  *
  * ## なぜ `liquid-glass` から改名したのか（#196）
  *
@@ -11,14 +11,14 @@
  * #195 が `Switch` / `Slider` / `TabBar` … を同じ場所に足す。**ガラスでない部品が
  * `liquid-glass` に入る**のは名前と中身のずれで、この repo が最も高い代償を払って潰している形。
  *
- * **`ios` ではなく `apple-hig` にした** —— Swift Runtime は macOS でも動く
+ * **`ios` ではなく `apple-design-system` にした** —— Swift Runtime は macOS でも動く
  * （`Package.swift` は `.macOS(.v14)` / `.iOS(.v17)`、`swift-macos` job が macOS で
  * `RenderHarness` を回す）ので、`ios` と名乗るとそこを狭める。HIG は iOS / iPadOS / macOS に
  * 共通する規範で、**Liquid Glass もその一部**なので、統合しても名前が正しいまま残る。
  *
  * ## 標準 Design System（`packages/components`）と別のパッケージである理由
  *
- * 客も依存も違う —— `apps/studio/design` の `chrome.*` を標準と名前が 1 つも交わらないように
+ * 客も依存も違う —— `tests/fixtures/ui-dsl-studio-design-system` の `chrome.*` を標準と名前が 1 つも交わらないように
  * 切ったのと同じ判断（#152 / #169）。分けたことで:
  *
  * - `packages/components` 側の**期待値を 1 つも動かさない**（Component を足すと 10 箇所動く）
@@ -37,15 +37,15 @@
 import { fileURLToPath } from 'node:url'
 
 /** このパッケージのルート（= UIX ワークスペースのルート）。 */
-export const appleHigRoot = fileURLToPath(new URL('..', import.meta.url))
+export const appleDesignSystemRoot = fileURLToPath(new URL('..', import.meta.url))
 
 /**
  * このパッケージが定義する Component の名前（ファイル名と一致する。docs/03 §0）。
  *
  * **並びは registry と同じ**（= `components/` のファイル名順）。
- * `examples/hello-world/src/apple-hig.test.ts` が `registry.names()` と突き合わせる。
+ * `examples/hello-world/src/apple-design-system.test.ts` が `registry.names()` と突き合わせる。
  */
-export const APPLE_HIG_COMPONENTS = [
+export const APPLE_DESIGN_SYSTEM_COMPONENTS = [
   'Badge',
   'Chip',
   'GlassBar',
@@ -60,7 +60,7 @@ export const APPLE_HIG_COMPONENTS = [
   'TabItem',
 ] as const
 
-export type AppleHIGComponent = (typeof APPLE_HIG_COMPONENTS)[number]
+export type AppleDesignSystemComponent = (typeof APPLE_DESIGN_SYSTEM_COMPONENTS)[number]
 
 /** `GlassBar` の `glass` 軸（SwiftUI の `Glass` 構造と同じ 3 種。README の「glass 軸」）。 */
 export const GLASS_VARIANTS = ['regular', 'clear', 'identity'] as const
@@ -165,7 +165,7 @@ export const CHIP_STATES = ['normal', 'disabled'] as const
  * その属性を軸が上書きしている Variant では**State の規則が 1 本も出ない** ——
  * `packages/renderer-web/src/state-css.ts` の `changedOnly` が base からの差分だけを
  * 残すため。しかも**絵は正しく見える**ので目で見ても気づけない（#227 の実測）。
- * `examples/hello-world/src/apple-hig.test.ts` が**軸と `<State>` の触る属性の交わりが
+ * `examples/hello-world/src/apple-design-system.test.ts` が**軸と `<State>` の触る属性の交わりが
  * 0 件であること**で縛っている（`Switch` / `Slider` / `SegmentedControl` / `Chip` も同じ）。
  * **原因の側を見る形にしてある** —— 症状（「2 種とも同じ本数の規則が出る」）を測ると、
  * `disabled` のように疑似クラスへ写らない State では**規則が元から 0 本**なので、
@@ -185,7 +185,7 @@ export const STEPPER_STATES = ['normal', 'pressed', 'disabled'] as const
 /**
  * **`<State>` を 1 つも宣言しない Component**（操作できないもの）。
  *
- * 表にしてあるのは、`examples/hello-world/src/apple-hig.test.ts` が
+ * 表にしてあるのは、`examples/hello-world/src/apple-design-system.test.ts` が
  * 「本当に 0 件か」を IR から確かめるため —— 散文で書くと、あとから
  * `<State>` を足したときに**嘘のまま残る**（#170 で `GlassBar` について同じ形を置いた）。
  */
@@ -218,7 +218,7 @@ export const AXISLESS_COMPONENTS = ['Stepper', 'TabBar', 'NavBar'] as const
  * （`GlassBar.uix`「下に何もスクロールしていないガラスには屈折させるものが無い」）、
  * リストの行は content そのもの。**包むとガラスの使い方が間違いになる。**
  *
- * 表にしてあるのは、`examples/hello-world/src/apple-hig.test.ts` が
+ * 表にしてあるのは、`examples/hello-world/src/apple-design-system.test.ts` が
  * 「**この顔ぶれ以外は `GlassBar` を中に置いていない**」を IR から確かめるため ——
  * 散文で書くと、あとから包んだときに嘘のまま残る。
  */

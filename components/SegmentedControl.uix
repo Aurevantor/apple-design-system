@@ -22,7 +22,7 @@
     インジケータの位置の前提**（`restTrailing` は pt で置いてある）。#187 のあとは
     「生成できない」が理由ではなくなった。`inset × 2 + segment × 2 === width` を解決値で縛ってある。
 
-    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-design-system.test.ts が固定）。
 -->
 <Component name="SegmentedControl">
 
