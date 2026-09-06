@@ -1,8 +1,8 @@
 <!--
-    apple-hig: Catalog / omitted: Switch / Slider / SegmentedControl / Chip / TabItem /
+    apple-design-system: Catalog / omitted: Switch / Slider / SegmentedControl / Chip / TabItem /
     ListRow の disabled と Stepper の disabled（<State> は screen から宣言できず、 forcedState は
     Renderer に渡す 描画オプションなので、静止したカタログには並べられない。 見るのは Studio の
-    Inspector で、 e2e/apple-hig.spec.ts が実際に操作して確かめている）と、
+    Inspector で、 e2e/apple-design-system.spec.ts が実際に操作して確かめている）と、
     GlassBar / ProgressBar / Badge / TabBar / NavBar の
     State（<State> を1つも宣言していない。操作できない部品なので「操作できるかどうか」の
     軸が無い。TabBar / NavBar は押す対象が中身の側）と、 NavBar の large title
@@ -33,9 +33,9 @@
     属さない。いまは cover 1 + glass 5 + controls 8 + list 2 で、**外側は 4 子**。
 
     **この画面は Swift に生成される**（#187 以降）。縞の grow が自作 Layout で比配分
-    できるようになり、packages/apple-hig が tools/generate-swift.mjs の SOURCES に戻った。
+    できるようになり、tests/fixtures/apple-design-system が tools/generate-swift.mjs の SOURCES に戻った。
     **12 Component すべてがここに並ぶので、生成検査の顔ぶれの縛りもこの画面が持つ**
-    （examples/hello-world/src/apple-hig.test.ts）。#187 の前は grow を使わない
+    （examples/hello-world/src/apple-design-system.test.ts）。#187 の前は grow を使わない
     screens/Controls.uix を足場として置いていたが、制約ごと無くなったので畳んだ。
 -->
 <Screen id="glass-catalog" name="Catalog" background="$demo.backdrop.canvas" padding="$demo.sample.padding">

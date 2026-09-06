@@ -14,7 +14,7 @@
     しかも**絵は正しく見える**（その色は既に当たっている）ので、目で見ても気づけない。
     `GlassBar` の「片方だけ属性を落とさない」と**同じ族** —— あちらは Variant どうし、
     こちらは Variant と State のあいだで、**どちらも「差分として読まれる」ことから来る**。
-    `examples/hello-world/src/apple-hig.test.ts` が**軸と `<State>` の触る属性の交わりが
+    `examples/hello-world/src/apple-design-system.test.ts` が**軸と `<State>` の触る属性の交わりが
     0 件であること**を見ているので、重ねた瞬間に落ちる（`Switch` / `Slider` /
     `SegmentedControl` / `Chip` にも同じ検査が当たっている）。
     **症状ではなく原因を見る形にしてある** —— 「2 種とも同じ本数の規則が出る」を測ると、
@@ -33,7 +33,7 @@
     **箱の高さは行の高さちょうど。** 記号とラベルを `iconBox` / `labelBox` の箱に入れてあり、
     `paddingVertical×2 + iconBox + spacing + labelBox === height` で閉じている。
     **項目の高さを書体の行送りに依存させないため** —— 依存させると同じ UIX が Web と Swift で
-    別の高さになり、帯の高さまで動く（`examples/hello-world/src/apple-hig.test.ts` が
+    別の高さになり、帯の高さまで動く（`examples/hello-world/src/apple-design-system.test.ts` が
     解決値で assert して縛っている）。
 
     **`grow` は使わない。** 等幅のタブを `grow` で割りたくなるが、`SegmentedControl` が
@@ -44,7 +44,7 @@
     （`packages/compiler/src/expand.ts`「`id` はファイル内で一意」）ので、
     **検査は `irId` か利用側に書いた `id` から辿る**（#227 の実測。書いても見つからない）。
 
-    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-design-system.test.ts が固定）。
 -->
 <Component name="TabItem">
 

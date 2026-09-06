@@ -25,7 +25,7 @@
     **`grow` は使わない**（他の Component と同じ —— 寸法を Token で固定して式で閉じる。
     #187 のあとは「生成できない」が理由ではない）。
 
-    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-design-system.test.ts が固定）。
 -->
 <Component name="Chip">
 

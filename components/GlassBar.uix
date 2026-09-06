@@ -9,7 +9,7 @@
     **capsule にしない。** `radius` は 4 隅一律で高さに追随しないので、`999` のような値は
     高さが変わった瞬間に破綻する。帯は角丸を控えめに取ることでこの近似を踏まずに済む。
 
-    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-design-system.test.ts が固定）。
 -->
 <Component name="GlassBar">
 

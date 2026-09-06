@@ -36,7 +36,7 @@
     **ここに書く `id` は IR に残らない**（定義側の `id` は展開で落ちる・#227）。
     検査は `irId` か利用側に書いた `id` から辿る。
 
-    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-hig.test.ts が固定）。
+    近似したものの一覧は `../README.md`（増減は examples/hello-world/src/apple-design-system.test.ts が固定）。
 -->
 <Component name="NavBar">
 
