@@ -1,0 +1,28 @@
+<Screen background="$sample.background">
+    <VStack width="fill" height="fill" align="stretch">
+        <NavigationBar title="使い方"><Leading><CloseButton /></Leading></NavigationBar>
+        <ScrollView width="fill" height="fill">
+            <VStack width="fill" padding="$sample.inset" padding-bottom="$sample.metrics.footer" spacing="$sample.sectionGap" align="stretch">
+                <VStack width="fill" spacing="$sample.metrics.regular" align="leading">
+                    <ZStack width="56" height="56" radius="$sample.metrics.badgeCorner" background="$ios.tintSoft" align="center">
+                        <Image source="system:square.stack" alt="" width="28" height="28" color="$ios.tint" />
+                    </ZStack>
+                    <VStack id="title" width="fill">
+                        <Text style="$sample.navigationTitle" color="$ios.primary">小さくつくって、</Text>
+                        <Text style="$sample.navigationTitle" color="$ios.primary">つなげてみる。</Text>
+                    </VStack>
+                    <Text style="$ios.body" color="$ios.secondary">Hello World へようこそ。画面を行き来しながら、あなたのアプリをイメージしてみましょう。</Text>
+                </VStack>
+                <ListGroup><Content>
+                    <ListRow title="01  ホームを開く" detail="あなたのスペースを見てみましょう。" symbol="system:house" />
+                    <InsetSeparator />
+                    <ListRow title="02  自分らしく整える" detail="プロフィールから編集画面を開けます。" symbol="system:person" />
+                    <InsetSeparator />
+                    <ListRow title="03  いつでも戻れる" detail="戻る・閉じるで、ひとつ前の場所へ。" symbol="system:chevron.left" />
+                </Content></ListGroup>
+                <PrimaryButton id="close-button" label="戻る／閉じる" />
+                <Text style="$ios.caption" color="$ios.secondary">HELLO WORLD  ·  はじめの一歩</Text>
+            </VStack>
+        </ScrollView>
+    </VStack>
+</Screen>

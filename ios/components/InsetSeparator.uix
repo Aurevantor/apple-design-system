@@ -1,0 +1,5 @@
+<Component name="InsetSeparator">
+    <VStack width="fill" padding-leading="$ios.metrics.separatorInset">
+        <VStack width="fill" height="0.5" background="$ios.separator" />
+    </VStack>
+</Component>

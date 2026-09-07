@@ -1,0 +1,9 @@
+<!-- Glass belongs to the navigation layer. Values approximate its appearance on Web. -->
+<Component name="GlassSurface">
+    <Slots><Slot name="content" /></Slots>
+    <VStack width="fill" background="$ios.glass.material" backdropBlur="$ios.glass.blur"
+        borderColor="$ios.glass.rim" borderWidth="$ios.toolbar.borderWidth"
+        radius="$ios.metrics.heroInset" shadow="$ios.shadow" align="stretch">
+        <SlotOutlet name="content" />
+    </VStack>
+</Component>

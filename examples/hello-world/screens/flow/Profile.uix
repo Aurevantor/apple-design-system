@@ -1,0 +1,14 @@
+<Screen background="$sample.background">
+    <VStack width="fill" height="fill" align="stretch">
+        <NavigationBar title="プロフィール">
+            <Leading><BackButton id="navigation-back" /></Leading>
+        </NavigationBar>
+        <ProfileContent><Actions>
+<ListGroup><Content>
+                        <ListRow id="edit-button" title="プロフィールを編集" detail="名前・メール・自己紹介" symbol="system:pencil" />
+                        <InsetSeparator />
+                        <ListRow id="back-button" title="ホームに戻る" detail="あなたのスペースへ" symbol="system:house" />
+                    </Content></ListGroup>
+        </Actions></ProfileContent>
+    </VStack>
+</Screen>

@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "name": "はじめての Flow",
+  "entry": "login",
+  "nodes": [
+    {
+      "id": "login",
+      "screen": "Welcome",
+      "position": {
+        "x": 40,
+        "y": 60
+      }
+    },
+    {
+      "id": "home",
+      "screen": "Home",
+      "position": {
+        "x": 370,
+        "y": 60
+      }
+    },
+    {
+      "id": "profile",
+      "screen": "Profile",
+      "position": {
+        "x": 700,
+        "y": 60
+      }
+    },
+    {
+      "id": "edit",
+      "screen": "EditProfile",
+      "position": {
+        "x": 1030,
+        "y": 60
+      }
+    },
+    {
+      "id": "about",
+      "screen": "About",
+      "position": {
+        "x": 370,
+        "y": 570
+      }
+    }
+  ],
+  "transitions": [
+    {
+      "id": "continue",
+      "from": "login",
+      "action": "push",
+      "label": "Continue → ホーム",
+      "sourceElement": "continue-button",
+      "to": "home"
+    },
+    {
+      "id": "open-profile",
+      "from": "home",
+      "action": "push",
+      "label": "プロフィールを見る",
+      "sourceElement": "profile-button",
+      "to": "profile"
+    },
+    {
+      "id": "back-home",
+      "from": "profile",
+      "action": "back",
+      "label": "ホームに戻る",
+      "sourceElement": "back-button"
+    },
+    {
+      "id": "edit-profile",
+      "from": "profile",
+      "action": "sheet",
+      "label": "プロフィールを編集",
+      "sourceElement": "edit-button",
+      "to": "edit"
+    },
+    {
+      "id": "close-edit",
+      "from": "edit",
+      "action": "dismiss",
+      "label": "編集を閉じる",
+      "sourceElement": "done-button"
+    },
+    {
+      "id": "open-about",
+      "from": "home",
+      "action": "fullScreenCover",
+      "label": "使い方を開く",
+      "sourceElement": "about-button",
+      "to": "about"
+    },
+    {
+      "id": "close-about",
+      "from": "about",
+      "action": "dismiss",
+      "label": "使い方を閉じる",
+      "sourceElement": "close-button"
+    }
+  ]
+}

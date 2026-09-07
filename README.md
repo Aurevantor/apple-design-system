@@ -1,5 +1,16 @@
 # apple-design-system — UIX で書かれた Apple HIG の Design System
 
+## iOS の共通部品
+
+Figma UI Kit を参照した新しい iOS 部品は **[ios/](ios/README.md)** に置く。
+`ios/uix.json` が独立したワークスペースの入口。NavigationBar、BackButton、
+CloseButton、DoneButton、TabBar、リスト・フォームなどを利用側から依存して使える。
+ルートの旧 API と混在させず、iOS 利用側は `ios` を参照する。
+画面名やユーザーデータは共通部品に含めない。
+
+利用サンプルは [examples/hello-world](examples/hello-world/README.md)。
+このフォルダを Studio で開くと、`../../ios` を参照する6画面と2つの Flow を試せる。
+
 **配るのは TypeScript ではなく UIX と Token。** 中身は `components/*.uix` /
 `screens/*.uix` / `tokens/*.json` で、それ自体が 1 つの UIX ワークスペース
 （`uix.json` が目印）。`src/index.ts` が持っているのは**軸と State の宣言**で、

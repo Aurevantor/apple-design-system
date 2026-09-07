@@ -1,0 +1,237 @@
+{
+  "$description": "Shared iOS UIX tokens. Figma measurements and approximation limits: ../README.md.",
+  "ios": {
+    "avatarRadius": {
+      "$type": "dimension",
+      "$value": 40
+    },
+    "body": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": ["SF Pro Text", "Helvetica Neue", "system-ui", "sans-serif"],
+        "fontSize": 17,
+        "fontWeight": "regular",
+        "lineHeight": 1.3
+      }
+    },
+    "buttonHeight": {
+      "$type": "dimension",
+      "$value": 50
+    },
+    "capsule": {
+      "$type": "dimension",
+      "$value": 25
+    },
+    "caption": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": ["SF Pro Text", "Helvetica Neue", "system-ui", "sans-serif"],
+        "fontSize": 13,
+        "fontWeight": "regular",
+        "lineHeight": 1.3
+      }
+    },
+    "corner": {
+      "$type": "dimension",
+      "$value": 24
+    },
+    "gap": {
+      "$type": "dimension",
+      "$value": 12
+    },
+    "glass": {
+      "blur": {
+        "$type": "dimension",
+        "$value": {
+          "value": 20,
+          "unit": "px"
+        }
+      },
+      "material": {
+        "$type": "color",
+        "$value": "#FFFFFFB8"
+      },
+      "rim": {
+        "$type": "color",
+        "$value": "#FFFFFFCC"
+      }
+    },
+    "headline": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": ["SF Pro Text", "Helvetica Neue", "system-ui", "sans-serif"],
+        "fontSize": 17,
+        "fontWeight": "semi-bold",
+        "lineHeight": 1.3
+      }
+    },
+    "metrics": {
+      "compact": {
+        "$type": "dimension",
+        "$value": 4
+      },
+      "heroInset": {
+        "$type": "dimension",
+        "$value": 32
+      },
+      "iconCorner": {
+        "$type": "dimension",
+        "$value": 9
+      },
+      "labelGap": {
+        "$type": "dimension",
+        "$value": 6
+      },
+      "rounded": {
+        "$type": "dimension",
+        "$value": 26
+      },
+      "separatorInset": {
+        "$type": "dimension",
+        "$value": 60
+      },
+      "tight": {
+        "$type": "dimension",
+        "$value": 3
+      },
+      "toolbarInset": {
+        "$type": "dimension",
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        }
+      }
+    },
+    "pressed": {
+      "$type": "number",
+      "$value": 0.65
+    },
+    "primary": {
+      "$type": "color",
+      "$value": "#111114"
+    },
+    "secondary": {
+      "$type": "color",
+      "$value": "#73737A"
+    },
+    "selection": {
+      "$type": "color",
+      "$value": "#EDEDED"
+    },
+    "separator": {
+      "$type": "color",
+      "$value": "#3C3C431F"
+    },
+    "shadow": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": "#0000000D",
+          "offsetX": 0,
+          "offsetY": 4,
+          "blur": 16
+        },
+        {
+          "color": "#00000008",
+          "offsetX": 0,
+          "offsetY": 1,
+          "blur": 3
+        }
+      ]
+    },
+    "surface": {
+      "$type": "color",
+      "$value": "#FFFFFF"
+    },
+    "tabGap": {
+      "$type": "dimension",
+      "$value": 1
+    },
+    "tabLabel": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": ["SF Pro Text", "Helvetica Neue", "system-ui", "sans-serif"],
+        "fontSize": 10,
+        "fontWeight": "semi-bold",
+        "lineHeight": 1.2
+      }
+    },
+    "tertiary": {
+      "$type": "color",
+      "$value": "#AEAEB2"
+    },
+    "tint": {
+      "$type": "color",
+      "$value": "#0088FF"
+    },
+    "tintSoft": {
+      "$type": "color",
+      "$value": "#E7F1FF"
+    },
+    "toolbar": {
+      "borderWidth": {
+        "$type": "dimension",
+        "$value": {
+          "value": 1,
+          "unit": "px"
+        }
+      },
+      "controlSize": {
+        "$type": "dimension",
+        "$value": {
+          "value": 44,
+          "unit": "px"
+        }
+      },
+      "height": {
+        "$type": "dimension",
+        "$value": {
+          "value": 54,
+          "unit": "px"
+        }
+      },
+      "radius": {
+        "$type": "dimension",
+        "$value": {
+          "value": 22,
+          "unit": "px"
+        }
+      },
+      "shadow": {
+        "$type": "shadow",
+        "$value": [
+          {
+            "color": "#00000014",
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 2,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 8,
+              "unit": "px"
+            }
+          }
+        ]
+      },
+      "sideWidth": {
+        "$type": "dimension",
+        "$value": {
+          "value": 52,
+          "unit": "px"
+        }
+      }
+    },
+    "transparent": {
+      "$type": "color",
+      "$value": "#FFFFFF00"
+    },
+    "white": {
+      "$type": "color",
+      "$value": "#FFFFFF"
+    }
+  }
+}

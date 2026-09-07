@@ -1,0 +1,30 @@
+<Screen background="$sample.background">
+    <VStack width="fill" height="fill" align="stretch">
+        <VStack width="fill" padding-top="$sample.metrics.medium" align="center">
+            <VStack width="36" height="5" radius="$ios.metrics.tight" background="$ios.tertiary" />
+        </VStack>
+        <NavigationBar title="プロフィールを編集" topInset="4">
+            <Leading><CloseButton /></Leading>
+            <Trailing><DoneButton id="done-button" /></Trailing>
+        </NavigationBar>
+        <ScrollView width="fill" height="fill">
+            <VStack width="fill" padding="$sample.inset" spacing="$sample.metrics.section" align="stretch">
+                <VStack width="fill" spacing="$sample.metrics.small" align="center">
+                    <ProfileAvatar />
+                    <Text style="$ios.caption" color="$ios.secondary">あなたのプロフィール</Text>
+                </VStack>
+                <ListGroup><Content>
+                    <FormRow label="名前" value="Yohei" />
+                    <InsetSeparator />
+                    <FormRow label="メールアドレス" value="yohei@example.com" />
+                </Content></ListGroup>
+                <ListGroup><Content>
+                    <FormRow label="自己紹介" value="小さなアイデアを形にするのが好き。毎日、少しずつつくっています。" />
+                </Content></ListGroup>
+                <VStack width="fill" spacing="$sample.metrics.medium" align="stretch">
+                    <Text style="$ios.caption" color="$ios.secondary">名前や自己紹介はいつでも変更できます。</Text>
+                </VStack>
+            </VStack>
+        </ScrollView>
+    </VStack>
+</Screen>

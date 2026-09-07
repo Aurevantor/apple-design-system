@@ -1,0 +1,9 @@
+<Component name="TabItem">
+    <Props><Prop name="label" type="string" /><Prop name="symbol" type="string" /><Prop name="variant" type="string" default="off" /></Props>
+    <Variant name="off" background="$ios.transparent" color="$ios.primary" />
+    <Variant name="on" background="$ios.selection" color="$ios.tint" />
+    <VStack width="fill" height="54" spacing="$ios.tabGap" align="center" justify="center" radius="$ios.metrics.rounded" background="{$variant.background}">
+        <Image source="{$props.symbol}" alt="" width="23" height="23" color="{$variant.foreground}" />
+        <Text style="$ios.tabLabel" color="{$variant.foreground}">{$props.label}</Text>
+    </VStack>
+</Component>

@@ -1,0 +1,43 @@
+<Screen background="$sample.background">
+    <VStack width="fill" height="fill" align="stretch">
+        <NavigationBar title="Hello World" />
+        <ZStack width="fill" height="fill" alignY="bottom">
+            <ScrollView width="fill" height="fill">
+                <VStack width="fill" padding="$sample.inset" padding-bottom="$sample.metrics.scrollBottom" spacing="$sample.sectionGap" align="stretch">
+                    <VStack width="fill" spacing="$ios.metrics.labelGap" align="leading">
+                        <Text style="$sample.subhead" color="$ios.secondary">おかえりなさい</Text>
+                        <Text id="title" style="$sample.navigationTitle" color="$ios.primary">こんにちは、Yohei</Text>
+                    </VStack>
+                    <VStack width="fill" padding="$sample.metrics.cardInset" spacing="$sample.metrics.large" radius="$ios.corner" background="$ios.tintSoft" align="stretch">
+                        <HStack width="fill" align="center">
+                            <Image source="system:sparkles" alt="" width="28" height="28" color="$ios.tint" />
+                            <Spacer />
+                            <Text style="$ios.caption" color="$ios.tint">YOUR SPACE</Text>
+                        </HStack>
+                        <VStack spacing="$ios.metrics.labelGap" align="leading">
+                            <Text style="$sample.title" color="$ios.primary">自分らしい場所へ。</Text>
+                            <Text style="$sample.subhead" color="$ios.secondary">プロフィールを整えて、あなたらしい場所に。</Text>
+                        </VStack>
+                        <PrimaryButton id="profile-button" label="プロフィールを見る" />
+                    </VStack>
+                    <VStack width="fill" spacing="$sample.metrics.medium" align="stretch">
+                        <Text style="$ios.headline" color="$ios.primary">見つける</Text>
+                        <ListGroup><Content>
+                            <ListRow id="about-button" title="Hello World の使い方" detail="はじめての方はこちら" symbol="system:info.circle" />
+                            <InsetSeparator />
+                            <ListRow title="あなたのアカウント" detail="プロフィールと基本情報" symbol="system:person.crop.circle" />
+                        </Content></ListGroup>
+                    </VStack>
+                    <VStack width="fill" spacing="$sample.metrics.medium" align="leading">
+                        <Text style="$ios.headline" color="$ios.primary">今日のヒント</Text>
+                        <Text style="$ios.body" color="$ios.secondary">小さく始めて、少しずつ育てていく。まずは名前と自己紹介から。</Text>
+                    </VStack>
+                </VStack>
+            </ScrollView>
+            <TabBar><Items>
+                <TabItem label="ホーム" symbol="system:house" variant="on" />
+                <TabItem label="プロフィール" symbol="system:person.crop.circle" variant="off" />
+            </Items></TabBar>
+        </ZStack>
+    </VStack>
+</Screen>

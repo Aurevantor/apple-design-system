@@ -1,0 +1,15 @@
+<Component name="TabBar">
+    <Props><Prop name="contentWidth" type="number" default="220" /><Prop name="bottomInset" type="number" default="25" /></Props>
+    <Slots><Slot name="items" /></Slots>
+    <VStack width="fill" padding-bottom="{$props.bottomInset}" align="center">
+        <VStack width="{$props.contentWidth}" align="stretch">
+            <GlassSurface>
+                <Content>
+                    <HStack width="fill" padding="$ios.metrics.compact">
+                        <SlotOutlet name="items" />
+                    </HStack>
+                </Content>
+            </GlassSurface>
+        </VStack>
+    </VStack>
+</Component>

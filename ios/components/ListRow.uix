@@ -1,0 +1,13 @@
+<Component name="ListRow">
+    <Props><Prop name="title" type="string" /><Prop name="detail" type="string" default="" /><Prop name="symbol" type="string" default="system:square.stack" /></Props>
+    <HStack width="fill" padding="$ios.metrics.toolbarInset" spacing="$ios.gap" align="center">
+        <ZStack width="32" height="32" radius="$ios.metrics.iconCorner" background="$ios.tintSoft" align="center">
+            <Image source="{$props.symbol}" alt="" width="20" height="20" color="$ios.tint" />
+        </ZStack>
+        <VStack grow="1" spacing="$ios.metrics.tight" align="leading">
+            <Text style="$ios.body" color="$ios.primary">{$props.title}</Text>
+            <Text style="$ios.caption" color="$ios.secondary">{$props.detail}</Text>
+        </VStack>
+        <Image source="system:chevron.right" alt="" width="12" height="16" color="$ios.tertiary" />
+    </HStack>
+</Component>

@@ -1,0 +1,3 @@
+<Component name="DoneButton">
+    <ToolbarButton symbol="system:checkmark" label="完了" variant="prominent" />
+</Component>

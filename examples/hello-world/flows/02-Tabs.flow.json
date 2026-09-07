@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "name": "タブと履歴",
+  "tabs": [
+    {
+      "id": "home-tab",
+      "label": "ホーム",
+      "root": "home"
+    },
+    {
+      "id": "profile-tab",
+      "label": "プロフィール",
+      "root": "profile"
+    }
+  ],
+  "initialTab": "home-tab",
+  "nodes": [
+    {
+      "id": "home",
+      "screen": "Home",
+      "position": {
+        "x": 40,
+        "y": 60
+      }
+    },
+    {
+      "id": "profile",
+      "screen": "Account",
+      "position": {
+        "x": 370,
+        "y": 60
+      }
+    },
+    {
+      "id": "edit",
+      "screen": "EditProfile",
+      "position": {
+        "x": 700,
+        "y": 60
+      }
+    },
+    {
+      "id": "about",
+      "screen": "About",
+      "position": {
+        "x": 40,
+        "y": 570
+      }
+    }
+  ],
+  "transitions": [
+    {
+      "id": "select-profile",
+      "from": "home",
+      "action": "switchTab",
+      "label": "プロフィールタブへ",
+      "sourceElement": "profile-button",
+      "tab": "profile-tab"
+    },
+    {
+      "id": "select-home",
+      "from": "profile",
+      "action": "switchTab",
+      "label": "ホームタブへ",
+      "sourceElement": "back-button",
+      "tab": "home-tab"
+    },
+    {
+      "id": "push-about",
+      "from": "home",
+      "action": "push",
+      "label": "使い方を見る",
+      "sourceElement": "about-button",
+      "to": "about"
+    },
+    {
+      "id": "back-about",
+      "from": "about",
+      "action": "back",
+      "label": "使い方から戻る",
+      "sourceElement": "close-button"
+    },
+    {
+      "id": "edit-profile",
+      "from": "profile",
+      "action": "sheet",
+      "label": "プロフィールを編集",
+      "sourceElement": "edit-button",
+      "to": "edit"
+    },
+    {
+      "id": "close-edit",
+      "from": "edit",
+      "action": "dismiss",
+      "label": "編集を閉じる",
+      "sourceElement": "done-button"
+    }
+  ]
+}

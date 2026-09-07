@@ -1,0 +1,6 @@
+<Component name="ProfileAvatar">
+    <Props><Prop name="size" type="number" default="80" /></Props>
+    <ZStack width="{$props.size}" height="{$props.size}" radius="$ios.avatarRadius" background="$ios.tintSoft" align="center">
+        <Image source="system:person" alt="プロフィール" width="36" height="36" color="$ios.tint" />
+    </ZStack>
+</Component>
