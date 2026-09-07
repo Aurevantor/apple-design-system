@@ -1,0 +1,27 @@
+<!-- Fixed control dimensions exclude padding (docs/02 §5.3). -->
+<Component name="NavigationBar">
+    <Props>
+        <Prop name="title" type="string" />
+        <Prop name="topInset" type="number" default="54" />
+    </Props>
+    <Slots><Slot name="leading" optional="true" /><Slot name="trailing" optional="true" /></Slots>
+    <VStack width="fill" align="stretch">
+        <VStack width="fill" height="{$props.topInset}" />
+        <VStack width="fill" height="$ios.toolbar.height" align="stretch">
+        <ZStack width="fill" height="$ios.toolbar.controlSize" align="center">
+            <HStack width="fill" padding-horizontal="$ios.metrics.toolbarInset" align="center">
+                <VStack width="$ios.toolbar.sideWidth" />
+                <HStack width="fill" justify="center">
+                    <Text style="$ios.headline" color="$ios.primary" maxLines="1">{$props.title}</Text>
+                </HStack>
+                <VStack width="$ios.toolbar.sideWidth" />
+            </HStack>
+            <HStack width="fill" height="fill" padding-horizontal="$ios.metrics.toolbarInset" align="center">
+                <VStack width="$ios.toolbar.sideWidth" align="leading"><SlotOutlet name="leading" /></VStack>
+                <Spacer />
+                <VStack width="$ios.toolbar.sideWidth" align="trailing"><SlotOutlet name="trailing" /></VStack>
+            </HStack>
+        </ZStack>
+        </VStack>
+    </VStack>
+</Component>

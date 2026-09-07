@@ -1,0 +1,27 @@
+<Screen background="$sample.background">
+    <VStack width="fill" height="fill" align="stretch">
+        <NavigationBar title="Hello World" />
+        <ScrollView width="fill" height="fill">
+            <VStack width="fill" padding="$sample.inset" spacing="$sample.sectionGap" align="stretch">
+                <VStack width="fill" spacing="$sample.metrics.inset" padding-top="$ios.metrics.heroInset" align="center">
+                    <ZStack width="88" height="88" radius="$ios.metrics.rounded" background="$ios.tint" align="center">
+                        <Image source="system:square.stack" alt="Hello World" width="42" height="42" color="$ios.white" />
+                    </ZStack>
+                    <VStack width="fill" spacing="$sample.metrics.medium" align="center">
+                        <Text style="$sample.hero" color="$ios.primary">Hello, world.</Text>
+                        <Text style="$sample.subhead" color="$ios.secondary">小さなアイデアを、あなたのアプリに。</Text>
+                    </VStack>
+                </VStack>
+                <ListGroup><Content>
+                    <ListRow title="自分らしいプロフィール" detail="名前や自己紹介をまとめて管理" symbol="system:person.crop.circle" />
+                    <InsetSeparator />
+                    <ListRow title="気持ちよく、画面を行き来" detail="ホームから詳細へ、自然につながる" symbol="system:square.stack" />
+                </Content></ListGroup>
+                <VStack width="fill" spacing="$ios.gap" align="stretch">
+                    <PrimaryButton id="continue-button" label="はじめる" />
+                    <Text style="$ios.caption" color="$ios.secondary">あなたのペースで、少しずつ。</Text>
+                </VStack>
+            </VStack>
+        </ScrollView>
+    </VStack>
+</Screen>

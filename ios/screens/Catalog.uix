@@ -1,0 +1,31 @@
+<Screen name="IOSCatalog" background="$ios.surface">
+    <VStack width="fill" height="fill">
+        <NavigationBar title="iOS Components">
+            <Leading><BackButton /></Leading>
+            <Trailing><DoneButton /></Trailing>
+        </NavigationBar>
+        <ScrollView width="fill" height="fill">
+            <VStack width="fill" padding="$ios.metrics.toolbarInset" spacing="$ios.gap">
+                <Text style="$ios.headline" color="$ios.primary">Toolbar buttons</Text>
+                <HStack spacing="$ios.gap">
+                    <CloseButton />
+                    <ToolbarButton symbol="system:pencil" label="Edit" />
+                    <ToolbarButton symbol="system:checkmark" label="Confirm" variant="prominent" />
+                </HStack>
+                <ProfileAvatar />
+                <Text style="$ios.headline" color="$ios.primary">Grouped content</Text>
+                <ListGroup><Content>
+                    <ListRow title="Navigation row" detail="Title and supporting text" symbol="system:info.circle" />
+                    <InsetSeparator />
+                    <FormRow label="Label" value="Sample value" />
+                </Content></ListGroup>
+                <PrimaryButton label="Continue" />
+                <Text style="$ios.caption" color="$ios.secondary">Editable UIX approximation. Not a native control.</Text>
+            </VStack>
+        </ScrollView>
+        <TabBar><Items>
+            <TabItem label="First" symbol="system:house" variant="on" />
+            <TabItem label="Second" symbol="system:person.crop.circle" />
+        </Items></TabBar>
+    </VStack>
+</Screen>

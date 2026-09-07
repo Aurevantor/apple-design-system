@@ -1,0 +1,9 @@
+<Component name="PrimaryButton">
+    <Props><Prop name="label" type="string" /></Props>
+    <State name="normal" />
+    <State name="pressed" opacity="$ios.pressed" />
+    <State name="focused" borderColor="$ios.primary" borderWidth="2" />
+    <HStack width="fill" height="$ios.buttonHeight" background="$ios.tint" radius="$ios.capsule" align="center" justify="center">
+        <Text style="$ios.headline" color="$ios.white">{$props.label}</Text>
+    </HStack>
+</Component>

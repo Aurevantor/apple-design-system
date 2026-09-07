@@ -1,0 +1,106 @@
+{
+  "$description": "Hello World-specific tokens. Shared ios.* tokens come from ../../ios.",
+  "sample": {
+    "background": {
+      "$type": "color",
+      "$value": "#F4F4F7"
+    },
+    "inset": {
+      "$type": "dimension",
+      "$value": 20
+    },
+    "metrics": {
+      "footer": {
+        "$type": "dimension",
+        "$value": 36
+      },
+      "regular": {
+        "$type": "dimension",
+        "$value": 12
+      },
+      "badgeCorner": {
+        "$type": "dimension",
+        "$value": 17
+      },
+      "medium": {
+        "$type": "dimension",
+        "$value": 10
+      },
+      "section": {
+        "$type": "dimension",
+        "$value": 24
+      },
+      "small": {
+        "$type": "dimension",
+        "$value": 8
+      },
+      "scrollBottom": {
+        "$type": "dimension",
+        "$value": 120
+      },
+      "cardInset": {
+        "$type": "dimension",
+        "$value": 22
+      },
+      "large": {
+        "$type": "dimension",
+        "$value": 18
+      },
+      "inset": {
+        "$type": "dimension",
+        "$value": 20
+      },
+      "tabPadding": {
+        "$type": "dimension",
+        "$value": 5
+      }
+    },
+    "sectionGap": {
+      "$type": "dimension",
+      "$value": 28
+    },
+    "navigationTitle": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": ["SF Pro Text", "Helvetica Neue", "system-ui", "sans-serif"],
+        "fontSize": {
+          "value": 34,
+          "unit": "px"
+        },
+        "fontWeight": "bold",
+        "lineHeight": 1.2
+      }
+    },
+    "subhead": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": ["SF Pro Text", "Helvetica Neue", "system-ui", "sans-serif"],
+        "fontSize": 15,
+        "fontWeight": "regular",
+        "lineHeight": 1.4
+      }
+    },
+    "title": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": ["SF Pro Text", "Helvetica Neue", "system-ui", "sans-serif"],
+        "fontSize": 28,
+        "fontWeight": "bold",
+        "lineHeight": 1.2
+      }
+    },
+    "hero": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": ["SF Pro Text", "Helvetica Neue", "system-ui", "sans-serif"],
+        "fontSize": 40,
+        "fontWeight": "bold",
+        "lineHeight": 1.1
+      }
+    },
+    "green": {
+      "$type": "color",
+      "$value": "#248A3D"
+    }
+  }
+}

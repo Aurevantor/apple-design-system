@@ -1,0 +1,18 @@
+<Screen background="$sample.background">
+    <VStack width="fill" height="fill" align="stretch">
+        <NavigationBar title="プロフィール" />
+        <ZStack width="fill" height="fill" alignY="bottom">
+            <ProfileContent><Actions>
+<ListGroup><Content>
+                        <ListRow id="edit-button" title="プロフィールを編集" detail="名前・メール・自己紹介" symbol="system:pencil" />
+                        <InsetSeparator />
+                        <ListRow id="back-button" title="ホームに戻る" detail="あなたのスペースへ" symbol="system:house" />
+                    </Content></ListGroup>
+        </Actions></ProfileContent>
+            <TabBar><Items>
+                <TabItem label="ホーム" symbol="system:house" variant="off" />
+                <TabItem label="プロフィール" symbol="system:person.crop.circle" variant="on" />
+            </Items></TabBar>
+        </ZStack>
+    </VStack>
+</Screen>

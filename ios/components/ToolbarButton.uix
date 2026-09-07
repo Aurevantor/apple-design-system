@@ -1,0 +1,21 @@
+<!-- Figma toolbar group: 44pt glass outside, 36pt content inside. -->
+<Component name="ToolbarButton">
+    <Props>
+        <Prop name="symbol" type="string" />
+        <Prop name="label" type="string" />
+        <Prop name="variant" type="string" default="regular" />
+    </Props>
+    <Variant name="regular" background="$ios.glass.material" color="$ios.primary" />
+    <Variant name="prominent" background="$ios.tint" color="$ios.white" />
+    <State name="normal" />
+    <State name="pressed" opacity="$ios.pressed" />
+    <State name="focused" borderColor="$ios.tint" borderWidth="2" />
+    <ZStack width="$ios.toolbar.controlSize" height="$ios.toolbar.controlSize" align="center"
+        background="{$variant.background}" backdropBlur="$ios.glass.blur"
+        borderColor="$ios.glass.rim" borderWidth="$ios.toolbar.borderWidth"
+        radius="$ios.toolbar.radius" shadow="$ios.toolbar.shadow">
+        <ZStack width="36" height="36" align="center">
+            <Image source="{$props.symbol}" alt="{$props.label}" width="24" height="24" color="{$variant.foreground}" />
+        </ZStack>
+    </ZStack>
+</Component>

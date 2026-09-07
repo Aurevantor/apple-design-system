@@ -1,0 +1,6 @@
+<Component name="ListGroup">
+    <Slots><Slot name="content" /></Slots>
+    <VStack width="fill" background="$ios.surface" radius="$ios.corner" clip="true" align="stretch">
+        <SlotOutlet name="content" />
+    </VStack>
+</Component>

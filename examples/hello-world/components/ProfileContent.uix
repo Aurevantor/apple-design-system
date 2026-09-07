@@ -1,0 +1,22 @@
+<Component name="ProfileContent">
+    <Slots><Slot name="actions" /></Slots>
+<ScrollView width="fill" height="fill">
+                <VStack width="fill" padding="$sample.inset" padding-bottom="$sample.metrics.scrollBottom" spacing="$sample.sectionGap" align="stretch">
+                    <VStack width="fill" spacing="$sample.metrics.medium" padding-top="$sample.metrics.regular" align="center">
+                        <ProfileAvatar />
+                        <Text id="title" style="$sample.title" color="$ios.primary">Yohei</Text>
+                        <Text style="$sample.subhead" color="$ios.secondary">yohei@example.com</Text>
+                        <HStack spacing="$sample.metrics.tabPadding" align="center">
+                            <Image source="system:checkmark" alt="" width="12" height="12" color="$sample.green" />
+                            <Text style="$ios.caption" color="$sample.green">プロフィールを設定済み</Text>
+                        </HStack>
+                    </VStack>
+                    <VStack id="profile-card" width="fill" padding="$sample.metrics.inset" spacing="$sample.metrics.small" background="$ios.surface" radius="$ios.corner" align="leading">
+                        <Text style="$ios.caption" color="$ios.secondary">自己紹介</Text>
+                        <Text style="$ios.body" color="$ios.primary">小さなアイデアを形にするのが好き。毎日、少しずつつくっています。</Text>
+                    </VStack>
+                    <SlotOutlet name="actions" />
+                    <Text style="$ios.caption" color="$ios.secondary">あなたの情報は、あなたのために。</Text>
+                </VStack>
+            </ScrollView>
+</Component>

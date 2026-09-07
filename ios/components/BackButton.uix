@@ -1,0 +1,3 @@
+<Component name="BackButton">
+    <ToolbarButton symbol="system:chevron.left" label="戻る" />
+</Component>

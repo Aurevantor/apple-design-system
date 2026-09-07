@@ -1,0 +1,7 @@
+<Component name="FormRow">
+    <Props><Prop name="label" type="string" /><Prop name="value" type="string" /></Props>
+    <VStack width="fill" padding="$ios.metrics.toolbarInset" spacing="$ios.metrics.labelGap" align="leading">
+        <Text style="$ios.caption" color="$ios.secondary">{$props.label}</Text>
+        <Text style="$ios.body" color="$ios.primary">{$props.value}</Text>
+    </VStack>
+</Component>

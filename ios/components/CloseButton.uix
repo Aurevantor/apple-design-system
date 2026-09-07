@@ -1,0 +1,3 @@
+<Component name="CloseButton">
+    <ToolbarButton symbol="system:xmark" label="閉じる" />
+</Component>
