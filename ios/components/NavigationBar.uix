@@ -9,7 +9,13 @@
         <VStack width="fill" height="{$props.topInset}" />
         <VStack width="fill" height="$ios.toolbar.height" align="stretch">
         <ZStack width="fill" height="$ios.toolbar.controlSize" align="center">
-            <Text style="$ios.headline" color="$ios.primary" maxLines="1">{$props.title}</Text>
+            <HStack width="fill" padding-horizontal="$ios.metrics.toolbarInset" align="center">
+                <VStack width="$ios.toolbar.sideWidth" />
+                <HStack width="fill" justify="center">
+                    <Text style="$ios.headline" color="$ios.primary" maxLines="1">{$props.title}</Text>
+                </HStack>
+                <VStack width="$ios.toolbar.sideWidth" />
+            </HStack>
             <HStack width="fill" height="fill" padding-horizontal="$ios.metrics.toolbarInset" align="center">
                 <VStack width="$ios.toolbar.sideWidth" align="leading"><SlotOutlet name="leading" /></VStack>
                 <Spacer />
