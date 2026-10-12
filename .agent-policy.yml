@@ -1,0 +1,58 @@
+# AI エージェントの運用
+#
+# 方針
+# Userがセッションで一時的に個別に許可したケース以外は準拠する
+version: 1
+
+review:
+  # true: PR 作成・merge の前に、レビューの 実施とRecord記録を必須にする
+  # false: レビューを必須にしない（任意で行ってよい）
+  required: true
+
+tests:
+  # full: PR ごとに全テストを実行した evidence を必須にする
+  # affected: 影響範囲のテストでよい（evidence に scope と選定理由を書く）
+  # none: テストの evidence を必須にしない
+  mode: affected
+
+pull_request:
+  # true: 変更は必ず PR を通す
+  # false: PR を必須にしない
+  required: true
+
+ci:
+  # true: CI の配置と成功を必須にする
+  # false: CI を必須にしない
+  required: false
+  # required: CI の配置と観測を必要とし、観測した checks / statuses がすべて成功していること
+  # if_configured: CI が配置されていれば成功を求める（配置があるのに観測がゼロなら止める）
+  # optional: 任意の checks の失敗を条件にしない（ci.required: true とは併用できない）
+  success: if_configured
+
+approval:
+  # approval_required: レビューワーAI（SubAgentまたは別SessionAgent） か人の Record Result:OK かつ APPROVE を必須にする
+  # record_required: レビューワーAI（SubAgentまたは別SessionAgent） か人の Record Result:OK を必須にする
+  # none: Record Result:OK または APPROVE を必須にしない
+  mode: record_required
+
+operations:
+  # allow: AI が確認なしで実行する
+  # confirm: 実行のたびに人の確認を求める
+  # deny: AI には実行させない（送信前に拒否する）
+  push: allow
+  # allow: AI が確認なしで実行する
+  # confirm: 実行のたびに人の確認を求める
+  # deny: AI には実行させない（送信前に拒否する）
+  pr_create: allow
+  # allow: AI が確認なしで実行する
+  # confirm: 実行のたびに人の確認を求める
+  # deny: AI には実行させない（送信前に拒否する）
+  merge: allow
+  # allow: AI が確認なしで実行する
+  # confirm: 実行のたびに人の確認を求める
+  # deny: AI には実行させない（送信前に拒否する）
+  approve: allow
+  # allow: AI が確認なしで実行する
+  # confirm: 実行のたびに人の確認を求める
+  # deny: AI には実行させない（送信前に拒否する）
+  record: allow
